@@ -1,0 +1,23 @@
+{
+    "name": "midijs",
+    "version": "0.1.0",
+    "description": "Read MIDI files to consistent structure and wrap around WebMIDI APIs",
+    "license": "MIT",
+    "main": "index.js",
+    
+    "scripts": {
+        "test": "npm test"
+    },
+    
+    "keywords": [
+        "midi",
+        "files",
+        "WebMIDI"
+    ],
+    
+    "author": {
+        "name": "Mattéo DELABRE",
+        "email": "matteo.delabre@outlook.fr",
+        "url": "https://github.com/matteo78"
+    }
+}

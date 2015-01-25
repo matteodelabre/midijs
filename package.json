@@ -1,6 +1,6 @@
 {
     "name": "midijs",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "Read MIDI files to consistent structure and wrap around WebMIDI APIs",
     "license": "MIT",
     "main": "index.js",

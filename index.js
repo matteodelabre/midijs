@@ -2,10 +2,10 @@
 
 'use strict';
 
-exports.FileReader = require('./filereader').FileReader;
-exports.FileWriter = require('./filewriter').FileWriter;
+exports.FileReader = require('./lib/filereader').FileReader;
+exports.FileWriter = require('./lib/filewriter').FileWriter;
 
-exports.connect = require('./connect');
-exports.programs = require('./programs');
+exports.connect = require('./lib/driver/connect');
+exports.programs = require('./lib/programs');
 
 exports.keyOffset = 21;

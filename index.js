@@ -1,4 +1,4 @@
-/*jshint node:true, browser:true */
+/*jslint node:true, browser:true */
 
 'use strict';
 

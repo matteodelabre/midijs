@@ -23,6 +23,7 @@
     
     "dependencies": {
         "buffercursor": "0.0.12",
-        "es6-promise": "^2.0.1"
+        "es6-promise": "^2.0.1",
+        "midi": "^0.9.0"
     }
 }

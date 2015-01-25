@@ -19,5 +19,10 @@
         "name": "Mattéo DELABRE",
         "email": "matteo.delabre@outlook.fr",
         "url": "https://github.com/matteo78"
+    },
+    
+    "dependencies": {
+        "buffercursor": "0.0.12",
+        "es6-promise": "^2.0.1"
     }
 }

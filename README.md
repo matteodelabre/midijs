@@ -1,3 +1,3 @@
-# DO NOT USE
+# midijs
 
-This repository is not for use in projects at the moment. It doesn't even have tests.
+Read and write Standard MIDI files and provide a set of tools to work with General MIDI using the WebMIDI API.

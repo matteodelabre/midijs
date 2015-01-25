@@ -98,7 +98,7 @@ describe('FileReader', function () {
                             assert.strictEqual(event.numerator, time[0]);
                             assert.strictEqual(event.denominator, time[1]);
                             assert.strictEqual(typeof event.metronome, 'number');
-                            assert.strictEqual(event.demisemiquaverPerBeat, 8);
+                            assert.strictEqual(event.clockSignalsPerBeat, 24);
                             break;
                             
                         case 'keySignature':

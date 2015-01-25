@@ -29,7 +29,7 @@ describe('FileReader', function () {
 
         it('should parse the header chunk', function () {
             assert.strictEqual(midi.header.type, 'MThd');
-            assert.strictEqual(midi.header.size, 6);
+            assert.strictEqual(midi.header.length, 6);
 
             assert.strictEqual(typeof midi.header.fileType, 'number');
             assert.ok(midi.header.fileType >= 0);

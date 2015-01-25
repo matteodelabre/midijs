@@ -4,10 +4,10 @@ Read and write Standard MIDI files and provide a set of tools to work with Gener
 
 ## API
 
-1. [FileReader](#FileReader).
-2. [FileWriter](#FileWriter).
-3. [connect()](#connect).
-4. [programs](#programs).
+1. [FileReader](#filereader)
+2. [FileWriter](#filewriter)
+3. [connect()](#connect)
+4. [programs](#programs)
 
 ### FileReader
 

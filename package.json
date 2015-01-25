@@ -1,7 +1,7 @@
 {
     "name": "midijs",
     "version": "0.3.0",
-    "description": "Read and write Standard MIDI files and provide a set of tools to work with General MIDI using the WebMIDI API.",
+    "description": "Read and write Standard MIDI files and provide a set of tools to work with General MIDI, in the browser or in Node.",
     "license": "MIT",
     "main": "index.js",
     

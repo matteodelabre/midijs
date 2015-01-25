@@ -1,10 +1,15 @@
 # midijs
 
-Read and write Standard MIDI files and provide a set of tools to work with General MIDI using the WebMIDI API.
+Read and write Standard MIDI files and provide a set of tools to work with General MIDI, in the browser or in Node.
 
 ## API
 
-### `FileReader`
+1. [FileReader](#FileReader).
+2. [FileWriter](#FileWriter).
+3. [connect()](#connect).
+4. [programs](#programs).
+
+### FileReader
 
 Reads Standard MIDI file data provided as a string or as a Buffer.  
 Example:
@@ -26,14 +31,14 @@ Attributes:
 * `header (ChunkHeader)`: header data.
 * `tracks (Array[ChunkTrack])`: file tracks.
 
-#### `Chunk`
+#### Chunk
 
 Represents a MIDI chunk.
 
 * `type (String)`: chunk identifier (either `MTrk` or `MThd`).
 * `length (Number)`: chunk length in bytes.
 
-#### `ChunkHeader (Chunk)`
+#### ChunkHeader (Chunk)
 
 Represents the file's header.
 
@@ -41,90 +46,90 @@ Represents the file's header.
 * `trackCount (Number)`: amount of tracks.
 * `ticksPerBeat (Number)`: number of ticks in one beat (one quarter-note).
 
-#### `ChunkTrack (Chunk)`
+#### ChunkTrack (Chunk)
 
 Represents a MIDI track in the file.
 
 * `events (Array[Event])`: list of events in the track.
 
-#### `Event`
+#### Event
 
 Represents a MIDI event in a track.
 
 * `delay (Number)`: time to wait before playing this event, relative to the time of the previous event, in ticks.
 
-#### `EventMeta (Event)`
+#### EventMeta (Event)
 
 Represents a meta event. This type of event only occurs in Standard MIDI files and are not transmitted to MIDI devices. They are only meant to contain metadata about the file.
 
 * `type (String)`: litteraly `'meta'`.
 * `subtype (String)`: type of metadata contained. See following sub-sections.
 
-##### `sequenceNumber`
+##### sequenceNumber
 
 Pattern number of this track. Should always be at the start of a track, with a delay of `0`.
 
 * `number (Number)`: the pattern number.
 
-##### `text`
+##### text
 
 Arbitrary text (comments, notes, ...). Usually ASCII text.
 
 * `text (String)`: the text.
 
-##### `copyrightNotice`
+##### copyrightNotice
 
 Copyright of this file (© YYYY, Author). Should always be at the start of the first track, with a delay of `0`.
 
 * `text (String)`: the copyright.
 
-##### `sequenceName`
+##### sequenceName
 
 Name of the track. Should always be at the start of a track, with a delay of `0`.
 
 * `text (String)`: the track name.
 
-##### `instumentName`
+##### instumentName
 
 Name of the instrument used in this track. Can be following a `channelPrefix` meta event if this applies only to a channel. Rarely used, in favour of using the `programChange` channel event.
 
 * `text (String)`: the instrument name.
 
-##### `lyrics`
+##### lyrics
 
 Lyrics to be sung at this time in the song.
 
 * `text (String)`: the lyrics.
 
-##### `marker`
+##### marker
 
 Marks a significant point in the song.
 
 * `text (String)`: marker details.
 
-##### `cuePoint`
+##### cuePoint
 
 Marks a point where some type of action should start.
 
 * `text (String)`: details about the action.
 
-##### `channelPrefix`
+##### channelPrefix
 
 Links the following meta events to a channel. Its effects are cancelled by another channel prefix or any non-meta event.
 
 * `channel (Number)`: channel identifier.
 
-##### `endOfTrack`
+##### endOfTrack
 
 Indicates the end of the track.
 
-##### `setTempo`
+##### setTempo
 
 Changes the tempo for the next events delays.
 
 * `tempo (Number)`: tempo in microseconds per beat.
 
-##### `timeSignature`
+##### timeSignature
 
 Changes the time signature. May occur several times in a track, or once in the first track (format 1), or once in each track (format 2). If none is provided the defaults are 4, 4, 24 and 8.
 
@@ -133,20 +138,20 @@ Changes the time signature. May occur several times in a track, or once in the f
 * `metronome (Number)`: metronome frequency in number of clock signals per click.
 * `clockSignalsPerBeat (Number)`: amount of clock signals in one beat.
 
-##### `keySignature`
+##### keySignature
 
 Changes the key signature.
 
 * `major (Boolean)`: whether the key signature is major or minor.
 * `note (Number)`: number of sharps (if positive), or number of flats (if negative).
 
-##### `sequencerSpecific`
+##### sequencerSpecific
 
 Contains data that is specific to the sequencer that produced this file.
 
 * `data (Buffer)`: message bytes.
 
-#### `EventChannel (Event)`
+#### EventChannel (Event)
 
 Represents a channel event. These events change the state of channels by setting notes on, off, changing controllers parameters or channel programs. They can be transmitted to the MIDI devices.
 
@@ -154,53 +159,53 @@ Represents a channel event. These events change the state of channels by setting
 * `subtype (String)`: type of channel event contained. See following sub-sections.
 * `channel (Number)`: channel affected by this event.
 
-##### `noteOff`
+##### noteOff
 
 Sets a note off.
 
 * `note (Number)`: note number to release (0 - 127).
 * `velocity (Number)`: velocity of the release (usually 0).
 
-##### `noteOn`
+##### noteOn
 
 Sets a note on.
 
 * `note (Number)`: note number to press (0 - 127).
 * `velocity (Number)`: velocity of the pressure (0 - 127).
 
-##### `noteAftertouch`
+##### noteAftertouch
 
 Changes the pressure on a note.
 
 * `note (Number)`: note number (0 - 127).
 * `pressure (Number)`: pressure applied on the note (0 - 127).
 
-##### `controller`
+##### controller
 
 Sets the value of a controller.
 
 * `controller (Number)`: controller ID.
 * `value (Number)`: new controller value.
 
-##### `programChange`
+##### programChange
 
 Changes the program on the channel.
 
 * `program (Number)`: program ID (see program list in programs object).
 
-##### `channelAftertouch`
+##### channelAftertouch
 
 Changed the global pressure on a channel.
 
 * `pressure (Number)`: pressure applied on the channel (0 - 127).
 
-##### `pitchBend`
+##### pitchBend
 
 Changes the pitch on the channel.
 
 * `value (Number)`: pitch variation (-8192 - 8191), negative values should reduce the pitch, positive values should increase the pitch. The meaning of the value is device-dependent, but 8191 generally means 2 semi-tones.
 
-#### `EventSysex (Event)`
+#### EventSysex (Event)
 
 Represents a system exclusive event. These events can have various meanings from device to device, and are defined by the manufacturer's specification. This API only expose the raw bytes of the message, not trying to interpret them.
 
@@ -208,14 +213,15 @@ Represents a system exclusive event. These events can have various meanings from
 * `subtype (Number)`: 240 or 247.
 * `data (Buffer)`: raw sysex bytes.
 
-### `FileWriter`
+### FileWriter
 
 Writes data to a Standard MIDI file. This API is still to come.
 
-### `connect()`
+### connect()
 
-Requests access to MIDI devices list and establishes connection to the first MIDI output in the list.  
-In the future, this API might allow to select the output by its unique ID or making a guess.  
+Provides access to the MIDI driver, enabling communication with the first MIDI
+output. In the future, it will allow selecting a specific output or allow communicating
+with inputs.  
 Example:
 
 ```js
@@ -228,17 +234,20 @@ connect()
     });
 ```
 
-This function returns an ES6 Promise. The promise is passed an Output instance on success, or an Error
-with a message explaining the error on failure.
+This function works both in the browser thanks to the Web MIDI API (only in Chrome at the moment),
+and in Node. It may fail in the browser if the user declines access to MIDI devices. It will
+also fail if there is no available MIDI output.
 
-#### `Output`
+An ES6 Promise instance is returned.
+
+#### Output
 
 Wraps around native outputs. The native outputs only have a `send` method, this object provides
 a high-level API to send MIDI messages.
 
 * `native`: reference to the native output.
 
-##### `noteOff(channel, note, velocity, delay)`
+##### noteOff(channel, note, velocity, delay)
 
 Sets a note off.
 
@@ -247,7 +256,7 @@ Sets a note off.
 * `velocity (Number)`: velocity of the release (usually 0).
 * `delay (Number)`: delay in milliseconds for this event.
 
-##### `noteOn(channel, note, velocity, delay)`
+##### noteOn(channel, note, velocity, delay)
 
 Sets a note on.
 
@@ -256,7 +265,7 @@ Sets a note on.
 * `velocity (Number)`: velocity of the pressure (usually 0).
 * `delay (Number)`: delay in milliseconds for this event.
 
-##### `noteAftertouch(channel, note, pressure, delay)`
+##### noteAftertouch(channel, note, pressure, delay)
 
 Changes the pressure on a note.
 
@@ -265,7 +274,7 @@ Changes the pressure on a note.
 * `pressure (Number)`: pressure applied on the note (0 - 127).
 * `delay (Number)`: delay in milliseconds for this event.
 
-##### `controller(channel, controller, value, delay)`
+##### controller(channel, controller, value, delay)
 
 Sets the value of a controller.
 
@@ -274,7 +283,7 @@ Sets the value of a controller.
 * `value (Number)`: new controller value.
 * `delay (Number)`: delay in milliseconds for this event.
 
-##### `programChange(channel, program, delay)`
+##### programChange(channel, program, delay)
 
 Changes the program on the channel.
 
@@ -282,7 +291,7 @@ Changes the program on the channel.
 * `program (Number)`: program ID (see program list in programs object).
 * `delay (Number)`: delay in milliseconds for this event.
 
-##### `channelAftertouch(channel, pressure, delay)`
+##### channelAftertouch(channel, pressure, delay)
 
 Changed the global pressure on a channel.
 
@@ -290,7 +299,7 @@ Changed the global pressure on a channel.
 * `pressure (Number)`: pressure applied on the channel (0 - 127).
 * `delay (Number)`: delay in milliseconds for this event.
 
-##### `pitchBend(channel, value, delay)`
+##### pitchBend(channel, value, delay)
 
 Changes the pitch on the channel.
 
@@ -298,7 +307,7 @@ Changes the pitch on the channel.
 * `value (Number)`: pitch variation (-8192 - 8191), negative values should reduce the pitch, positive values should increase the pitch. The meaning of the value is device-dependent, but 8191 generally means 2 semi-tones.
 * `delay (Number)`: delay in milliseconds for this event.
 
-### `programs`
+### programs
 
 List of programs defined by the General MIDI standard.
 

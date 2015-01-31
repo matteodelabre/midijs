@@ -157,6 +157,17 @@ Changes the tempo for the next events delays.
 
 * `tempo (Number)`: tempo in microseconds per beat.
 
+##### smpteOffset
+
+Sets the SMPTE starting point relative to the beginning of the track.
+
+* `rate (Number)`: frame rate (24, 25, 30 fps).
+* `hours (Number)`: hour offset (0 - 23).
+* `minutes (Number)`: minute offset (0 - 59).
+* `seconds (Number)`: second offset (0 - 59).
+* `frames (Number)`: frame offset (0 - `rate`).
+* `subframes (Number)`: subframe offset (0 - 99).
+
 ##### timeSignature
 
 Changes the time signature. May occur several times in a track, or once in the first track (format 1), or once in each track (format 2). If none is provided the defaults are 4, 4, 24 and 8.

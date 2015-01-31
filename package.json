@@ -1,6 +1,6 @@
 {
     "name": "midijs",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "description": "Read and write Standard MIDI files and provide a set of tools to work with General MIDI, in the browser or in Node.",
     "license": "MIT",
     "main": "index.js",

@@ -15,18 +15,46 @@ Reads Standard MIDI file data provided as a string or as a Buffer.
 Example:
 
 ```js
+var MIDI = require('midijs');
+var fs = require('fs');
+
 fs.readFile(path, function (err, data) {
     if (err) {
         throw err;
     }
 
-    var file = new FileReader(data);
+    var file = new MIDI.Reader(data);
     
-    // do something with MIDI data
+    file.parse(function (err) {
+        if (err) {
+            throw err;
+        }
+        
+        // do something with MIDI data
+    });
 });
 ```
 
-Attributes:
+It can also be used as a writable stream:
+
+```js
+var MIDI = require('midijs');
+var fs = require('fs');
+
+var file = new MIDI.Reader();
+
+file.on('parsed', function () {
+    // do something with MIDI data
+});
+
+file.on('error', function (err) {
+    throw err;
+});
+
+fs.createReadStream(path).pipe(file);
+```
+
+Attributes of the instance:
 
 * `header (ChunkHeader)`: header data.
 * `tracks (Array[ChunkTrack])`: file tracks.

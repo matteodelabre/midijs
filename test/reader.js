@@ -36,8 +36,7 @@ describe('Reader', function () {
                         }
 
                         midi = new Reader(data);
-                        midi.parse();
-                        done();
+                        midi.parse(done);
                     });
                 }
             });

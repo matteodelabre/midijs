@@ -2,8 +2,8 @@
 
 'use strict';
 
-exports.FileReader = require('./lib/filereader').FileReader;
-exports.FileWriter = require('./lib/filewriter').FileWriter;
+exports.Reader = require('./lib/parser/reader').Reader;
+exports.Writer = require('./lib/parser/writer').Writer;
 
 exports.connect = require('./lib/driver/connect');
 exports.programs = require('./lib/programs');

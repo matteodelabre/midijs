@@ -4,12 +4,12 @@ Read and write Standard MIDI files and provide a set of tools to work with Gener
 
 ## API
 
-1. [FileReader](#filereader)
-2. [FileWriter](#filewriter)
+1. [Reader](#reader)
+2. [Writer](#writer)
 3. [connect()](#connect)
 4. [programs](#programs)
 
-### FileReader
+### Reader
 
 Reads Standard MIDI file data provided as a string or as a Buffer.  
 Example:
@@ -213,7 +213,7 @@ Represents a system exclusive event. These events can have various meanings from
 * `subtype (Number)`: 240 or 247.
 * `data (Buffer)`: raw sysex bytes.
 
-### FileWriter
+### Writer
 
 Writes data to a Standard MIDI file. This API is still to come.
 

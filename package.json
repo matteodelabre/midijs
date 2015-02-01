@@ -1,6 +1,6 @@
 {
     "name": "midijs",
-    "version": "0.7.1",
+    "version": "0.7.2",
     "description": "Read and write Standard MIDI files, and enable communication with MIDI devices through a high-level API on top of the WebMIDI api.",
     "license": "MIT",
     "main": "index.js",

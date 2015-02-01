@@ -1,6 +1,6 @@
 # midijs
 
-Read and write Standard MIDI files and provide a set of tools to work with General MIDI, in the browser or in Node.
+Read and write Standard MIDI files, and enable communication with MIDI devices through a high-level API on top of the WebMIDI api.
 
 ## API
 

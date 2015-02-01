@@ -258,93 +258,81 @@ Writes data to a Standard MIDI file. This API is still to come.
 
 ### connect()
 
-Provides access to the MIDI driver, enabling communication with the first MIDI
-output. In the future, it will allow selecting a specific output or allow communicating
-with inputs.  
+Provides access to the MIDI driver, enabling communication with the plugged MIDI
+devices (outputs and inputs).
 Example:
 
 ```js
 connect()
-    .then(function (output) {
-        // work with the output
+    .then(function (driver) {
+        // work with the outputs/inputs
     })
     .catch(function (error) {
         // something happened
     });
 ```
 
-This function works both in the browser thanks to the Web MIDI API (only in Chrome at the moment),
-and in Node. It may fail in the browser if the user declines access to MIDI devices. It will
-also fail if there is no available MIDI output.
+It will fail if the user declines access to MIDI devices. This API is only available
+in the browser. An ES6 Promise instance is returned.
 
-An ES6 Promise instance is returned.
+#### Driver
+
+Wraps around native MIDI access. Allows to select a default input from which
+the event bubble or a default output to which the events are send.
+
+* `outputs (Array)`: list of available outputs.
+* `output (Output|null)`: currently selected default output.
+* `inputs (Array)`: list of available inputs.
+* `input (Input|null)`: currently selected default input.
+
+This object is an EventEmitter. It can emit the following events:
+
+* `connect (port: Input|Output)`: when a new device is plugged in.
+* `disconnect (port: Input|Output)`: when a device is disconnected.
+* `event (event: EventChannel)`: when the default input emits an event.
+
+The `outputs` and `inputs` arrays are dynamically updated when devices
+are connected or disconnected.
+
+##### setInput(input)
+
+Set default input.
+
+* `input (String|Input|MIDIInput)`: the default input to select, by unique ID, or by native instance, or by wrapped instance.
+
+##### setOutput(output)
+
+Set default output.
+
+* `output (String|Output|MIDIOutput)`: the default output to select, by unique ID, or by native instance, or by wrapped instance.
+
+##### send(event)
+
+Send an event to the default output.
+
+* `event (EventChannel)`: event to transmit.
 
 #### Output
 
-Wraps around native outputs. The native outputs only have a `send` method, this object provides
-a high-level API to send MIDI messages.
+Wraps the `send` method to take `EventChannel` instances as an argument.
 
 * `native`: reference to the native output.
 
-##### noteOff(channel, note, velocity, delay)
+##### send(event)
 
-Sets a note off.
+Send an event to this output.
 
-* `channel (Number)`: channel ID.
-* `note (Number)`: note number to release (0 - 127).
-* `velocity (Number)`: velocity of the release (usually 0).
-* `delay (Number)`: delay in milliseconds for this event.
+* `event (EventChannel)`: event to transmit.
 
-##### noteOn(channel, note, velocity, delay)
+#### Input
 
-Sets a note on.
+Wraps the `midimessage` event to take `EventChannel` instances as an argument.
 
-* `channel (Number)`: channel ID.
-* `note (Number)`: note number to press (0 - 127).
-* `velocity (Number)`: velocity of the pressure (usually 0).
-* `delay (Number)`: delay in milliseconds for this event.
+* `native`: reference to the native output.
 
-##### noteAftertouch(channel, note, pressure, delay)
+This object is an EventEmitter. It can emit the following events:
 
-Changes the pressure on a note.
-
-* `channel (Number)`: channel ID.
-* `note (Number)`: note number (0 - 127).
-* `pressure (Number)`: pressure applied on the note (0 - 127).
-* `delay (Number)`: delay in milliseconds for this event.
-
-##### controller(channel, controller, value, delay)
-
-Sets the value of a controller.
-
-* `channel (Number)`: channel ID.
-* `controller (Number)`: controller ID.
-* `value (Number)`: new controller value.
-* `delay (Number)`: delay in milliseconds for this event.
-
-##### programChange(channel, program, delay)
-
-Changes the program on the channel.
-
-* `channel (Number)`: channel ID.
-* `program (Number)`: program ID (see program list in programs object).
-* `delay (Number)`: delay in milliseconds for this event.
-
-##### channelAftertouch(channel, pressure, delay)
-
-Changed the global pressure on a channel.
-
-* `channel (Number)`: channel ID.
-* `pressure (Number)`: pressure applied on the channel (0 - 127).
-* `delay (Number)`: delay in milliseconds for this event.
-
-##### pitchBend(channel, value, delay)
-
-Changes the pitch on the channel.
-
-* `channel (Number)`: channel ID.
-* `value (Number)`: pitch variation (-8192 - 8191), negative values should reduce the pitch, positive values should increase the pitch. The meaning of the value is device-dependent, but 8191 generally means 2 semi-tones.
-* `delay (Number)`: delay in milliseconds for this event.
+* `event (event: EventChannel)`: when the native input emits an event.
 
 ### programs
 

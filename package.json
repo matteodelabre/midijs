@@ -9,6 +9,11 @@
         "test": "mocha -R spec"
     },
     
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/MattouFP/midijs.git"
+    },
+    
     "keywords": [
         "midi",
         "files",

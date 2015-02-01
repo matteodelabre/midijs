@@ -296,31 +296,36 @@ are connected or disconnected.
 
 ##### setInput(input)
 
-Set default input.
+Sets default input.
 
 * `input (String|Input|MIDIInput)`: the default input to select, by unique ID, or by native instance, or by wrapped instance.
 
 ##### setOutput(output)
 
-Set default output.
+Sets default output.
 
 * `output (String|Output|MIDIOutput)`: the default output to select, by unique ID, or by native instance, or by wrapped instance.
 
 ##### send(event)
 
-Send an event to the default output.
+Sends an event to the default output.
 
 * `event (EventChannel)`: event to transmit.
 
 #### Output
 
-Wraps the `send` method to take `EventChannel` instances as an argument.
+Wraps the `send` method of the native MIDI outputs to take `EventChannel`
+instances as an argument.
 
 * `native`: reference to the native output.
+* `id`: unique output ID, will be the same across instances of the app.
+* `manufacturer`: output manufacturer.
+* `name`: output name (not unique).
+* `version`: output version.
 
 ##### send(event)
 
-Send an event to this output.
+Sends an event to this output.
 
 * `event (EventChannel)`: event to transmit.
 
@@ -329,6 +334,10 @@ Send an event to this output.
 Wraps the `midimessage` event to take `EventChannel` instances as an argument.
 
 * `native`: reference to the native output.
+* `id`: unique input ID, will be the same across instances of the app.
+* `manufacturer`: input manufacturer.
+* `name`: input name (not unique).
+* `version`: input version.
 
 This object is an EventEmitter. It can emit the following events:
 

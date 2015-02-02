@@ -7,7 +7,7 @@ var assert = require('assert');
 var util = require('util');
 var fs = require('fs');
 
-var Reader = require('../lib/parser/reader').Reader;
+var File = require('../lib/file').File;
 
 var filesPath = __dirname + '/files/';
 var pathFormat = filesPath + '%d_%d_time.mid';
@@ -16,49 +16,49 @@ var times = [
     [3, 4, false], [4, 4, false], [6, 8, false], [9, 8, false], [12, 8, false]
 ];
 
-describe('Reader', function () {
+describe('File as a reader', function () {
     times.forEach(function (time) {
-        var path = util.format(pathFormat, time[0], time[1]), midi,
+        var path = util.format(pathFormat, time[0], time[1]), file,
             streamMessage = (time[2]) ? 'read with streams' : 'read with buffers',
             message = util.format('file %s (%s)', path, streamMessage);
         
         describe(message, function () {
             before(function (done) {
                 if (time[2]) {
-                    midi = new Reader();
-                    midi.on('parsed', done);
+                    file = new File();
+                    file.on('parsed', done);
                     
-                    fs.createReadStream(path).pipe(midi);
+                    fs.createReadStream(path).pipe(file);
                 } else {
                     fs.readFile(path, function (err, data) {
                         if (err) {
                             throw err;
                         }
 
-                        midi = new Reader(data);
-                        midi.parse(done);
+                        file = new File(data);
+                        file.parse(done);
                     });
                 }
             });
 
             it('should parse the header chunk', function () {
-                assert.strictEqual(midi.header.type, 'MThd');
-                assert.strictEqual(midi.header.length, 6);
+                assert.strictEqual(file.header.type, 'MThd');
+                assert.strictEqual(file.header.length, 6);
 
-                assert.strictEqual(typeof midi.header.fileType, 'number');
-                assert.ok(midi.header.fileType >= 0);
-                assert.ok(midi.header.fileType <= 2);
+                assert.strictEqual(typeof file.header.fileType, 'number');
+                assert.ok(file.header.fileType >= 0);
+                assert.ok(file.header.fileType <= 2);
 
-                assert.strictEqual(typeof midi.header.trackCount, 'number');
-                assert.ok(midi.header.trackCount > 0, 'number');
+                assert.strictEqual(typeof file.header.trackCount, 'number');
+                assert.ok(file.header.trackCount > 0, 'number');
 
-                assert.strictEqual(typeof midi.header.ticksPerBeat, 'number');
-                assert.ok(midi.header.ticksPerBeat > 0);
+                assert.strictEqual(typeof file.header.ticksPerBeat, 'number');
+                assert.ok(file.header.ticksPerBeat > 0);
             });
 
             it('should parse the tracks chunks as a list of tracks', function () {
-                assert.ok(Array.isArray(midi.tracks));
-                assert.strictEqual(midi.tracks.length, midi.header.trackCount);
+                assert.ok(Array.isArray(file.tracks));
+                assert.strictEqual(file.tracks.length, file.header.trackCount);
             });
 
             it('should parse each track chunk', function () {
@@ -74,7 +74,7 @@ describe('Reader', function () {
                                 'endOfTrack', 'setTempo', 'timeSignature',
                                 'keySignature', 'sequencerSpecific'];
 
-                midi.tracks.forEach(function (track) {
+                file.tracks.forEach(function (track) {
                     assert.strictEqual(track.type, 'MTrk');
                     assert.ok(Array.isArray(track.events));
 
@@ -133,7 +133,7 @@ describe('Reader', function () {
     });
     
     describe('invalid file "' + filesPath + 'invalid_file.mid"', function () {
-        var path = filesPath + 'invalid_file.mid', midi;
+        var path = filesPath + 'invalid_file.mid', file;
 
         it('should throw on parsing the file', function (done) {
             fs.readFile(path, function (err, data) {
@@ -141,15 +141,39 @@ describe('Reader', function () {
                     throw err;
                 }
                 
-                midi = new Reader(data);
+                file = new File(data);
                 
-                midi.on('error', function (error) {
+                file.on('error', function (error) {
                     assert.ok(/invalid midi/i.test(error.message));
                     done();
                 });
                 
-                midi.parse();
+                file.parse();
             });
+        });
+    });
+});
+
+describe('File as a writer', function () {
+    var file;
+    
+    it('should create a new file', function () {
+        file = new File();
+
+        assert.strictEqual(file.header.type, 'MThd');
+        assert.strictEqual(file.header.length, 6);
+
+        assert.strictEqual(file.header.fileType, 1);
+        assert.strictEqual(file.header.trackCount, 0);
+        assert.strictEqual(file.header.ticksPerBeat, 120);
+
+        assert.ok(Array.isArray(file.tracks));
+        assert.strictEqual(file.tracks.length, file.header.trackCount);
+    });
+    
+    describe('tracks edition', function () {
+        it('should add a track', function () {
+            var track = file.addTrack();
         });
     });
 });

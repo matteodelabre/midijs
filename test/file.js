@@ -8,6 +8,9 @@ var util = require('util');
 var fs = require('fs');
 
 var File = require('../lib/file').File;
+var MetaEvent = require('../lib/file/event').MetaEvent;
+var SysexEvent = require('../lib/file/event').SysexEvent;
+var ChannelEvent = require('../lib/file/event').ChannelEvent;
 
 var filesPath = __dirname + '/files/';
 var pathFormat = filesPath + '%d_%d_time.mid';
@@ -15,6 +18,27 @@ var times = [
     [3, 4, true],  [4, 4, true],  [6, 8, true],  [9, 8, true],  [12, 8, true],
     [3, 4, false], [4, 4, false], [6, 8, false], [9, 8, false], [12, 8, false]
 ];
+
+describe('File as a writer', function () {
+    var file;
+    
+    it('should create a new file', function () {
+        file = new File();
+        
+        assert.strictEqual(file.header.fileType, 1);
+        assert.strictEqual(file.header.trackCount, 0);
+        assert.strictEqual(file.header.ticksPerBeat, 120);
+        
+        assert.ok(Array.isArray(file.tracks));
+        assert.strictEqual(file.tracks.length, file.header.trackCount);
+    });
+    
+    describe('tracks edition', function () {
+        it('should add a track', function () {
+            var track = file.addTrack();
+        });
+    });
+});
 
 describe('File as a reader', function () {
     times.forEach(function (time) {
@@ -42,9 +66,6 @@ describe('File as a reader', function () {
             });
 
             it('should parse the header chunk', function () {
-                assert.strictEqual(file.header.type, 'MThd');
-                assert.strictEqual(file.header.length, 6);
-
                 assert.strictEqual(typeof file.header.fileType, 'number');
                 assert.ok(file.header.fileType >= 0);
                 assert.ok(file.header.fileType <= 2);
@@ -62,52 +83,36 @@ describe('File as a reader', function () {
             });
 
             it('should parse each track chunk', function () {
-                var types, channelSubtypes, metaSubtypes;
-
-                types = ['channel', 'sysex', 'meta'];
-                channelSubtypes = ['noteOff', 'noteOn', 'noteAftertouch',
-                                   'controller', 'programChange',
-                                   'channelAftertouch', 'pitchBend'];
-                metaSubtypes = ['sequenceNumber', 'text', 'copyrightNotice',
-                                'sequenceName', 'instumentName', 'lyrics',
-                                'marker', 'cuePoint', 'channelPrefix',
-                                'endOfTrack', 'setTempo', 'timeSignature',
-                                'keySignature', 'sequencerSpecific'];
+                var channelTypes, metaTypes;
+                
+                channelTypes = ['noteOff', 'noteOn', 'noteAftertouch',
+                                'controller', 'programChange',
+                                'channelAftertouch', 'pitchBend'];
+                metaTypes = ['sequenceNumber', 'text', 'copyrightNotice',
+                            'sequenceName', 'instumentName', 'lyrics',
+                            'marker', 'cuePoint', 'channelPrefix',
+                            'endOfTrack', 'setTempo', 'timeSignature',
+                            'keySignature', 'sequencerSpecific'];
 
                 file.tracks.forEach(function (track) {
-                    assert.strictEqual(track.type, 'MTrk');
                     assert.ok(Array.isArray(track.events));
 
                     track.events.forEach(function (event, index) {
-                        assert.strictEqual(typeof event.type, 'string');
-                        assert.notStrictEqual(types.indexOf(event.type), -1);
                         assert.strictEqual(typeof event.delay, 'number');
 
                         if (index === track.events.length - 1) {
-                            assert.strictEqual(event.type, 'meta');
-                            assert.strictEqual(event.subtype, 'endOfTrack');
+                            assert.ok(event instanceof MetaEvent);
+                            assert.strictEqual(event.type, 'endOfTrack');
                             return;
                         }
-
-                        switch (event.type) {
-                        case 'channel':
-                            assert.strictEqual(typeof event.channel, 'number');
-                            assert.ok(event.channel >= 0);
-                            assert.ok(event.channel <= 15);
-
+                        
+                        if (event instanceof MetaEvent) {
                             assert.notStrictEqual(
-                                channelSubtypes.indexOf(event.subtype),
+                                metaTypes.indexOf(event.type),
                                 -1
                             );
 
-                            break;
-                        case 'meta':
-                            assert.notStrictEqual(
-                                metaSubtypes.indexOf(event.subtype),
-                                -1
-                            );
-
-                            switch (event.subtype) {
+                            switch (event.type) {
                             case 'timeSignature':
                                 assert.strictEqual(event.numerator, time[0]);
                                 assert.strictEqual(event.denominator, time[1]);
@@ -124,7 +129,19 @@ describe('File as a reader', function () {
                                 assert.strictEqual(event.tempo, 600000);
                                 break;
                             }
-                            break;
+                        } else if (event instanceof SysexEvent) {
+                            
+                        } else if (event instanceof ChannelEvent) {
+                            assert.strictEqual(typeof event.channel, 'number');
+                            assert.ok(event.channel >= 0);
+                            assert.ok(event.channel <= 15);
+
+                            assert.notStrictEqual(
+                                channelTypes.indexOf(event.type),
+                                -1
+                            );
+                        } else {
+                            throw new Error('Expected event of type Meta, Sysex or Channel');
                         }
                     });
                 });
@@ -150,30 +167,6 @@ describe('File as a reader', function () {
                 
                 file.parse();
             });
-        });
-    });
-});
-
-describe('File as a writer', function () {
-    var file;
-    
-    it('should create a new file', function () {
-        file = new File();
-
-        assert.strictEqual(file.header.type, 'MThd');
-        assert.strictEqual(file.header.length, 6);
-
-        assert.strictEqual(file.header.fileType, 1);
-        assert.strictEqual(file.header.trackCount, 0);
-        assert.strictEqual(file.header.ticksPerBeat, 120);
-
-        assert.ok(Array.isArray(file.tracks));
-        assert.strictEqual(file.tracks.length, file.header.trackCount);
-    });
-    
-    describe('tracks edition', function () {
-        it('should add a track', function () {
-            var track = file.addTrack();
         });
     });
 });

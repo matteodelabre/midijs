@@ -1,138 +1,182 @@
-/*eslint-env mocha */
-
 'use strict';
 
 var assert = require('assert');
 var path = require('path');
-var util = require('util');
 var fs = require('fs');
 
 var File = require('../lib/file').File;
+var Header = require('../lib/file/header').Header;
+var Track = require('../lib/file/track').Track;
 var MetaEvent = require('../lib/file/event').MetaEvent;
-var SysexEvent = require('../lib/file/event').SysexEvent;
 var ChannelEvent = require('../lib/file/event').ChannelEvent;
 
-var filesPath = path.join(__dirname, 'files');
-var pathFormat = path.join(filesPath, '%d_%d_time.mid');
-var times = [
-    [3, 4, true], [4, 4, true], [6, 8, true], [9, 8, true], [12, 8, true],
-    [3, 4, false], [4, 4, false], [6, 8, false], [9, 8, false], [12, 8, false]
-];
+var fixtures = path.join(__dirname, 'fixtures');
+var filePath = path.join(fixtures, 'file.mid');
+var invalidFilePath = path.join(fixtures, 'invalid-file.mid');
 
 describe('File as a reader', function () {
-    times.forEach(function (time) {
-        var filePath = util.format(pathFormat, time[0], time[1]), file,
-            streamMessage = (time[2]) ? 'read with streams' : 'read with buffers',
-            message = util.format('file %s (%s)', path, streamMessage);
+    describe('loading APIs', function () {
+        var bufferFile, streamFile;
         
-        describe(message, function () {
-            before(function (done) {
-                if (time[2]) {
-                    file = new File();
-                    file.on('parsed', done);
-                    
-                    fs.createReadStream(filePath).pipe(file);
-                } else {
-                    fs.readFile(filePath, function (err, data) {
-                        if (err) {
-                            throw err;
-                        }
-
-                        file = new File(data);
-                        file.parse(done);
-                    });
+        it('should load with buffers', function (done) {
+            fs.readFile(filePath, function (err, data) {
+                if (err) {
+                    throw err;
                 }
+
+                bufferFile = new File(data);
+                bufferFile.parse(done);
             });
+        });
+        
+        it('should load with streams', function (done) {
+            streamFile = new File();
+            streamFile.on('parsed', done);
 
-            it('should parse the header chunk', function () {
-                assert.strictEqual(typeof file.header.fileType, 'number');
-                assert.ok(file.header.fileType >= 0);
-                assert.ok(file.header.fileType <= 2);
+            fs.createReadStream(filePath).pipe(streamFile);
+        });
+        
+        it('should give the same results', function () {
+            assert.deepEqual(bufferFile.header, streamFile.header);
+            assert.deepEqual(bufferFile.tracks, streamFile.tracks);
+        });
+    });
+    
+    describe('file compliance', function () {
+        var file;
+        
+        before(function (done) {
+            file = new File();
+            file.on('parsed', done);
 
-                assert.strictEqual(typeof file.header.trackCount, 'number');
-                assert.ok(file.header.trackCount > 0, 'number');
-
-                assert.strictEqual(typeof file.header.ticksPerBeat, 'number');
-                assert.ok(file.header.ticksPerBeat > 0);
-            });
-
-            it('should parse the tracks chunks as a list of tracks', function () {
-                assert.ok(Array.isArray(file.tracks));
-                assert.strictEqual(file.tracks.length, file.header.trackCount);
-            });
-
-            it('should parse each track chunk', function () {
-                var channelTypes, metaTypes;
-                
-                channelTypes = ['noteOff', 'noteOn', 'noteAftertouch',
-                                'controller', 'programChange',
-                                'channelAftertouch', 'pitchBend'];
-                metaTypes = ['sequenceNumber', 'text', 'copyrightNotice',
-                            'sequenceName', 'instumentName', 'lyrics',
-                            'marker', 'cuePoint', 'channelPrefix',
-                            'endOfTrack', 'setTempo', 'timeSignature',
-                            'keySignature', 'sequencerSpecific'];
-
-                file.tracks.forEach(function (track) {
-                    assert.ok(Array.isArray(track.events));
-
-                    track.events.forEach(function (event, index) {
-                        assert.strictEqual(typeof event.delay, 'number');
-
-                        if (index === track.events.length - 1) {
-                            assert.ok(event instanceof MetaEvent);
-                            assert.strictEqual(event.type, 'endOfTrack');
-                            return;
-                        }
-                        
-                        if (event instanceof MetaEvent) {
-                            assert.notStrictEqual(
-                                metaTypes.indexOf(event.type),
-                                -1
-                            );
-
-                            switch (event.type) {
-                            case 'timeSignature':
-                                assert.strictEqual(event.numerator, time[0]);
-                                assert.strictEqual(event.denominator, time[1]);
-                                assert.strictEqual(typeof event.metronome, 'number');
-                                assert.strictEqual(event.clockSignalsPerBeat, 24);
-                                break;
-
-                            case 'keySignature':
-                                assert.ok(event.major);
-                                assert.strictEqual(event.note, 0);
-                                break;
-
-                            case 'setTempo':
-                                assert.strictEqual(event.tempo, 600000);
-                                break;
-                            }
-                        } else if (event instanceof SysexEvent) {
-                            
-                        } else if (event instanceof ChannelEvent) {
-                            assert.strictEqual(typeof event.channel, 'number');
-                            assert.ok(event.channel >= 0);
-                            assert.ok(event.channel <= 15);
-
-                            assert.notStrictEqual(
-                                channelTypes.indexOf(event.type),
-                                -1
-                            );
-                        } else {
-                            throw new Error('Expected event of type Meta, Sysex or Channel');
-                        }
-                    });
+            fs.createReadStream(filePath).pipe(file);
+        });
+        
+        it('should parse header to correct structure', function () {
+            assert.strictEqual(typeof file.header.fileType, 'number');
+            assert.strictEqual(typeof file.header.ticksPerBeat, 'number');
+            assert.strictEqual(typeof file.header.trackCount, 'number');
+        });
+        
+        it('should parse tracks to correct structure', function () {
+            assert.ok(Array.isArray(file.tracks));
+            assert.strictEqual(file.tracks.length, file.header.trackCount);
+        });
+        
+        it('should parse header with correct data', function () {
+            var header = new Header(1, 2, 480);
+            assert.deepEqual(file.header, header);
+        });
+        
+        it('should parse tracks with correct data', function () {
+            var tracks = [
+                new Track(
+                    new MetaEvent('instrumentName', {
+                        text: ''
+                    }),
+                    new MetaEvent('setTempo', {
+                        tempo: 120
+                    }),
+                    new MetaEvent('sequenceName', {
+                        text: 'Sequence Name'
+                    }),
+                    new MetaEvent('endOfTrack')
+                ),
+                new Track(
+                    new MetaEvent('instrumentName', {
+                        text: 'Acoustic Grand Piano'
+                    }),
+                    new MetaEvent('sequenceName', {
+                        text: 'My New Track'
+                    }),
+                    new ChannelEvent('controller', 0, {
+                        controller: 7,
+                        value: 127
+                    }),
+                    new ChannelEvent('programChange', 0, {
+                        program: 1
+                    }),
+                    new ChannelEvent('noteOn', 0, {
+                        note: 64,
+                        velocity: 127
+                    }),
+                    new ChannelEvent('noteOff', 0, {
+                        note: 64,
+                        velocity: 127
+                    }, 480),
+                    new ChannelEvent('noteOn', 0, {
+                        note: 66,
+                        velocity: 127
+                    }),
+                    new ChannelEvent('noteOff', 0, {
+                        note: 66,
+                        velocity: 127
+                    }, 480),
+                    new ChannelEvent('noteOn', 0, {
+                        note: 68,
+                        velocity: 127
+                    }),
+                    new ChannelEvent('noteOff', 0, {
+                        note: 68,
+                        velocity: 127
+                    }, 480),
+                    new ChannelEvent('noteOn', 0, {
+                        note: 69,
+                        velocity: 127
+                    }),
+                    new ChannelEvent('noteOff', 0, {
+                        note: 69,
+                        velocity: 127
+                    }, 480),
+                    new ChannelEvent('noteOn', 0, {
+                        note: 71,
+                        velocity: 127
+                    }),
+                    new ChannelEvent('noteOff', 0, {
+                        note: 71,
+                        velocity: 127
+                    }, 480),
+                    new ChannelEvent('noteOn', 0, {
+                        note: 73,
+                        velocity: 127
+                    }),
+                    new ChannelEvent('noteOff', 0, {
+                        note: 73,
+                        velocity: 127
+                    }, 480),
+                    new ChannelEvent('noteOn', 0, {
+                        note: 75,
+                        velocity: 127
+                    }),
+                    new ChannelEvent('noteOff', 0, {
+                        note: 75,
+                        velocity: 127
+                    }, 480),
+                    new ChannelEvent('noteOn', 0, {
+                        note: 76,
+                        velocity: 127
+                    }),
+                    new ChannelEvent('noteOff', 0, {
+                        note: 76,
+                        velocity: 127
+                    }, 480),
+                    new MetaEvent('endOfTrack')
+                )
+            ];
+            
+            file.tracks.forEach(function (track, i) {
+                track.events.forEach(function (event, j) {
+                    assert.deepEqual(event, tracks[i].events[j]);
                 });
             });
         });
     });
     
-    describe('invalid file "' + filesPath + 'invalid_file.mid"', function () {
-        var filePath = path.join(filesPath, 'invalid_file.mid'), file;
-
-        it('should throw on parsing the file', function (done) {
-            fs.readFile(filePath, function (err, data) {
+    describe('invalid files', function () {
+        it('should throw on parsing invalid files', function (done) {
+            var file;
+            
+            fs.readFile(invalidFilePath, function (err, data) {
                 if (err) {
                     throw err;
                 }

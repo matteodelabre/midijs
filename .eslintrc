@@ -1,5 +1,12 @@
 {
     "rules": {
+        "valid-jsdoc": [2, {
+            "prefer": {
+                "returns": "return",
+                "throws": "exception",
+                "class": "constructor"
+            }
+        }],
         "quotes": [2, "simple"],
         "no-trailing-spaces": 0
     },

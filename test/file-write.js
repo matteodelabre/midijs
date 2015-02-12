@@ -17,10 +17,4 @@ describe('File as a writer', function () {
         assert.ok(Array.isArray(file.tracks));
         assert.strictEqual(file.tracks.length, file.header.trackCount);
     });
-    
-    describe('tracks edition', function () {
-        it('should add a track', function () {
-            var track = file.addTrack();
-        });
-    });
 });

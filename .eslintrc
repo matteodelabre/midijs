@@ -1,5 +1,8 @@
 {
     "rules": {
+        "radix": 2,
+        "vars-on-top": 2,
+        "wrap-iife": 2,
         "valid-jsdoc": [2, {
             "prefer": {
                 "returns": "return",
@@ -7,6 +10,9 @@
                 "class": "constructor"
             }
         }],
+        
+        "brace-style": 2,
+        "comma-style": [2, "last"],
         "quotes": [2, "simple"],
         "no-trailing-spaces": 0
     },

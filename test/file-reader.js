@@ -19,27 +19,6 @@ var times = [
     [3, 4, false], [4, 4, false], [6, 8, false], [9, 8, false], [12, 8, false]
 ];
 
-describe('File as a writer', function () {
-    var file;
-    
-    it('should create a new file', function () {
-        file = new File();
-        
-        assert.strictEqual(file.header.fileType, 1);
-        assert.strictEqual(file.header.trackCount, 0);
-        assert.strictEqual(file.header.ticksPerBeat, 120);
-        
-        assert.ok(Array.isArray(file.tracks));
-        assert.strictEqual(file.tracks.length, file.header.trackCount);
-    });
-    
-    describe('tracks edition', function () {
-        it('should add a track', function () {
-            var track = file.addTrack();
-        });
-    });
-});
-
 describe('File as a reader', function () {
     times.forEach(function (time) {
         var filePath = util.format(pathFormat, time[0], time[1]), file,

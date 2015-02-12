@@ -173,7 +173,7 @@ describe('File as a reader', function () {
     });
     
     describe('invalid files', function () {
-        it('should throw on parsing invalid files', function (done) {
+        it('should throw when parsing invalid files', function (done) {
             var file;
             
             fs.readFile(invalidFilePath, function (err, data) {

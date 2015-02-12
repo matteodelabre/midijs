@@ -1,0 +1,11 @@
+{
+    "rules": {
+        "quotes": [2, "simple"],
+        "no-trailing-spaces": 0
+    },
+    
+    "env": {
+        "browser": true,
+        "node": true
+    }
+}

@@ -1,9 +1,9 @@
-/*jslint node:true, browser:true, nomen:true */
-/*globals before, describe, after, it */
+/*eslint-env mocha */
 
 'use strict';
 
 var assert = require('assert');
+var path = require('path');
 var util = require('util');
 var fs = require('fs');
 
@@ -12,10 +12,10 @@ var MetaEvent = require('../lib/file/event').MetaEvent;
 var SysexEvent = require('../lib/file/event').SysexEvent;
 var ChannelEvent = require('../lib/file/event').ChannelEvent;
 
-var filesPath = __dirname + '/files/';
-var pathFormat = filesPath + '%d_%d_time.mid';
+var filesPath = path.join(__dirname, 'files');
+var pathFormat = path.join(filesPath, '%d_%d_time.mid');
 var times = [
-    [3, 4, true],  [4, 4, true],  [6, 8, true],  [9, 8, true],  [12, 8, true],
+    [3, 4, true], [4, 4, true], [6, 8, true], [9, 8, true], [12, 8, true],
     [3, 4, false], [4, 4, false], [6, 8, false], [9, 8, false], [12, 8, false]
 ];
 
@@ -42,7 +42,7 @@ describe('File as a writer', function () {
 
 describe('File as a reader', function () {
     times.forEach(function (time) {
-        var path = util.format(pathFormat, time[0], time[1]), file,
+        var filePath = util.format(pathFormat, time[0], time[1]), file,
             streamMessage = (time[2]) ? 'read with streams' : 'read with buffers',
             message = util.format('file %s (%s)', path, streamMessage);
         
@@ -52,9 +52,9 @@ describe('File as a reader', function () {
                     file = new File();
                     file.on('parsed', done);
                     
-                    fs.createReadStream(path).pipe(file);
+                    fs.createReadStream(filePath).pipe(file);
                 } else {
-                    fs.readFile(path, function (err, data) {
+                    fs.readFile(filePath, function (err, data) {
                         if (err) {
                             throw err;
                         }
@@ -150,10 +150,10 @@ describe('File as a reader', function () {
     });
     
     describe('invalid file "' + filesPath + 'invalid_file.mid"', function () {
-        var path = filesPath + 'invalid_file.mid', file;
+        var filePath = path.join(filesPath, 'invalid_file.mid'), file;
 
         it('should throw on parsing the file', function (done) {
-            fs.readFile(path, function (err, data) {
+            fs.readFile(filePath, function (err, data) {
                 if (err) {
                     throw err;
                 }

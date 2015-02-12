@@ -1,5 +1,3 @@
-/*jslint node:true, browser:true */
-
 'use strict';
 
 exports.Reader = require('./lib/parser/reader').Reader;

@@ -71,96 +71,96 @@ describe('File as a reader', function () {
         it('should parse tracks with correct data', function () {
             var tracks = [
                 new Track(
-                    new MetaEvent('instrumentName', {
+                    new MetaEvent(MetaEvent.TYPE.INSTRUMENT_NAME, {
                         text: ''
                     }),
-                    new MetaEvent('setTempo', {
+                    new MetaEvent(MetaEvent.TYPE.SET_TEMPO, {
                         tempo: 120
                     }),
-                    new MetaEvent('sequenceName', {
+                    new MetaEvent(MetaEvent.TYPE.SEQUENCE_NAME, {
                         text: 'Sequence Name'
                     }),
-                    new MetaEvent('endOfTrack')
+                    new MetaEvent(MetaEvent.TYPE.END_OF_TRACK)
                 ),
                 new Track(
-                    new MetaEvent('instrumentName', {
+                    new MetaEvent(MetaEvent.TYPE.INSTRUMENT_NAME, {
                         text: 'Acoustic Grand Piano'
                     }),
-                    new MetaEvent('sequenceName', {
+                    new MetaEvent(MetaEvent.TYPE.SEQUENCE_NAME, {
                         text: 'My New Track'
                     }),
-                    new ChannelEvent('controller', 0, {
+                    new ChannelEvent(ChannelEvent.TYPE.CONTROLLER, {
                         controller: 7,
                         value: 127
-                    }),
-                    new ChannelEvent('programChange', 0, {
+                    }, 0),
+                    new ChannelEvent(ChannelEvent.TYPE.PROGRAM_CHANGE, {
                         program: 1
-                    }),
-                    new ChannelEvent('noteOn', 0, {
+                    }, 0),
+                    new ChannelEvent(ChannelEvent.TYPE.NOTE_ON, {
                         note: 64,
                         velocity: 127
-                    }),
-                    new ChannelEvent('noteOff', 0, {
+                    }, 0),
+                    new ChannelEvent(ChannelEvent.TYPE.NOTE_OFF, {
                         note: 64,
                         velocity: 127
-                    }, 480),
-                    new ChannelEvent('noteOn', 0, {
+                    }, 0, 480),
+                    new ChannelEvent(ChannelEvent.TYPE.NOTE_ON, {
                         note: 66,
                         velocity: 127
-                    }),
-                    new ChannelEvent('noteOff', 0, {
+                    }, 0),
+                    new ChannelEvent(ChannelEvent.TYPE.NOTE_OFF, {
                         note: 66,
                         velocity: 127
-                    }, 480),
-                    new ChannelEvent('noteOn', 0, {
+                    }, 0, 480),
+                    new ChannelEvent(ChannelEvent.TYPE.NOTE_ON, {
                         note: 68,
                         velocity: 127
-                    }),
-                    new ChannelEvent('noteOff', 0, {
+                    }, 0),
+                    new ChannelEvent(ChannelEvent.TYPE.NOTE_OFF, {
                         note: 68,
                         velocity: 127
-                    }, 480),
-                    new ChannelEvent('noteOn', 0, {
+                    }, 0, 480),
+                    new ChannelEvent(ChannelEvent.TYPE.NOTE_ON, {
                         note: 69,
                         velocity: 127
-                    }),
-                    new ChannelEvent('noteOff', 0, {
+                    }, 0),
+                    new ChannelEvent(ChannelEvent.TYPE.NOTE_OFF, {
                         note: 69,
                         velocity: 127
-                    }, 480),
-                    new ChannelEvent('noteOn', 0, {
+                    }, 0, 480),
+                    new ChannelEvent(ChannelEvent.TYPE.NOTE_ON, {
                         note: 71,
                         velocity: 127
-                    }),
-                    new ChannelEvent('noteOff', 0, {
+                    }, 0),
+                    new ChannelEvent(ChannelEvent.TYPE.NOTE_OFF, {
                         note: 71,
                         velocity: 127
-                    }, 480),
-                    new ChannelEvent('noteOn', 0, {
+                    }, 0, 480),
+                    new ChannelEvent(ChannelEvent.TYPE.NOTE_ON, {
                         note: 73,
                         velocity: 127
-                    }),
-                    new ChannelEvent('noteOff', 0, {
+                    }, 0),
+                    new ChannelEvent(ChannelEvent.TYPE.NOTE_OFF, {
                         note: 73,
                         velocity: 127
-                    }, 480),
-                    new ChannelEvent('noteOn', 0, {
+                    }, 0, 480),
+                    new ChannelEvent(ChannelEvent.TYPE.NOTE_ON, {
                         note: 75,
                         velocity: 127
-                    }),
-                    new ChannelEvent('noteOff', 0, {
+                    }, 0),
+                    new ChannelEvent(ChannelEvent.TYPE.NOTE_OFF, {
                         note: 75,
                         velocity: 127
-                    }, 480),
-                    new ChannelEvent('noteOn', 0, {
+                    }, 0, 480),
+                    new ChannelEvent(ChannelEvent.TYPE.NOTE_ON, {
                         note: 76,
                         velocity: 127
-                    }),
-                    new ChannelEvent('noteOff', 0, {
+                    }, 0),
+                    new ChannelEvent(ChannelEvent.TYPE.NOTE_OFF, {
                         note: 76,
                         velocity: 127
-                    }, 480),
-                    new MetaEvent('endOfTrack')
+                    }, 0, 480),
+                    new MetaEvent(MetaEvent.TYPE.END_OF_TRACK)
                 )
             ];
             

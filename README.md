@@ -1,3 +1,6 @@
+[![npm version](https://img.shields.io/npm/v/midijs.svg) ![npm downloads](https://img.shields.io/npm/dm/midijs.svg)](https://www.npmjs.com/package/midijs)
+[![build status](https://img.shields.io/travis/MattouFP/midijs.svg)](https://travis-ci.org/MattouFP/midijs)
+
 # midijs
 
 Read and write Standard MIDI files and enable communication with MIDI devices!

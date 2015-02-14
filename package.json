@@ -1,13 +1,13 @@
 {
     "name": "midijs",
-    "version": "0.10.0",
+    "version": "0.10.1",
     "description": "Read and write Standard MIDI files and enable communication with MIDI devices!",
     "license": "MIT",
     "main": "index.js",
     
     "scripts": {
-        "test": "mocha -R spec",
-        "docs": "jsdoc lib -r"
+        "test": "./node_modules/.bin/mocha -R spec",
+        "docs": "./node_modules/.bin/jsdoc lib -r"
     },
     
     "repository": {
@@ -30,5 +30,10 @@
     "dependencies": {
         "buffercursor": "0.0.12",
         "es6-promise": "^2.0.1"
+    },
+    
+    "devDependencies": {
+        "mocha": "^2.1.0",
+        "jsdoc": "^3.3.0-beta1"
     }
 }

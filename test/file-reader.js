@@ -4,11 +4,11 @@ var assert = require('assert');
 var path = require('path');
 var fs = require('fs');
 
-var File = require('../lib/file').File;
-var Header = File.Header;
-var Track = File.Track;
-var MetaEvent = File.MetaEvent;
-var ChannelEvent = File.ChannelEvent;
+var MIDI = require('../index');
+var Header = MIDI.File.Header;
+var Track = MIDI.File.Track;
+var MetaEvent = MIDI.File.MetaEvent;
+var ChannelEvent = MIDI.File.ChannelEvent;
 
 var fixtures = path.join(__dirname, 'fixtures');
 var filePath = path.join(fixtures, 'file.mid');
@@ -24,13 +24,13 @@ describe('File as a reader', function () {
                     throw err;
                 }
 
-                bufferFile = new File(data);
+                bufferFile = new MIDI.File(data);
                 bufferFile.parse(done);
             });
         });
         
         it('should load with streams', function (done) {
-            streamFile = new File();
+            streamFile = new MIDI.File();
             streamFile.on('parsed', done);
 
             fs.createReadStream(filePath).pipe(streamFile);
@@ -46,7 +46,7 @@ describe('File as a reader', function () {
         var file;
         
         before(function (done) {
-            file = new File();
+            file = new MIDI.File();
             file.on('parsed', done);
 
             fs.createReadStream(filePath).pipe(file);
@@ -181,7 +181,7 @@ describe('File as a reader', function () {
                     throw err;
                 }
                 
-                file = new File(data);
+                file = new MIDI.File(data);
                 
                 file.on('error', function (error) {
                     assert.ok(/invalid midi/i.test(error.message));

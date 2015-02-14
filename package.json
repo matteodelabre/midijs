@@ -6,7 +6,8 @@
     "main": "index.js",
     
     "scripts": {
-        "test": "mocha -R spec"
+        "test": "mocha -R spec",
+        "docs": "jsdoc lib -r"
     },
     
     "repository": {

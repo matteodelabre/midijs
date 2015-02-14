@@ -5,10 +5,10 @@ var path = require('path');
 var fs = require('fs');
 
 var File = require('../lib/file').File;
-var Header = require('../lib/file/header').Header;
-var Track = require('../lib/file/track').Track;
-var MetaEvent = require('../lib/file/event').MetaEvent;
-var ChannelEvent = require('../lib/file/event').ChannelEvent;
+var Header = File.Header;
+var Track = File.Track;
+var MetaEvent = File.MetaEvent;
+var ChannelEvent = File.ChannelEvent;
 
 var fixtures = path.join(__dirname, 'fixtures');
 var filePath = path.join(fixtures, 'file.mid');

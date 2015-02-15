@@ -5,10 +5,11 @@ var path = require('path');
 var fs = require('fs');
 
 var MIDI = require('../index');
-var Header = MIDI.File.Header;
-var Track = MIDI.File.Track;
-var MetaEvent = MIDI.File.MetaEvent;
-var ChannelEvent = MIDI.File.ChannelEvent;
+var File = MIDI.File;
+var Header = File.Header;
+var Track = File.Track;
+var MetaEvent = File.MetaEvent;
+var ChannelEvent = File.ChannelEvent;
 
 var fixtures = path.join(__dirname, 'fixtures');
 var filePath = path.join(fixtures, 'file.mid');
@@ -24,15 +25,14 @@ describe('File as a reader', function () {
                     throw err;
                 }
 
-                bufferFile = new MIDI.File(data);
-                bufferFile.parse(done);
+                bufferFile = new File(data, done);
             });
         });
         
         it('should load with streams', function (done) {
-            streamFile = new MIDI.File();
-            streamFile.on('parsed', done);
-
+            streamFile = new File();
+            
+            streamFile.on('finish', done);
             fs.createReadStream(filePath).pipe(streamFile);
         });
         
@@ -46,9 +46,9 @@ describe('File as a reader', function () {
         var file;
         
         before(function (done) {
-            file = new MIDI.File();
-            file.on('parsed', done);
-
+            file = new File();
+            
+            file.on('finish', done);
             fs.createReadStream(filePath).pipe(file);
         });
         
@@ -181,14 +181,12 @@ describe('File as a reader', function () {
                     throw err;
                 }
                 
-                file = new MIDI.File(data);
-                
-                file.on('error', function (error) {
-                    assert.ok(/invalid midi/i.test(error.message));
+                file = new File();
+                file.setData(data, function (err) {
+                    assert.notStrictEqual(err, undefined);
+                    assert.ok(/invalid midi/i.test(err.message));
                     done();
                 });
-                
-                file.parse();
             });
         });
     });

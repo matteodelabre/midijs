@@ -6,7 +6,7 @@
     "main": "index.js",
     
     "scripts": {
-        "test": "./node_modules/mocha/bin/mocha -R spec",
+        "test": "./node_modules/.bin/mocha -R spec",
         "coverage": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec",
         "docs": "./node_modules/.bin/jsdoc lib -r"
     },

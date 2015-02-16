@@ -224,9 +224,12 @@ describe('File as a reader', function () {
                 }
                 
                 file = new File();
-                file.setData(data, function (err) {
-                    assert.notStrictEqual(err, undefined);
-                    assert.ok(/invalid midi/i.test(err.message));
+                file.setData(data, function (e) {
+                    assert.notStrictEqual(e, undefined);
+                    assert.ok(e instanceof error.MIDIFileParserError);
+                    assert.strictEqual(e.actual, 'test');
+                    assert.strictEqual(e.expected, 'MThd');
+                    
                     done();
                 });
             });

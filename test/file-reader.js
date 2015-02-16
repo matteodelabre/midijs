@@ -9,7 +9,9 @@ var MIDI = require('../index');
 var File = MIDI.File;
 var Header = File.Header;
 var Track = File.Track;
+
 var MetaEvent = File.MetaEvent;
+var SysexEvent = File.SysexEvent;
 var ChannelEvent = File.ChannelEvent;
 
 var fixtures = path.join(__dirname, 'fixtures');
@@ -188,6 +190,8 @@ describe('File as a reader', function () {
                         controller: 123,
                         value: 0
                     }, 0, 480),
+                    
+                    new SysexEvent(0, new buffer.Buffer('test')),
 
                     new MetaEvent(MetaEvent.TYPE.CUE_POINT, {
                         text: 'All sounds are stopped'

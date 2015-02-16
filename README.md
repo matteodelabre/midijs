@@ -41,9 +41,7 @@ fs.readFile(path, function (err, data) {
         throw err;
     }
 
-    var file = new MIDI.File(data);
-    
-    file.parse(function (err) {
+    var file = new MIDI.File(data, function (err) {
         if (err) {
             throw err;
         }
@@ -62,7 +60,7 @@ var fs = require('fs');
 
 var file = new MIDI.File();
 
-file.on('parsed', function () {
+file.on('finish', function () {
     // file.header contains header data
     // file.tracks contains file tracks
 });

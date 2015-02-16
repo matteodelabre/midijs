@@ -7,7 +7,8 @@
         "brace-style": 2,
         "comma-style": [2, "last"],
         "quotes": [2, "simple"],
-        "no-trailing-spaces": 0
+        "no-trailing-spaces": 0,
+        "no-underscore-dangle": 0
     },
     
     "env": {

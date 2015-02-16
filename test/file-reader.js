@@ -5,6 +5,7 @@ var path = require('path');
 var buffer = require('buffer');
 var fs = require('fs');
 
+var error = require('../lib/error');
 var MIDI = require('../index');
 var File = MIDI.File;
 var Header = File.Header;
@@ -40,8 +41,8 @@ describe('File as a reader', function () {
         });
         
         it('should give the same results', function () {
-            assert.deepEqual(bufferFile.header, streamFile.header);
-            assert.deepEqual(bufferFile.tracks, streamFile.tracks);
+            assert.deepEqual(bufferFile.getHeader(), streamFile.getHeader());
+            assert.deepEqual(bufferFile.getTracks(), streamFile.getTracks());
         });
     });
     
@@ -56,23 +57,24 @@ describe('File as a reader', function () {
         });
         
         it('should parse header to correct structure', function () {
-            assert.strictEqual(typeof file.header.fileType, 'number');
-            assert.strictEqual(typeof file.header.ticksPerBeat, 'number');
-            assert.strictEqual(typeof file.header.trackCount, 'number');
+            var header = file.getHeader();
+            
+            assert.strictEqual(typeof header.getFileType(), 'number');
+            assert.strictEqual(typeof header.getTicksPerBeat(), 'number');
         });
         
         it('should parse tracks to correct structure', function () {
-            assert.ok(Array.isArray(file.tracks));
-            assert.strictEqual(file.tracks.length, file.header.trackCount);
+            assert.ok(Array.isArray(file.getTracks()));
+            assert.strictEqual(file.getTracks().length, file.getHeader()._trackCount);
         });
         
         it('should parse header with correct data', function () {
             var header = new Header(1, 2, 120);
-            assert.deepEqual(file.header, header);
+            assert.deepEqual(file.getHeader(), header);
         });
         
         it('should parse tracks with correct data', function () {
-            var tracks = [
+            var expectedTracks = [
                 new Track([
                     new MetaEvent(MetaEvent.TYPE.SEQUENCE_NUMBER, {
                         number: 0
@@ -204,9 +206,9 @@ describe('File as a reader', function () {
                 ])
             ];
             
-            file.tracks.forEach(function (track, i) {
+            file.getTracks().forEach(function (track, i) {
                 track.events.forEach(function (event, j) {
-                    assert.deepEqual(event, tracks[i].events[j]);
+                    assert.deepEqual(event, expectedTracks[i].events[j]);
                 });
             });
         });

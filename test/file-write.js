@@ -8,13 +8,17 @@ describe('File as a writer', function () {
     var file;
     
     it('should create a new file', function () {
+        var header, tracks;
+        
         file = new File();
+        header = file.getHeader();
+        tracks = file.getTracks();
         
-        assert.strictEqual(file.header.fileType, 1);
-        assert.strictEqual(file.header.trackCount, 0);
-        assert.strictEqual(file.header.ticksPerBeat, 120);
+        assert.strictEqual(header.getFileType(), 1);
+        assert.strictEqual(header._trackCount, 0);
+        assert.strictEqual(header.getTicksPerBeat(), 120);
         
-        assert.ok(Array.isArray(file.tracks));
-        assert.strictEqual(file.tracks.length, file.header.trackCount);
+        assert.ok(Array.isArray(tracks));
+        assert.strictEqual(tracks.length, header._trackCount);
     });
 });

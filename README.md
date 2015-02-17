@@ -20,7 +20,7 @@ npm install --save midijs
 ### File
 
 Read or write data from or to a Standard MIDI file.  
-Creating a new empty file:
+Creating an empty file:
 
 ```js
 var MIDI = require('midijs');
@@ -104,8 +104,8 @@ track.getEvent(0); // get an event
 track.removeEvent(0); // remove given event
 track.addEvent(1, // position (optional)
     new File.ChannelEvent(File.ChannelEvent.TYPE.PROGRAM_CHANGE, {
-        program: MIDI.programs.indexOf('organ_church'),
-    }, 0, 200);
+        program: MIDI.programs.indexOf('organ_church')
+    }, 0, 200)
 );
 ```
 

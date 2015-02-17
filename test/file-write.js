@@ -3,6 +3,7 @@
 var assert = require('assert');
 var path = require('path');
 var buffer = require('buffer');
+var bufferEqual = require('buffer-equal');
 var fs = require('fs');
 
 var MIDI = require('../index');
@@ -261,7 +262,7 @@ describe('File as a writer', function () {
         });
         
         it('should give the same results', function () {
-            assert.ok(encodedBuffers.equals(encodedStreams));
+            assert.ok(bufferEqual(encodedBuffers, encodedStreams));
         });
         
         it('should equal reference file', function (done) {
@@ -271,8 +272,8 @@ describe('File as a writer', function () {
                     return;
                 }
                 
-                assert.ok(encodedBuffers.equals(data));
-                assert.ok(encodedStreams.equals(data));
+                assert.ok(bufferEqual(encodedBuffers, data));
+                assert.ok(bufferEqual(encodedStreams, data));
                 done();
             });
         });

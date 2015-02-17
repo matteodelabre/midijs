@@ -72,6 +72,93 @@ file.on('error', function (err) {
 fs.createReadStream(path).pipe(file);
 ```
 
+Changing elements in a file:
+
+```js
+var MIDI = require('midijs');
+var File = MIDI.File;
+
+/** edit header **/
+
+file.getHeader().setTicksPerBeat(60); // speed up twice
+file.getHeader().setFileType(File.Header.FILE_TYPE.SINGLE_TRACK); // change file type
+
+/** edit tracks **/
+
+file.getTracks(); // get all tracks
+file.getTrack(0); // get a track
+file.removeTrack(0); // remove given track
+
+// add a track with events
+file.addTrack(2, // position (optional)
+    new File.ChannelEvent(File.ChannelEvent.TYPE.NOTE_ON, {
+        note: 45
+    }),
+    new File.MetaEvent(File.MetaEvent.TYPE.END_OF_TRACK)
+);
+
+/** edit events in a track **/
+
+track.getEvents(); // get all events
+track.getEvent(0); // get an event
+track.removeEvent(0); // remove given event
+track.addEvent(1, // position (optional)
+    new File.ChannelEvent(File.ChannelEvent.TYPE.PROGRAM_CHANGE, {
+        program: MIDI.programs.indexOf('organ_church'),
+    }, 0, 200);
+);
+```
+
+Saving data to a SMF file, using the Buffer API:
+
+```js
+var MIDI = require('midijs');
+var fs = require('fs');
+
+var file = new MIDI.File();
+
+// add/remove tracks or events...
+
+file.getData(function (err, data) {
+    if (err) {
+        throw err;
+    }
+    
+    fs.writeFile(path, data, function (err) {
+        if (err) {
+            throw err;
+        }
+        
+        // file at 'path' now contains binary MIDI data
+        // ready to be played by any other MIDI program
+        // (or re-read by this module later)
+    });
+});
+```
+
+Or using the Stream API:
+
+```js
+var MIDI = require('midijs');
+var fs = require('fs');
+
+var file = new MIDI.File();
+
+// add/remove tracks or events...
+
+file.on('end', function () {
+    // file at 'path' now contains binary MIDI data
+    // ready to be played by any other MIDI program
+    // (or re-read by this module later)
+});
+
+file.on('error', function (err) {
+    throw err;
+});
+
+file.pipe(fs.createWriteStream(path));
+```
+
 ### connect()
 
 Access a MIDI driver that enables communication with the plugged MIDI
@@ -168,6 +255,10 @@ driver.on('event', function (event) {
 ### programs
 
 List of programs defined by the General MIDI standard.
+
+### errors
+
+Constructors of errors that can be emitted by this module.
 
 ## Commit convention
 

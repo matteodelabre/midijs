@@ -1,7 +1,9 @@
 'use strict';
 
 var assert = require('assert');
+var path = require('path');
 var buffer = require('buffer');
+var fs = require('fs');
 
 var MIDI = require('../index');
 var File = MIDI.File;
@@ -10,6 +12,9 @@ var error = MIDI.error;
 var MetaEvent = File.MetaEvent;
 var SysexEvent = File.SysexEvent;
 var ChannelEvent = File.ChannelEvent;
+
+var fixtures = path.join(__dirname, 'fixtures');
+var filePath = path.join(fixtures, 'file.mid');
 
 describe('File as a writer', function () {
     var file;
@@ -258,6 +263,19 @@ describe('File as a writer', function () {
         it('should give the same results', function () {
             assert.ok(encodedBuffers.equals(encodedStreams));
         });
+        
+        it('should equal reference file', function (done) {
+            fs.readFile(filePath, function (err, data) {
+                if (err) {
+                    done(err);
+                    return;
+                }
+                
+                assert.ok(encodedBuffers.equals(data));
+                assert.ok(encodedStreams.equals(data));
+                done();
+            });
+        });
     });
     
     describe('invalid files', function () {
@@ -283,6 +301,15 @@ describe('File as a writer', function () {
             event.type = 'unknown type!!!'; // dirty hack
             
             file.getTrack(0).addEvent(event);
+            file.getData(function (err) {
+                assert.ok(err);
+                assert.ok(err instanceof error.MIDIFileEncoderError);
+                done();
+            });
+        });
+        
+        it('should throw with unknown events', function (done) {
+            file.getTrack(0).addEvent({}); // add a generic object as an event
             file.getData(function (err) {
                 assert.ok(err);
                 assert.ok(err instanceof error.MIDIFileEncoderError);

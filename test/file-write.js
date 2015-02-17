@@ -18,25 +18,141 @@ var fixtures = path.join(__dirname, 'fixtures');
 var filePath = path.join(fixtures, 'file.mid');
 
 describe('File as a writer', function () {
-    var file;
-    
     describe('creation API', function () {
-        it('should create a new file', function () {
-            var header, tracks;
-
+        var file, header, tracks;
+        
+        before(function () {
             file = new File();
             header = file.getHeader();
             tracks = file.getTracks();
-
-            assert.strictEqual(header.getFileType(), 1);
+        });
+        
+        it('should create a new file', function () {
             assert.strictEqual(header._trackCount, 0);
-            assert.strictEqual(header.getTicksPerBeat(), 120);
-
             assert.ok(Array.isArray(tracks));
             assert.strictEqual(tracks.length, header._trackCount);
         });
+        
+        it('should have header methods', function () {
+            assert.strictEqual(typeof header.getFileType(), 'number');
+            assert.strictEqual(typeof header.getTicksPerBeat(), 'number');
+            
+            assert.strictEqual(
+                header
+                    .setFileType(File.Header.FILE_TYPE.SINGLE_TRACK)
+                    .setFileType(File.Header.FILE_TYPE.SYNC_TRACKS)
+                    .setFileType(File.Header.FILE_TYPE.ASYNC_TRACKS),
+                header
+            );
+            
+            assert.strictEqual(
+                header
+                    .setTicksPerBeat(120)
+                    .setTicksPerBeat(60),
+                header
+            );
+            
+            assert.strictEqual(
+                header.getFileType(),
+                File.Header.FILE_TYPE.ASYNC_TRACKS
+            );
+            
+            assert.strictEqual(header.getTicksPerBeat(), 60);
+        });
+        
+        it('should throw with wrong values', function () {
+            assert.throws(function () {
+                header.setFileType(-1);
+            }, error.MIDIInvalidArgument);
+            
+            assert.throws(function () {
+                header.setTicksPerBeat(0);
+            }, error.MIDIInvalidArgument);
+            
+            assert.throws(function () {
+                header.setTicksPerBeat(65536);
+            }, error.MIDIInvalidArgument);
+        });
 
         it('should add tracks', function () {
+            file.addTrack(0, new MetaEvent(MetaEvent.TYPE.END_OF_TRACK));
+            file.addTrack(new MetaEvent(MetaEvent.TYPE.SET_TEMPO));
+            file.addTrack(2, []);
+            file.addTrack([
+                new ChannelEvent(ChannelEvent.TYPE.CHANNEL_AFTERTOUCH)
+            ]);
+        });
+
+        it('should add events', function () {
+            var track = file.getTrack(2), events, expectedEvents = [
+                new MetaEvent(MetaEvent.TYPE.SEQUENCE_NUMBER, {
+                    number: 2
+                }),
+                new MetaEvent(MetaEvent.TYPE.SEQUENCE_NAME, {
+                    text: 'Optional'
+                }),
+                new MetaEvent(MetaEvent.TYPE.END_OF_TRACK)
+            ];
+
+            track.addEvent(expectedEvents[2]);
+            track.addEvent(0, expectedEvents[0]);
+            track.addEvent(1, expectedEvents[1]);
+
+            events = track.getEvents();
+            events.forEach(function (event, i) {
+                assert.deepEqual(event, expectedEvents[i]);
+            });
+
+            expectedEvents.forEach(function (event, i) {
+                assert.deepEqual(event, track.getEvent(i));
+            });
+        });
+
+        it('should remove events', function () {
+            var track = file.getTrack(2);
+
+            track.removeEvent(0);
+            assert.strictEqual(track.getEvents().length, 2);
+            track.removeEvent();
+            assert.strictEqual(track.getEvents().length, 1);
+
+            assert.strictEqual(
+                track.getEvent(0).type,
+                MetaEvent.TYPE.SEQUENCE_NAME
+            );
+        });
+
+        it('should remove tracks', function () {
+            file.removeTrack(2);
+            assert.strictEqual(file.getTracks().length, 3);
+            file.removeTrack(2);
+            assert.strictEqual(file.getTracks().length, 2);
+            file.removeTrack();
+            assert.strictEqual(file.getTracks().length, 1);
+            
+            assert.strictEqual(
+                file.getTrack(0).getEvent(0).type,
+                MetaEvent.TYPE.END_OF_TRACK
+            );
+        });
+        
+        it('should throw with unknown events', function () {
+            assert.throws(function () {
+                return new ChannelEvent('unknown type!!!');
+            }, error.MIDIInvalidEventError);
+            
+            assert.throws(function () {
+                return new MetaEvent('unknown type!!!');
+            }, error.MIDIInvalidEventError);
+        });
+    });
+    
+    describe('encoding APIs', function () {
+        var file, encodedBuffers, encodedStreams;
+        
+        before(function () {
+            file = new File();
+            
             file.addTrack(
                 new MetaEvent(MetaEvent.TYPE.SEQUENCE_NUMBER, {
                     number: 0
@@ -167,70 +283,7 @@ describe('File as a writer', function () {
 
                 new MetaEvent(MetaEvent.TYPE.END_OF_TRACK)
             ]);
-
-            file.addTrack(2);
-            file.addTrack(3, []);
         });
-
-        it('should add events', function () {
-            var track = file.getTrack(2), events, expectedEvents = [
-                new MetaEvent(MetaEvent.TYPE.SEQUENCE_NUMBER, {
-                    number: 2
-                }),
-                new MetaEvent(MetaEvent.TYPE.SEQUENCE_NAME, {
-                    text: 'Optional'
-                }),
-                new MetaEvent(MetaEvent.TYPE.END_OF_TRACK)
-            ];
-
-            track.addEvent(expectedEvents[2]);
-            track.addEvent(0, expectedEvents[0]);
-            track.addEvent(1, expectedEvents[1]);
-
-            events = track.getEvents();
-            events.forEach(function (event, i) {
-                assert.deepEqual(event, expectedEvents[i]);
-            });
-
-            expectedEvents.forEach(function (event, i) {
-                assert.deepEqual(event, track.getEvent(i));
-            });
-        });
-
-        it('should remove events', function () {
-            var track = file.getTrack(2);
-
-            track.removeEvent(0);
-            assert.strictEqual(track.getEvents().length, 2);
-            track.removeEvent(1);
-            assert.strictEqual(track.getEvents().length, 1);
-
-            assert.strictEqual(
-                track.getEvent(0).type,
-                MetaEvent.TYPE.SEQUENCE_NAME
-            );
-        });
-
-        it('should remove tracks', function () {
-            file.removeTrack(2);
-            assert.strictEqual(file.getTracks().length, 3);
-            file.removeTrack(2);
-            assert.strictEqual(file.getTracks().length, 2);
-        });
-        
-        it('should throw with unknown events', function () {
-            assert.throws(function () {
-                return new ChannelEvent('unknown type!!!');
-            }, error.MIDIInvalidEventError);
-            
-            assert.throws(function () {
-                return new MetaEvent('unknown type!!!');
-            }, error.MIDIInvalidEventError);
-        });
-    });
-    
-    describe('encoding APIs', function () {
-        var encodedBuffers, encodedStreams;
         
         it('should encode with buffers', function (done) {
             file.getData(function (err, data) {
@@ -280,6 +333,8 @@ describe('File as a writer', function () {
     });
     
     describe('invalid files', function () {
+        var file;
+        
         beforeEach(function () {
             file = new File();
             file.addTrack();

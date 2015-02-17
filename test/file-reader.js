@@ -207,8 +207,10 @@ describe('File as a reader', function () {
             ];
             
             file.getTracks().forEach(function (track, i) {
-                track.events.forEach(function (event, j) {
-                    assert.deepEqual(event, expectedTracks[i].events[j]);
+                var expectedEvents = expectedTracks[i].getEvents();
+                
+                track.getEvents().forEach(function (event, j) {
+                    assert.deepEqual(event, expectedEvents[j]);
                 });
             });
         });

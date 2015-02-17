@@ -8,7 +8,7 @@
     "scripts": {
         "test": "./node_modules/.bin/mocha -R spec",
         "coverage": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec",
-        "docs": "./node_modules/.bin/jsdoc lib -r"
+        "docs": "./node_modules/.bin/jsdoc --readme README.md package.json lib index.js -r"
     },
     
     "repository": {

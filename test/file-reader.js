@@ -36,7 +36,9 @@ describe('File as a reader', function () {
         it('should load with streams', function (done) {
             streamFile = new File();
             
-            streamFile.on('finish', done);
+            streamFile.on('error', done);
+            streamFile.on('parsed', done);
+            
             fs.createReadStream(filePath).pipe(streamFile);
         });
         
@@ -52,7 +54,9 @@ describe('File as a reader', function () {
         before(function (done) {
             file = new File();
             
-            file.on('finish', done);
+            file.on('error', done);
+            file.on('parsed', done);
+            
             fs.createReadStream(filePath).pipe(file);
         });
         

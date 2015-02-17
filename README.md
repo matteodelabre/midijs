@@ -60,7 +60,7 @@ var fs = require('fs');
 
 var file = new MIDI.File();
 
-file.on('finish', function () {
+file.on('parsed', function () {
     // file.header contains header data
     // file.tracks contains file tracks
 });

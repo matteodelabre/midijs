@@ -5,12 +5,12 @@ var path = require('path');
 var buffer = require('buffer');
 var fs = require('fs');
 
-var error = require('../lib/error');
 var MIDI = require('../index');
 var File = MIDI.File;
+var error = MIDI.error;
+
 var Header = File.Header;
 var Track = File.Track;
-
 var MetaEvent = File.MetaEvent;
 var SysexEvent = File.SysexEvent;
 var ChannelEvent = File.ChannelEvent;
@@ -142,7 +142,7 @@ describe('File as a reader', function () {
                     new ChannelEvent(ChannelEvent.TYPE.NOTE_ON, {
                         note: 75,
                         velocity: 127
-                    }, 0),
+                    }),
                     new ChannelEvent(ChannelEvent.TYPE.NOTE_ON, {
                         note: 60,
                         velocity: 127
@@ -150,7 +150,7 @@ describe('File as a reader', function () {
                     new ChannelEvent(ChannelEvent.TYPE.NOTE_ON, {
                         note: 60,
                         velocity: 127
-                    }, 0),
+                    }),
 
                     new MetaEvent(MetaEvent.TYPE.LYRICS, {
                         text: 'test'
@@ -166,11 +166,11 @@ describe('File as a reader', function () {
                     new ChannelEvent(ChannelEvent.TYPE.NOTE_AFTERTOUCH, {
                         note: 60,
                         pressure: 50
-                    }, 0),
+                    }),
                     new ChannelEvent(ChannelEvent.TYPE.NOTE_AFTERTOUCH, {
                         note: 60,
                         pressure: 50
-                    }, 0),
+                    }),
 
                     new ChannelEvent(ChannelEvent.TYPE.CHANNEL_AFTERTOUCH, {
                         pressure: 127
@@ -181,7 +181,7 @@ describe('File as a reader', function () {
                     }, 480),
                     new ChannelEvent(ChannelEvent.TYPE.PITCH_BEND, {
                         value: -6000
-                    }, 0),
+                    }),
 
                     new ChannelEvent(ChannelEvent.TYPE.NOTE_OFF, {
                         note: 75,
@@ -200,7 +200,7 @@ describe('File as a reader', function () {
                     }, 480),
                     new ChannelEvent(ChannelEvent.TYPE.PROGRAM_CHANGE, {
                         program: 0
-                    }, 0),
+                    }),
 
                     new MetaEvent(MetaEvent.TYPE.END_OF_TRACK)
                 ])

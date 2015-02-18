@@ -17,10 +17,10 @@ exports.File = require('./lib/file').File;
 exports.connect = require('./lib/connect').connect;
 
 /**
- * List of channel programs defined by the General MIDI standard<br />
- * {@link module:midijs/lib/programs}
+ * List of programs and instruments defined by the General MIDI standard<br />
+ * {@link module:midijs/lib/gm}
  */
-exports.programs = require('./lib/programs').programs;
+exports.gm = require('./lib/gm');
 
 /**
  * Constructors of the errors that can be thrown by this module<br />

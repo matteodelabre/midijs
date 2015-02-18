@@ -131,7 +131,7 @@ describe('File as a reader', function () {
                         text: 'Church organ'
                     }),
                     new ChannelEvent(ChannelEvent.TYPE.PROGRAM_CHANGE, {
-                        program: MIDI.programs.indexOf('organ_church')
+                        program: MIDI.gm.getProgram('Church organ')
                     }, 0),
 
                     new MetaEvent(MetaEvent.TYPE.SMPTE_OFFSET, {

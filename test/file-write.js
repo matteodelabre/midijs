@@ -347,7 +347,7 @@ describe('File as a writer', function () {
             file.getTrack(0).addEvent(event);
             file.getData(function (err) {
                 assert.ok(err);
-                assert.ok(err instanceof error.MIDIFileEncoderError);
+                assert.ok(err instanceof error.MIDIEncoderError);
                 done();
             });
         });
@@ -359,7 +359,7 @@ describe('File as a writer', function () {
             file.getTrack(0).addEvent(event);
             file.getData(function (err) {
                 assert.ok(err);
-                assert.ok(err instanceof error.MIDIFileEncoderError);
+                assert.ok(err instanceof error.MIDIEncoderError);
                 done();
             });
         });
@@ -368,7 +368,7 @@ describe('File as a writer', function () {
             file.getTrack(0).addEvent({}); // add a generic object as an event
             file.getData(function (err) {
                 assert.ok(err);
-                assert.ok(err instanceof error.MIDIFileEncoderError);
+                assert.ok(err instanceof error.MIDIEncoderError);
                 done();
             });
         });

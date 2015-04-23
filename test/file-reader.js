@@ -22,7 +22,7 @@ var invalidFilePath = path.join(fixtures, 'invalid-file.mid');
 describe('File as a reader', function () {
     describe('loading APIs', function () {
         var bufferFile, streamFile;
-        
+
         it('should load with buffers', function (done) {
             fs.readFile(filePath, function (err, data) {
                 if (err) {
@@ -32,51 +32,51 @@ describe('File as a reader', function () {
                 bufferFile = new File(data, done);
             });
         });
-        
+
         it('should load with streams', function (done) {
             streamFile = new File();
-            
+
             streamFile.on('error', done);
             streamFile.on('parsed', done);
-            
+
             fs.createReadStream(filePath).pipe(streamFile);
         });
-        
+
         it('should give the same results', function () {
             assert.deepEqual(bufferFile.getHeader(), streamFile.getHeader());
             assert.deepEqual(bufferFile.getTracks(), streamFile.getTracks());
         });
     });
-    
+
     describe('file compliance', function () {
         var file;
-        
+
         before(function (done) {
             file = new File();
-            
+
             file.on('error', done);
             file.on('parsed', done);
-            
+
             fs.createReadStream(filePath).pipe(file);
         });
-        
+
         it('should parse header to correct structure', function () {
             var header = file.getHeader();
-            
+
             assert.strictEqual(typeof header.getFileType(), 'number');
             assert.strictEqual(typeof header.getTicksPerBeat(), 'number');
         });
-        
+
         it('should parse tracks to correct structure', function () {
             assert.ok(Array.isArray(file.getTracks()));
             assert.strictEqual(file.getTracks().length, file.getHeader()._trackCount);
         });
-        
+
         it('should parse header with correct data', function () {
             var header = new Header(1, 2, 120);
             assert.deepEqual(file.getHeader(), header);
         });
-        
+
         it('should parse tracks with correct data', function () {
             var expectedTracks = [
                 new Track([
@@ -127,8 +127,14 @@ describe('File as a reader', function () {
                     new MetaEvent(MetaEvent.TYPE.CHANNEL_PREFIX, {
                         channel: 0
                     }),
+                    new MetaEvent(MetaEvent.TYPE.DEVICE_NAME, {
+                        text: 'test device'
+                    }),
                     new MetaEvent(MetaEvent.TYPE.INSTRUMENT_NAME, {
                         text: 'Church organ'
+                    }),
+                    new MetaEvent(MetaEvent.TYPE.PROGRAM_NAME, {
+                        text: 'program name test'
                     }),
                     new ChannelEvent(ChannelEvent.TYPE.PROGRAM_CHANGE, {
                         program: MIDI.gm.getProgram('Church organ')
@@ -196,7 +202,7 @@ describe('File as a reader', function () {
                         controller: 123,
                         value: 0
                     }, 0, 480),
-                    
+
                     new SysexEvent(0, new buffer.Buffer('test')),
 
                     new MetaEvent(MetaEvent.TYPE.CUE_POINT, {
@@ -209,33 +215,33 @@ describe('File as a reader', function () {
                     new MetaEvent(MetaEvent.TYPE.END_OF_TRACK)
                 ])
             ];
-            
+
             file.getTracks().forEach(function (track, i) {
                 var expectedEvents = expectedTracks[i].getEvents();
-                
+
                 track.getEvents().forEach(function (event, j) {
                     assert.deepEqual(event, expectedEvents[j]);
                 });
             });
         });
     });
-    
+
     describe('invalid files', function () {
         it('should throw when parsing invalid files', function (done) {
             var file;
-            
+
             fs.readFile(invalidFilePath, function (err, data) {
                 if (err) {
                     throw err;
                 }
-                
+
                 file = new File();
                 file.setData(data, function (e) {
                     assert.notStrictEqual(e, undefined);
                     assert.ok(e instanceof error.MIDIParserError);
                     assert.strictEqual(e.actual, 'test');
                     assert.strictEqual(e.expected, 'MThd');
-                    
+
                     done();
                 });
             });

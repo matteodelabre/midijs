@@ -28,6 +28,10 @@ describe('General MIDI API', function () {
             assert.deepEqual(gm.getFamily(test[0]), 'organ');
         });
         
+        it('should return false when no family match', function () {
+            assert.deepEqual(gm.getFamily('not an instrument'), false);
+        });
+        
         it('should check for the family of a program', function () {
             assert.deepEqual(gm.getProgram(test[1], 'organ'), test[0]);
             assert.deepEqual(gm.getProgram(test[1], 'not an organ'), false);

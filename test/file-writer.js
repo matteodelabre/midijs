@@ -20,23 +20,23 @@ var filePath = path.join(fixtures, 'file.mid');
 describe('File as a writer', function () {
     describe('creation API', function () {
         var file, header, tracks;
-        
+
         before(function () {
             file = new File();
             header = file.getHeader();
             tracks = file.getTracks();
         });
-        
+
         it('should create a new file', function () {
             assert.strictEqual(header._trackCount, 0);
             assert.ok(Array.isArray(tracks));
             assert.strictEqual(tracks.length, header._trackCount);
         });
-        
+
         it('should have header methods', function () {
             assert.strictEqual(typeof header.getFileType(), 'number');
             assert.strictEqual(typeof header.getTicksPerBeat(), 'number');
-            
+
             assert.strictEqual(
                 header
                     .setFileType(File.Header.FILE_TYPE.SINGLE_TRACK)
@@ -44,31 +44,31 @@ describe('File as a writer', function () {
                     .setFileType(File.Header.FILE_TYPE.ASYNC_TRACKS),
                 header
             );
-            
+
             assert.strictEqual(
                 header
                     .setTicksPerBeat(120)
                     .setTicksPerBeat(60),
                 header
             );
-            
+
             assert.strictEqual(
                 header.getFileType(),
                 File.Header.FILE_TYPE.ASYNC_TRACKS
             );
-            
+
             assert.strictEqual(header.getTicksPerBeat(), 60);
         });
-        
+
         it('should throw with wrong values', function () {
             assert.throws(function () {
                 header.setFileType(-1);
             }, error.MIDIInvalidArgument);
-            
+
             assert.throws(function () {
                 header.setTicksPerBeat(0);
             }, error.MIDIInvalidArgument);
-            
+
             assert.throws(function () {
                 header.setTicksPerBeat(65536);
             }, error.MIDIInvalidArgument);
@@ -129,30 +129,30 @@ describe('File as a writer', function () {
             assert.strictEqual(file.getTracks().length, 2);
             file.removeTrack();
             assert.strictEqual(file.getTracks().length, 1);
-            
+
             assert.strictEqual(
                 file.getTrack(0).getEvent(0).type,
                 MetaEvent.TYPE.END_OF_TRACK
             );
         });
-        
+
         it('should throw with unknown events', function () {
             assert.throws(function () {
                 return new ChannelEvent('unknown type!!!');
             }, error.MIDIInvalidEventError);
-            
+
             assert.throws(function () {
                 return new MetaEvent('unknown type!!!');
             }, error.MIDIInvalidEventError);
         });
     });
-    
+
     describe('encoding APIs', function () {
         var file, encodedBuffers, encodedStreams;
-        
+
         before(function () {
             file = new File();
-            
+
             file.addTrack(
                 new MetaEvent(MetaEvent.TYPE.SEQUENCE_NUMBER, {
                     number: 0
@@ -202,8 +202,14 @@ describe('File as a writer', function () {
                 new MetaEvent(MetaEvent.TYPE.CHANNEL_PREFIX, {
                     channel: 0
                 }),
+                new MetaEvent(MetaEvent.TYPE.DEVICE_NAME, {
+                    text: 'test device'
+                }),
                 new MetaEvent(MetaEvent.TYPE.INSTRUMENT_NAME, {
                     text: 'Church organ'
+                }),
+                new MetaEvent(MetaEvent.TYPE.PROGRAM_NAME, {
+                    text: 'program name test'
                 }),
                 new ChannelEvent(ChannelEvent.TYPE.PROGRAM_CHANGE, {
                     program: MIDI.gm.getProgram('Church organ')
@@ -284,66 +290,66 @@ describe('File as a writer', function () {
                 new MetaEvent(MetaEvent.TYPE.END_OF_TRACK)
             ]);
         });
-        
+
         it('should encode with buffers', function (done) {
             file.getData(function (err, data) {
                 if (err) {
                     done(err);
                     return;
                 }
-                
+
                 encodedBuffers = data;
                 done();
             });
         });
-        
+
         it('should encode with streams', function (done) {
             var data = [];
-            
+
             file.on('data', function (chunk) {
                 data.push(chunk);
             });
-            
+
             file.on('error', function (err) {
                 done(err);
             });
-            
+
             file.on('end', function () {
                 encodedStreams = buffer.Buffer.concat(data);
                 done();
             });
         });
-        
+
         it('should give the same results', function () {
             assert.ok(bufferEqual(encodedBuffers, encodedStreams));
         });
-        
+
         it('should equal reference file', function (done) {
             fs.readFile(filePath, function (err, data) {
                 if (err) {
                     done(err);
                     return;
                 }
-                
+
                 assert.ok(bufferEqual(encodedBuffers, data));
                 assert.ok(bufferEqual(encodedStreams, data));
                 done();
             });
         });
     });
-    
+
     describe('invalid files', function () {
         var file;
-        
+
         beforeEach(function () {
             file = new File();
             file.addTrack();
         });
-        
+
         it('should throw with unknown meta events', function (done) {
             var event = new MetaEvent(MetaEvent.TYPE.CHANNEL_PREFIX);
             event.type = 'unknown type!!!'; // dirty hack
-            
+
             file.getTrack(0).addEvent(event);
             file.getData(function (err) {
                 assert.ok(err);
@@ -351,11 +357,11 @@ describe('File as a writer', function () {
                 done();
             });
         });
-        
+
         it('should throw with unknown channel events', function (done) {
             var event = new ChannelEvent(ChannelEvent.TYPE.NOTE_AFTERTOUCH);
             event.type = 'unknown type!!!'; // dirty hack
-            
+
             file.getTrack(0).addEvent(event);
             file.getData(function (err) {
                 assert.ok(err);
@@ -363,7 +369,7 @@ describe('File as a writer', function () {
                 done();
             });
         });
-        
+
         it('should throw with unknown events', function (done) {
             file.getTrack(0).addEvent({}); // add a generic object as an event
             file.getData(function (err) {

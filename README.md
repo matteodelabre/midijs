@@ -194,10 +194,13 @@ Knowing an instrument's name (as a string) as defined by the
 [specification](http://www.midi.org/techspecs/gm1sound.php#instrument),
 you can retrieve its program number, using the `getProgram()` method.
 
+**IMPORTANT NOTE:** the program number is calculated starting from 0,
+but the specification's indices start from 1. Be careful.
+
 ```js
-MIDI.gm.getProgram('MUSIC BOX'); // 11
-MIDI.gm.getProgram('music Box'); // 11
-MIDI.gm.getProgram('Music Box', 'Chromatic Percussion'); // 11
+MIDI.gm.getProgram('MUSIC BOX'); // 10
+MIDI.gm.getProgram('music Box'); // 10
+MIDI.gm.getProgram('Music Box', 'Chromatic Percussion'); // 10
 MIDI.gm.getProgram('Music Box', 'Strings'); // false
 ```
 
@@ -207,11 +210,11 @@ you can retrieve its name, using the `getInstrument()` method, or
 its family name with the `getFamily()` method.
 
 ```js
-MIDI.gm.getInstrument(11); // 'music box'
-MIDI.gm.getFamily(11); // 'chromatic percussion'
+MIDI.gm.getInstrument(10); // 'music box'
+MIDI.gm.getFamily(10); // 'chromatic percussion'
 MIDI.gm.getFamily('music box'); // 'chromatic percussion'
-MIDI.gm.getInstrument(11, 'Chromatic Percussion'); // 'music box'
-MIDI.gm.getInstrument(11, 'Strings'); // false
+MIDI.gm.getInstrument(10, 'Chromatic Percussion'); // 'music box'
+MIDI.gm.getInstrument(10, 'Strings'); // false
 ```
 
 Result of the `getProgram()` or `getInstrument()` method can be

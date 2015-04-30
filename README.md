@@ -106,7 +106,7 @@ track.getEvent(0); // get an event
 track.removeEvent(0); // remove given event
 track.addEvent(1, // position (optional)
     new File.ChannelEvent(File.ChannelEvent.TYPE.PROGRAM_CHANGE, {
-        program: MIDI.programs.indexOf('organ_church')
+        program: MIDI.gm.getProgram('Church Organ')
     }, 0, 200)
 );
 ```
@@ -160,6 +160,39 @@ file.on('error', function (err) {
 
 file.pipe(fs.createWriteStream(path));
 ```
+
+### gm
+
+List of programs numbers associated to instruments and families defined 
+by the General MIDI standard.
+
+Knowing an instrument's name (as a string) as defined by the
+[specification](http://www.midi.org/techspecs/gm1sound.php#instrument),
+you can retrieve its program number, using the `getProgram()` method.
+
+```js
+MIDI.gm.getProgram('MUSIC BOX'); // 11
+MIDI.gm.getProgram('music Box'); // 11
+MIDI.gm.getProgram('Music Box', 'Chromatic Percussion'); // 11
+MIDI.gm.getProgram('Music Box', 'Strings'); // false
+```
+
+Knowing an instrument's program number as defined by the
+[specification](http://www.midi.org/techspecs/gm1sound.php#instrument),
+you can retrieve its name, using the `getInstrument()` method, or
+its family name with the `getFamily()` method.
+
+```js
+MIDI.gm.getInstrument(11); // 'music box'
+MIDI.gm.getFamily(11); // 'chromatic percussion'
+MIDI.gm.getFamily('music box'); // 'chromatic percussion'
+MIDI.gm.getInstrument(11, 'Chromatic Percussion'); // 'music box'
+MIDI.gm.getInstrument(11, 'Strings'); // false
+```
+
+Result of the `getProgram()` or `getInstrument()` method can be
+limited to check if the given instrument is within the given family,
+using the second argument.
 
 ### connect()
 
@@ -253,10 +286,6 @@ driver.on('event', function (event) {
     }
 });
 ```
-
-### programs
-
-List of programs defined by the General MIDI standard.
 
 ### errors
 

@@ -17,6 +17,30 @@ read from a file.
 npm install --save midijs
 ```
 
+### Run tests
+
+```sh
+cd midijs/
+npm install
+npm test
+```
+
+### Check code coverage
+
+```sh
+cd midijs/
+npm install
+npm run coverage
+```
+
+### Make documentation
+
+```sh
+cd midijs/
+npm install
+npm run docs
+```
+
 ## Usage
 
 ### File

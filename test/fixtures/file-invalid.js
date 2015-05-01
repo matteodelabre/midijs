@@ -9,8 +9,8 @@
  * emulate it by calling independent parts of it
  * 
  * Use the 'undefined' argument to generate an undefined event
- * Use the 'channel' argument to generate an invalid channel event
  * Use the 'unknown' argument to generate an unknown event
+ * Use the 'meta' argument to generate an invalid meta event
  */
 
 'use strict';
@@ -78,7 +78,7 @@ switch (type) {
         events.unshift(new Buffer([0x00, 0x7, 0x42, 0x42]));
         break;
     case 'unknown':
-        events.push(new Buffer([0x13, 0x37]));
+        events.push(new Buffer([0x00, 0xF3, 0x13, 0x37]));
         break;
     default:
         type = 'meta';

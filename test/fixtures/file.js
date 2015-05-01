@@ -1,3 +1,11 @@
+/**
+ * MIDI file
+ * 
+ * A script to generate well-formed MIDI files
+ * in order to test if the information is preserved
+ * across parsing and encoding
+ */
+
 'use strict';
 
 var fs = require('fs');

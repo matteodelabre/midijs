@@ -70,8 +70,12 @@ for (i = 0; i < length; i += 1) {
 // add the invalid event
 events.push(new Buffer([0x00, 0xFF, 0x30, 0x00]));
 
+// fake header
+header = (new File())._header;
+header._trackCount = 1;
+
 data = buffer.Buffer.concat([
-    encodeHeader((new File())._header),
+    encodeHeader(header),
     encodeChunk('MTrk', buffer.Buffer.concat(events))
 ]);
 

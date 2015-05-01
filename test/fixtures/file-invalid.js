@@ -7,6 +7,10 @@
  * Here, we doesn't use the normal encoding
  * algorithm that would trigger an event, but we
  * emulate it by calling independent parts of it
+ * 
+ * Use the 'undefined' argument to generate an undefined event
+ * Use the 'channel' argument to generate an invalid channel event
+ * Use the 'unknown' argument to generate an unknown event
  */
 
 'use strict';
@@ -24,6 +28,7 @@ var MetaEvent = File.MetaEvent;
 var SysexEvent = File.SysexEvent;
 var ChannelEvent = File.ChannelEvent;
 
+var type = (process.argv[2] || 'meta').toLowerCase();
 var header, events, data, i, length;
 
 events = [
@@ -68,7 +73,18 @@ for (i = 0; i < length; i += 1) {
 }
 
 // add the invalid event
-events.push(new Buffer([0x00, 0xFF, 0x30, 0x00]));
+switch (type) {
+    case 'undefined':
+        events.unshift(new Buffer([0x00, 0x7, 0x42, 0x42]));
+        break;
+    case 'unknown':
+        events.push(new Buffer([0x13, 0x37]));
+        break;
+    default:
+        type = 'meta';
+        events.push(new Buffer([0x00, 0xFF, 0x30, 0x00]));
+        break;
+}
 
 // fake header
 header = (new File())._header;
@@ -80,7 +96,7 @@ data = buffer.Buffer.concat([
 ]);
 
 // save the file
-fs.writeFile('file-invalid.mid', data, function (err) {
+fs.writeFile('file-invalid-' + type + '.mid', data, function (err) {
     if (err) {
         throw err;
     }

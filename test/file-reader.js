@@ -238,9 +238,7 @@ describe('File as a reader', function () {
                 file = new File();
                 file.setData(data, function (e) {
                     assert.notStrictEqual(e, undefined);
-                    assert.ok(e instanceof error.MIDIParserError);
-                    assert.strictEqual(e.actual, 'test');
-                    assert.strictEqual(e.expected, 'MThd');
+                    assert.ok(e instanceof error.MIDINotMIDIError);
 
                     done();
                 });

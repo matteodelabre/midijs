@@ -15,9 +15,14 @@ var MetaEvent = File.MetaEvent;
 var SysexEvent = File.SysexEvent;
 var ChannelEvent = File.ChannelEvent;
 
+// evaluate fixtures paths
 var fixtures = path.join(__dirname, 'fixtures');
-var filePath = path.join(fixtures, 'file.mid');
-var invalidFilePath = path.join(fixtures, 'invalid-file.mid');
+var genericFilePath = path.join(fixtures, 'file');
+var txtFilePath = path.join(fixtures, 'notmidi.txt');
+var filePath = genericFilePath + '.mid';
+var undefinedFilePath = genericFilePath + '-invalid-undefined.mid';
+var unknownFilePath = genericFilePath + '-invalid-unknown.mid';
+var invalidMetaFilePath = genericFilePath + '-invalid-meta.mid';
 
 describe('File as a reader', function () {
     describe('loading APIs', function () {
@@ -227,22 +232,50 @@ describe('File as a reader', function () {
     });
 
     describe('invalid files', function () {
-        it('should throw when parsing invalid files', function (done) {
-            var file;
-
-            fs.readFile(invalidFilePath, function (err, data) {
-                if (err) {
-                    throw err;
-                }
-
-                file = new File();
-                file.setData(data, function (e) {
-                    assert.notStrictEqual(e, undefined);
-                    assert.ok(e instanceof error.MIDINotMIDIError);
-
-                    done();
+        /**
+         * Expect parsing a file to result into an error
+         * 
+         * @param {string} path - Path to the file to check
+         * @param {Error} errorType - Constructor of the expected error
+         */
+        function expectInvalid(path, errorType) {
+            return function (done) {
+                var file;
+    
+                fs.readFile(path, function (err, data) {
+                    if (err) {
+                        throw err;
+                    }
+    
+                    file = new File();
+                    file.setData(data, function (e) {
+                        assert.notStrictEqual(e, undefined);
+                        assert.ok(e instanceof errorType);
+                        
+                        done();
+                    });
                 });
-            });
-        });
+            };
+        }
+        
+        it(
+            'should throw when parsing non-MIDI files',
+            expectInvalid(txtFilePath, error.MIDINotMIDIError)
+        );
+        
+        it(
+            'should throw with undefined events',
+            expectInvalid(undefinedFilePath, error.MIDIParserError)
+        );
+        
+        it(
+            'should throw with unknown events',
+            expectInvalid(unknownFilePath, error.MIDIParserError)
+        );
+        
+        it(
+            'should throw with invalid meta events',
+            expectInvalid(invalidMetaFilePath, error.MIDIParserError)
+        );
     });
 });

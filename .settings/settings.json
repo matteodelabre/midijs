@@ -1,0 +1,22 @@
+{
+	"javascript.validate.lint.curlyBracketsMustNotBeOmitted": "ignore",
+	"javascript.validate.lint.emptyBlocksWithoutComment": "ignore",
+	"javascript.validate.lint.comparisonOperatorsNotStrict": "ignore",
+	"javascript.validate.lint.missingSemicolon": "ignore",
+	"javascript.validate.lint.reservedKeywords": "ignore",
+	"javascript.validate.lint.typeScriptSpecifics": "ignore",
+	"javascript.validate.lint.unknownTypeOfResults": "ignore",
+	"javascript.validate.lint.semicolonsInsteadOfBlocks": "ignore",
+	"javascript.validate.lint.functionsInsideLoops": "ignore",
+	"javascript.validate.lint.newOnLowercaseFunctions": "ignore",
+	"javascript.validate.lint.tripleSlashReferenceAlike": "ignore",
+	"javascript.validate.lint.unusedVariables": "ignore",
+	"javascript.validate.lint.unusedFunctions": "ignore",
+	"javascript.validate.lint.newOnReturningFunctions": "ignore",
+	"javascript.validate.lint.redeclaredVariables": "ignore",
+	"javascript.validate.lint.undeclaredVariables": "ignore",
+	"javascript.validate.lint.unknownProperty": "ignore",
+	"javascript.validate.lint.primitivesInInstanceOf": "ignore",
+	"javascript.validate.lint.mixedTypesArithmetics": "ignore",
+	"javascript.validate.lint.forcedTypeConversion": "ignore"
+}

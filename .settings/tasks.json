@@ -1,0 +1,17 @@
+{
+	"version": "0.1.0",
+	"command": "eslint.cmd",
+	"args": ["${file}", "--no-color"],
+	"showOutput": "silent",
+	"problemMatcher": {
+		"owner": "javascript",
+		"fileLocation": ["relative", "${cwd}"],
+		"pattern": {
+			"regexp": "^  (\\d+):(\\d+)  (error|warning)  (.*)$",
+			"line": 1,
+			"column": 2,
+			"severity": 3,
+			"message": 4
+		}
+	}
+}

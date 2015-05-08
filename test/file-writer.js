@@ -199,7 +199,7 @@ describe('File as a writer', function () {
                     text: 'Test song'
                 }),
 
-                new MetaEvent(MetaEvent.TYPE.CHANNEL_PREFIX, {
+                new MetaEvent(MetaEvent.TYPE.MIDI_CHANNEL, {
                     channel: 0
                 }),
                 new MetaEvent(MetaEvent.TYPE.MIDI_PORT, {
@@ -350,7 +350,7 @@ describe('File as a writer', function () {
         });
 
         it('should throw with unknown meta events', function (done) {
-            var event = new MetaEvent(MetaEvent.TYPE.CHANNEL_PREFIX);
+            var event = new MetaEvent(MetaEvent.TYPE.MIDI_CHANNEL);
             event.type = 'unknown type!!!'; // dirty hack
 
             file.getTrack(0).addEvent(event);

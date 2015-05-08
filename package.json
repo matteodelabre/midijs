@@ -1,6 +1,6 @@
 {
     "name": "midijs",
-    "version": "0.11.2",
+    "version": "0.12.0",
     "description": "Read and write Standard MIDI files and enable communication with MIDI devices!",
     "license": "MIT",
     "main": "index.js",

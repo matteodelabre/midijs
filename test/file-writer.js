@@ -202,6 +202,9 @@ describe('File as a writer', function () {
                 new MetaEvent(MetaEvent.TYPE.CHANNEL_PREFIX, {
                     channel: 0
                 }),
+                new MetaEvent(MetaEvent.TYPE.MIDI_PORT, {
+                    port: 42
+                }),
                 new MetaEvent(MetaEvent.TYPE.DEVICE_NAME, {
                     text: 'test device'
                 }),

@@ -1,7 +1,3 @@
-/**
- * @module midijs
- */
-
 'use strict';
 
 /**

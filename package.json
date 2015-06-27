@@ -4,18 +4,18 @@
     "description": "Read and write Standard MIDI files and enable communication with MIDI devices!",
     "license": "MIT",
     "main": "index.js",
-    
+
     "scripts": {
         "test": "./node_modules/.bin/mocha -R spec",
         "coverage": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec",
-        "docs": "./node_modules/.bin/jsdoc --readme README.md package.json lib index.js -r"
+        "docs": "./node_modules/.bin/documentation index.js -f html -o docs"
     },
-    
+
     "repository": {
         "type": "git",
         "url": "http://github.com/MattouFP/midijs.git"
     },
-    
+
     "keywords": [
         "midi",
         "files",
@@ -23,21 +23,21 @@
         "music",
         "devices"
     ],
-    
+
     "author": {
         "name": "Mattéo DELABRE",
         "email": "matteo.delabre@outlook.fr",
         "url": "https://github.com/MattouFP"
     },
-    
+
     "dependencies": {
         "buffercursor": "0.0.12",
         "es6-promise": "^2.0.1"
     },
-    
+
     "devDependencies": {
         "istanbul": "^0.3.5",
-        "jsdoc": "^3.3.0-beta1",
+        "documentation": "^2.0.0",
         "buffer-equal": "0.0.1",
         "mocha": "^2.1.0"
     }

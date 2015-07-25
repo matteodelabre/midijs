@@ -32,7 +32,8 @@
 
     "dependencies": {
         "buffercursor": "0.0.12",
-        "promise": "^7.0.3"
+        "promise": "^7.0.3",
+        "midi": "^0.9.3"
     },
 
     "devDependencies": {

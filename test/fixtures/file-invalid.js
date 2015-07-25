@@ -1,13 +1,13 @@
 /**
  * Invalid MIDI file
- * 
+ *
  * A script to generate malformed MIDI files
  * for testing error handling
- * 
+ *
  * Here, we doesn't use the normal encoding
  * algorithm that would trigger an event, but we
  * emulate it by calling independent parts of it
- * 
+ *
  * Use the 'undefined' argument to generate an undefined event
  * Use the 'unknown' argument to generate an unknown event
  * Use the 'meta' argument to generate an invalid meta event
@@ -16,7 +16,6 @@
 'use strict';
 
 var fs = require('fs');
-var buffer = require('buffer');
 
 var MIDI = require('../../index');
 var encodeHeader = require('../../lib/file/encoder/header').encodeHeader;
@@ -25,8 +24,6 @@ var encodeChunk = require('../../lib/file/encoder/chunk').encodeChunk;
 var File = MIDI.File;
 
 var MetaEvent = File.MetaEvent;
-var SysexEvent = File.SysexEvent;
-var ChannelEvent = File.ChannelEvent;
 
 var type = (process.argv[2] || 'meta').toLowerCase();
 var header, events, data, i, length;
@@ -55,9 +52,9 @@ events = [
         note: 3
     }),
     new MetaEvent(MetaEvent.TYPE.SEQUENCER_SPECIFIC, {
-        data: new buffer.Buffer('just testing out')
+        data: new Buffer('just testing out')
     }),
-    
+
     new MetaEvent(MetaEvent.TYPE.SET_TEMPO, {
         tempo: 240
     }),
@@ -90,9 +87,9 @@ switch (type) {
 header = (new File())._header;
 header._trackCount = 1;
 
-data = buffer.Buffer.concat([
+data = Buffer.concat([
     encodeHeader(header),
-    encodeChunk('MTrk', buffer.Buffer.concat(events))
+    encodeChunk('MTrk', Buffer.concat(events))
 ]);
 
 // save the file
@@ -100,6 +97,6 @@ fs.writeFile('file-invalid-' + type + '.mid', data, function (err) {
     if (err) {
         throw err;
     }
-    
+
     console.log('file written');
 });

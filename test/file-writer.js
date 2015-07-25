@@ -2,7 +2,6 @@
 
 var assert = require('assert');
 var path = require('path');
-var buffer = require('buffer');
 var bufferEqual = require('buffer-equal');
 var fs = require('fs');
 
@@ -178,7 +177,7 @@ describe('File as a writer', function () {
                     note: 3
                 }),
                 new MetaEvent(MetaEvent.TYPE.SEQUENCER_SPECIFIC, {
-                    data: new buffer.Buffer('just testing out')
+                    data: new Buffer('just testing out')
                 }),
 
                 new MetaEvent(MetaEvent.TYPE.SET_TEMPO, {
@@ -281,7 +280,7 @@ describe('File as a writer', function () {
                     value: 0
                 }, 0, 480),
 
-                new SysexEvent(0, new buffer.Buffer('test')),
+                new SysexEvent(0, new Buffer('test')),
 
                 new MetaEvent(MetaEvent.TYPE.CUE_POINT, {
                     text: 'All sounds are stopped'
@@ -318,7 +317,7 @@ describe('File as a writer', function () {
             });
 
             file.on('end', function () {
-                encodedStreams = buffer.Buffer.concat(data);
+                encodedStreams = Buffer.concat(data);
                 done();
             });
         });

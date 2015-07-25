@@ -2,7 +2,6 @@
 
 var assert = require('assert');
 var path = require('path');
-var buffer = require('buffer');
 var fs = require('fs');
 
 var MIDI = require('../index');
@@ -109,7 +108,7 @@ describe('File as a reader', function () {
                         note: 3
                     }),
                     new MetaEvent(MetaEvent.TYPE.SEQUENCER_SPECIFIC, {
-                        data: new buffer.Buffer('just testing out')
+                        data: new Buffer('just testing out')
                     }),
 
                     new MetaEvent(MetaEvent.TYPE.SET_TEMPO, {
@@ -211,7 +210,7 @@ describe('File as a reader', function () {
                         value: 0
                     }, 0, 480),
 
-                    new SysexEvent(0, new buffer.Buffer('test')),
+                    new SysexEvent(0, new Buffer('test')),
 
                     new MetaEvent(MetaEvent.TYPE.CUE_POINT, {
                         text: 'All sounds are stopped'
@@ -237,45 +236,45 @@ describe('File as a reader', function () {
     describe('invalid files', function () {
         /**
          * Expect parsing a file to result into an error
-         * 
+         *
          * @param {string} path - Path to the file to check
          * @param {Error} errorType - Constructor of the expected error
          */
         function expectInvalid(path, errorType) {
             return function (done) {
                 var file;
-    
+
                 fs.readFile(path, function (err, data) {
                     if (err) {
                         throw err;
                     }
-    
+
                     file = new File();
                     file.setData(data, function (e) {
                         assert.notStrictEqual(e, undefined);
                         assert.ok(e instanceof errorType);
-                        
+
                         done();
                     });
                 });
             };
         }
-        
+
         it(
             'should throw when parsing non-MIDI files',
             expectInvalid(txtFilePath, error.MIDINotMIDIError)
         );
-        
+
         it(
             'should throw with undefined events',
             expectInvalid(undefinedFilePath, error.MIDIParserError)
         );
-        
+
         it(
             'should throw with unknown events',
             expectInvalid(unknownFilePath, error.MIDIParserError)
         );
-        
+
         it(
             'should throw with invalid meta events',
             expectInvalid(invalidMetaFilePath, error.MIDIParserError)

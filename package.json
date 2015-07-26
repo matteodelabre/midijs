@@ -1,45 +1,40 @@
 {
-    "name": "midijs",
-    "version": "0.12.0",
-    "description": "Read and write Standard MIDI files and enable communication with MIDI devices!",
-    "license": "MIT",
-    "main": "index.js",
-
-    "scripts": {
-        "test": "./node_modules/.bin/mocha -R spec",
-        "coverage": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec",
-        "docs": "./node_modules/.bin/documentation index.js -f html -o docs --lint"
-    },
-
-    "repository": {
-        "type": "git",
-        "url": "http://github.com/MattouFP/midijs.git"
-    },
-
-    "keywords": [
-        "midi",
-        "files",
-        "parser",
-        "music",
-        "devices"
-    ],
-
-    "author": {
-        "name": "Mattéo DELABRE",
-        "email": "matteo.delabre@outlook.fr",
-        "url": "https://github.com/MattouFP"
-    },
-
-    "dependencies": {
-        "buffercursor": "0.0.12",
-        "promise": "^7.0.3",
-        "midi": "^0.9.3"
-    },
-
-    "devDependencies": {
-        "istanbul": "^0.3.5",
-        "documentation": "^2.0.0",
-        "buffer-equal": "0.0.1",
-        "mocha": "^2.1.0"
-    }
+  "name": "midijs",
+  "version": "0.12.0",
+  "description": "Read and write Standard MIDI files and enable communication with MIDI devices!",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha -R spec",
+    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec",
+    "docs": "./node_modules/.bin/documentation index.js -f html -o docs --lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/MattouFP/midijs.git"
+  },
+  "keywords": [
+    "midi",
+    "files",
+    "parser",
+    "music",
+    "devices"
+  ],
+  "author": {
+    "name": "Mattéo DELABRE",
+    "email": "matteo.delabre@outlook.fr",
+    "url": "https://github.com/MattouFP"
+  },
+  "dependencies": {
+    "buffercursor": "0.0.12",
+    "midi": "^0.9.3",
+    "object-assign": "^3.0.0",
+    "promise": "^7.0.3"
+  },
+  "devDependencies": {
+    "istanbul": "^0.3.5",
+    "documentation": "^2.0.0",
+    "buffer-equal": "0.0.1",
+    "mocha": "^2.1.0"
+  }
 }

@@ -1,7 +1,9 @@
 language: node_js
-before_install:
-    - sudo apt-get update
-    - sudo apt-get install libasound2-dev
+sudo: false
+addons:
+    apt:
+        packages:
+            - libasound2-dev
 node_js:
     - "0.12"
     - "0.10"

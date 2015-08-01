@@ -9,154 +9,136 @@
 'use strict';
 
 var fs = require('fs');
+var path = require('path');
 
 var MIDI = require('../../index');
 var File = MIDI.File;
 
-var MetaEvent = File.MetaEvent;
-var SysexEvent = File.SysexEvent;
-var ChannelEvent = File.ChannelEvent;
-
-var file = new File();
-
-file.addTrack(
-    new MetaEvent(MetaEvent.TYPE.SEQUENCE_NUMBER, {
+var file = new File().track()
+    .meta(File.META.SEQUENCE_NUMBER, {
         number: 0
-    }),
-    new MetaEvent(MetaEvent.TYPE.SEQUENCE_NAME, {
+    })
+    .meta(File.META.SEQUENCE_NAME, {
         text: 'Meta track'
-    }),
-    new MetaEvent(MetaEvent.TYPE.COPYRIGHT_NOTICE, {
+    })
+    .meta(File.META.COPYRIGHT_NOTICE, {
         text: '© 2015, Mattéo DELABRE'
-    }),
-    new MetaEvent(MetaEvent.TYPE.TEXT, {
+    })
+    .meta(File.META.TEXT, {
         text: 'A fixture for testing all types of MIDI events in one file'
-    }),
-    new MetaEvent(MetaEvent.TYPE.TIME_SIGNATURE, {
+    })
+    .meta(File.META.TIME_SIGNATURE, {
         numerator: 2,
         denominator: 4,
         metronome: 24,
         clockSignalsPerBeat: 8
-    }),
-    new MetaEvent(MetaEvent.TYPE.KEY_SIGNATURE, {
+    })
+    .meta(File.META.KEY_SIGNATURE, {
         major: false,
         note: 3
-    }),
-    new MetaEvent(MetaEvent.TYPE.SEQUENCER_SPECIFIC, {
-        data: new Buffer('just testing out')
-    }),
-
-    new MetaEvent(MetaEvent.TYPE.SET_TEMPO, {
+    })
+    .meta(File.META.SEQUENCER_SPECIFIC, {
+        bytes: new Buffer('just testing out')
+    })
+    .meta(File.META.SET_TEMPO, {
         tempo: 240
-    }),
-    new MetaEvent(MetaEvent.TYPE.SET_TEMPO, {
+    })
+    .meta(File.META.SET_TEMPO, {
         tempo: 480
-    }, 600),
-
-    new MetaEvent(MetaEvent.TYPE.END_OF_TRACK)
-).addTrack(
-    new MetaEvent(MetaEvent.TYPE.SEQUENCE_NUMBER, {
+    }, 600)
+.end().track()
+    .meta(File.META.SEQUENCE_NUMBER, {
         number: 1
-    }),
-    new MetaEvent(MetaEvent.TYPE.SEQUENCE_NAME, {
+    })
+    .meta(File.META.SEQUENCE_NAME, {
         text: 'Test song'
-    }),
-
-    new MetaEvent(MetaEvent.TYPE.MIDI_CHANNEL, {
+    })
+    .meta(File.META.MIDI_CHANNEL, {
         channel: 0
-    }),
-    new MetaEvent(MetaEvent.TYPE.MIDI_PORT, {
+    })
+    .meta(File.META.MIDI_PORT, {
         port: 42
-    }),
-    new MetaEvent(MetaEvent.TYPE.DEVICE_NAME, {
+    })
+    .meta(File.META.DEVICE_NAME, {
         text: 'test device'
-    }),
-    new MetaEvent(MetaEvent.TYPE.INSTRUMENT_NAME, {
+    })
+    .meta(File.META.INSTRUMENT_NAME, {
         text: 'Church organ'
-    }),
-    new MetaEvent(MetaEvent.TYPE.PROGRAM_NAME, {
+    })
+    .meta(File.META.PROGRAM_NAME, {
         text: 'program name test'
-    }),
-    new ChannelEvent(ChannelEvent.TYPE.PROGRAM_CHANGE, {
+    })
+    .channel(File.CHANNEL.PROGRAM_CHANGE, {
         program: MIDI.gm.getProgram('Church Organ')
-    }, 0),
-
-    new MetaEvent(MetaEvent.TYPE.SMPTE_OFFSET, {
+    }, 0)
+    .meta(File.META.SMPTE_OFFSET, {
         rate: 25,
         hours: 15,
         minutes: 53,
         seconds: 10,
         frames: 20,
         subframes: 50
-    }),
-
-    new ChannelEvent(ChannelEvent.TYPE.NOTE_ON, {
+    })
+    .channel(File.CHANNEL.NOTE_ON, {
         note: 75,
         velocity: 127
-    }, 0),
-    new ChannelEvent(ChannelEvent.TYPE.NOTE_ON, {
+    }, 0)
+    .channel(File.CHANNEL.NOTE_ON, {
         note: 60,
         velocity: 127
-    }, 0, 120),
-    new ChannelEvent(ChannelEvent.TYPE.NOTE_ON, {
+    }, 0, 120)
+    .channel(File.CHANNEL.NOTE_ON, {
         note: 60,
         velocity: 127
-    }, 0),
-
-    new MetaEvent(MetaEvent.TYPE.LYRICS, {
+    }, 0)
+    .meta(File.META.LYRICS, {
         text: 'test'
-    }),
-    new MetaEvent(MetaEvent.TYPE.SET_TEMPO, {
+    })
+    .meta(File.META.SET_TEMPO, {
         tempo: 60
-    }),
-
-    new ChannelEvent(ChannelEvent.TYPE.NOTE_AFTERTOUCH, {
+    })
+    .channel(File.CHANNEL.NOTE_AFTERTOUCH, {
         note: 75,
         pressure: 50
-    }, 0, 480),
-    new ChannelEvent(ChannelEvent.TYPE.NOTE_AFTERTOUCH, {
+    }, 0, 480)
+    .channel(File.CHANNEL.NOTE_AFTERTOUCH, {
         note: 60,
         pressure: 50
-    }, 0),
-    new ChannelEvent(ChannelEvent.TYPE.NOTE_AFTERTOUCH, {
+    }, 0)
+    .channel(File.CHANNEL.NOTE_AFTERTOUCH, {
         note: 60,
         pressure: 50
-    }, 0),
-
-    new ChannelEvent(ChannelEvent.TYPE.CHANNEL_AFTERTOUCH, {
+    }, 0)
+    .channel(File.CHANNEL.CHANNEL_AFTERTOUCH, {
         pressure: 127
-    }, 0, 480),
-
-    new MetaEvent(MetaEvent.TYPE.MARKER, {
+    }, 0, 480)
+    .meta(File.META.MARKER, {
         text: 'Pitch bend'
-    }, 480),
-    new ChannelEvent(ChannelEvent.TYPE.PITCH_BEND, {
+    }, 480)
+    .channel(File.CHANNEL.PITCH_BEND, {
         value: -6000
-    }, 0),
-
-    new ChannelEvent(ChannelEvent.TYPE.NOTE_OFF, {
+    }, 0)
+    .channel(File.CHANNEL.NOTE_OFF, {
         note: 75,
         velocity: 127
-    }, 0, 480),
-
-    new ChannelEvent(ChannelEvent.TYPE.CONTROLLER, {
+    }, 0, 480)
+    .channel(File.CHANNEL.CONTROLLER, {
         controller: 123,
         value: 0
-    }, 0, 480),
-
-    new SysexEvent(0, new Buffer('test')),
-
-    new MetaEvent(MetaEvent.TYPE.CUE_POINT, {
+    }, 0, 480)
+    .sysex(0, new Buffer('test'))
+    .meta(File.META.CUE_POINT, {
         text: 'All sounds are stopped'
-    }, 480),
-    new ChannelEvent(ChannelEvent.TYPE.PROGRAM_CHANGE, {
+    }, 480)
+    .channel(File.CHANNEL.PROGRAM_CHANGE, {
         program: 0
-    }, 0),
+    }, 0)
+.end();
 
-    new MetaEvent(MetaEvent.TYPE.END_OF_TRACK)
-);
+fs.writeFile(path.join(__dirname, 'file.mid'), file.encode(), function (err) {
+    if (err) {
+        throw err;
+    }
 
-file.pipe(fs.createWriteStream('file.mid'));
-file.on('end', function () {
     console.log('file written');
 });

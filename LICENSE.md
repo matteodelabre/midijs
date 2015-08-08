@@ -1,3 +1,7 @@
+# License
+
+_The MIT license._
+
 Copyright (c) 2014-2015 Mattéo DELABRE
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

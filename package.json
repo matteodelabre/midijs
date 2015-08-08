@@ -1,7 +1,7 @@
 {
   "name": "midijs",
   "version": "0.12.0",
-  "description": "Read and write Standard MIDI files and enable communication with MIDI devices!",
+  "description": "Parser and encoder for MIDI events and Standard MIDI files",
   "license": "MIT",
   "main": "index.js",
   "scripts": {
@@ -17,8 +17,7 @@
     "midi",
     "files",
     "parser",
-    "music",
-    "devices"
+    "music"
   ],
   "author": {
     "name": "Mattéo DELABRE",

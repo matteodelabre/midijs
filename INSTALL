@@ -1,8 +1,0 @@
-sudo apt-get install libasound2-dev
-
-// open native port :
-
-sudo apt-get install timidity
-sudo modprobe snd-seq-device
-sudo modprobe snd-seq-midi
-timidity -iA -B2,8 -Os1l -s 44100

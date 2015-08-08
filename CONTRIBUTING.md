@@ -4,6 +4,10 @@ All contributions are welcome! If you want a new feature
 to be added or a bug to be fixed, you can propose your changes
 using a pull request.
 
+Many thanks to those who contributed to this project:
+
+* [corentingurtner](https://github.com/corentingurtner)
+
 There are a few rules to follow so that the repo
 stays consistent.
 

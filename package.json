@@ -5,7 +5,7 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "test": "tape tests/**/*.js | tap-spec",
+    "test": "tape tests/*.js | tap-spec",
     "coverage": "istanbul cover tape -- tests/**/*.js"
   },
   "repository": {

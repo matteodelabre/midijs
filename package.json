@@ -6,14 +6,15 @@
   "main": "index.js",
   "scripts": {
     "test": "tape tests/*.js | tap-spec",
-    "coverage": "istanbul cover tape -- tests/*.js"
+    "coverage": "istanbul cover tape -- tests/*.js",
+    "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
     "url": "http://github.com/MattouFP/midijs.git"
   },
   "engines": {
-      "node": ">=0.10.0"
+    "node": ">=0.10.0"
   },
   "keywords": [
     "midi",
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "buffer-equal": "0.0.1",
+    "coveralls": "^2.11.3",
     "istanbul": "^0.3.5",
     "tap-spec": "^4.0.2",
     "tape": "^4.0.3"

@@ -127,7 +127,7 @@ var file = new File().track()
     }, 0)
 .end();
 
-fs.writeFile(path.join(__dirname, 'file.mid'), file.encode(), function (err) {
+fs.writeFile(path.join(__dirname, 'song.mid'), file.encode(), function (err) {
     if (err) {
         throw err;
     }

@@ -11,67 +11,65 @@
 var fs = require('fs');
 var path = require('path');
 
-var MIDI = require('../../index');
-var File = MIDI.File;
-
+var File = require('../../index').File;
 var file = new File().track()
-    .meta('SEQUENCE_NUMBER', {
+    .meta('sequence number', {
         number: 0
     })
-    .meta('SEQUENCE_NAME', {
+    .meta('sequence name', {
         text: 'Meta track'
     })
-    .meta('COPYRIGHT_NOTICE', {
+    .meta('copyright notice', {
         text: '© 2015, Mattéo DELABRE'
     })
-    .meta('TEXT', {
+    .meta('text', {
         text: 'A fixture for testing all types of MIDI events in one file'
     })
-    .meta('TIME_SIGNATURE', {
+    .meta('time signature', {
         numerator: 2,
         denominator: 4,
         metronome: 24,
         clockSignalsPerBeat: 8
     })
-    .meta('KEY_SIGNATURE', {
+    .meta('key signature', {
         major: false,
         note: 3
     })
-    .meta('SEQUENCER_SPECIFIC', {
+    .meta('sequencer specific', {
         bytes: new Buffer('just testing out')
     })
-    .meta('SET_TEMPO', {
+    .meta('set tempo', {
         tempo: 240
     })
-    .meta('SET_TEMPO', {
+    .meta('set tempo', {
         tempo: 480
     }, 600)
 .end().track()
-    .meta('SEQUENCE_NUMBER', {
+    .meta('sequence number', {
         number: 1
     })
-    .meta('SEQUENCE_NAME', {
+    .meta('sequence name', {
         text: 'Test song'
     })
-    .meta('MIDI_CHANNEL', {
+    .meta('MIDI channel', {
         channel: 0
     })
-    .meta('MIDI_PORT', {
+    .meta('MIDI port', {
         port: 42
     })
-    .meta('DEVICE_NAME', {
+    .meta('device name', {
         text: 'test device'
     })
-    .meta('INSTRUMENT_NAME', {
+    .meta('instrument name', {
         text: 'Church organ'
     })
-    .meta('PROGRAM_NAME', {
+    .meta('program name', {
         text: 'program name test'
     })
-    .channel('PROGRAM_CHANGE', {
-        program: MIDI.gm.getProgram('Church Organ')
+    .channel('program change', {
+        instrument: 'Church Organ'
     }, 0)
-    .meta('SMPTE_OFFSET', {
+    .meta('SMPTE offset', {
         rate: 25,
         hours: 15,
         minutes: 53,
@@ -79,59 +77,59 @@ var file = new File().track()
         frames: 20,
         subframes: 50
     })
-    .channel('NOTE_ON', {
+    .channel('note on', {
         note: 75,
         velocity: 127
     }, 0)
-    .channel('NOTE_ON', {
+    .channel('note on', {
         note: 60,
         velocity: 127
     }, 0, 120)
-    .channel('NOTE_ON', {
+    .channel('note on', {
         note: 60,
         velocity: 127
     }, 0)
-    .meta('LYRICS', {
+    .meta('lyrics', {
         text: 'test'
     })
-    .meta('SET_TEMPO', {
+    .meta('set tempo', {
         tempo: 60
     })
-    .channel('NOTE_AFTERTOUCH', {
+    .channel('note aftertouch', {
         note: 75,
         pressure: 50
     }, 0, 480)
-    .channel('NOTE_AFTERTOUCH', {
+    .channel('note aftertouch', {
         note: 60,
         pressure: 50
     }, 0)
-    .channel('NOTE_AFTERTOUCH', {
+    .channel('note aftertouch', {
         note: 60,
         pressure: 50
     }, 0)
-    .channel('CHANNEL_AFTERTOUCH', {
+    .channel('channel aftertouch', {
         pressure: 127
     }, 0, 480)
-    .meta('MARKER', {
+    .meta('marker', {
         text: 'Pitch bend'
     }, 480)
-    .channel('PITCH_BEND', {
+    .channel('pitch bend', {
         value: -6000
     }, 0)
-    .channel('NOTE_OFF', {
+    .channel('note off', {
         note: 75,
         velocity: 127
     }, 0, 480)
-    .channel('CONTROLLER', {
-        controller: 123,
+    .channel('controller', {
+        controller: 'all notes off',
         value: 0
     }, 0, 480)
-    .sysex('TYPE_1', new Buffer('test'))
-    .meta('CUE_POINT', {
+    .sysex('type 1', new Buffer('test'))
+    .meta('cue point', {
         text: 'All sounds are stopped'
     }, 480)
-    .channel('PROGRAM_CHANGE', {
-        program: 0
+    .channel('program change', {
+        instrument: 'Acoustic Grand Piano'
     }, 0)
 .end();
 

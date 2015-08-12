@@ -51,12 +51,6 @@ var file = new File().track()
     .meta('sequence name', {
         text: 'Test song'
     })
-    .meta('MIDI channel', {
-        channel: 0
-    })
-    .meta('MIDI port', {
-        port: 42
-    })
     .meta('device name', {
         text: 'test device'
     })

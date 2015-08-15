@@ -4,6 +4,7 @@ var test = require('tape');
 var fs = require('fs');
 var path = require('path');
 var File = require('../').File;
+var events = require('../').events;
 
 var songpath = path.join(__dirname, 'fixtures/song.mid');
 
@@ -57,6 +58,15 @@ test('File', function (sub) {
         assert.end();
     });
 
+    sub.test('should allow constant shortcuts', function (assert) {
+        var file = new File();
+
+        file.type = 'async tracks';
+        assert.equal(file.type, File.TYPE.ASYNC_TRACKS, 'should convert strings to constants');
+
+        assert.end();
+    });
+
     sub.test('should decode a file and encode it back to the exact same bytes', function (assert) {
         fs.readFile(songpath, function (err, buffer) {
             var file;
@@ -67,5 +77,37 @@ test('File', function (sub) {
             assert.ok(bufferEqual(buffer, file.encode()), 'should result in the same data');
             assert.end();
         });
+    });
+
+    sub.test('should detect non-midi files', function (assert) {
+        assert.throws(function () {
+            File.decode(new Buffer('not midi data'));
+        }, /not a midi file/i, 'should throw with non-midi files');
+        assert.end();
+    });
+
+    sub.test('should enable file creation', function (assert) {
+        var file = new File();
+
+        assert.equal(
+            file.track()
+                .channel('program change', {
+                    instrument: 'acoustic grand piano'
+                })
+                .meta('text', {
+                    text: 'testing'
+                })
+                .sysex('type 1', new Buffer('void'))
+                .end(),
+        file, 'should allow chaining');
+
+        assert.equal(file.tracks.length, 1, 'should create a track');
+        assert.equal(file.tracks[0].events.length, 4, 'should create events');
+        assert.ok(file.tracks[0].events[0] instanceof events.ChannelEvent, 'should create channel events');
+        assert.ok(file.tracks[0].events[1] instanceof events.MetaEvent, 'should create meta events');
+        assert.ok(file.tracks[0].events[2] instanceof events.SysexEvent, 'should create sysex events');
+        assert.equal(file.tracks[0].events[3].type, events.MetaEvent.TYPE.END_OF_TRACK, 'should append end event');
+
+        assert.end();
     });
 });

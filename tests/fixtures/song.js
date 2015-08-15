@@ -115,7 +115,7 @@ var file = new File().track()
         velocity: 127
     }, 0, 480)
     .channel('controller', {
-        controller: 'all notes off',
+        type: 'all notes off',
         value: 0
     }, 0, 480)
     .sysex('type 1', new Buffer('test'))

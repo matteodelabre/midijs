@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * @overview Test set all lib utilities
+ * @overview Test set for all lib utilities
  */
 
 var test = require('tape');

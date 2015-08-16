@@ -14,7 +14,7 @@ var events = require('../').events;
 var songpath = path.join(__dirname, 'fixtures/song.mid');
 
 /**
- * Check whether to buffers contain the same data or not
+ * Check whether two buffers contain the same data or not
  *
  * @param {Buffer} a First buffer
  * @param {Buffer} b Second buffer
@@ -104,11 +104,14 @@ test('File', function (sub) {
                 })
                 .sysex('type 1', new Buffer('void'))
                 .note('E4+E5', 120, 1, 5, 103)
+                .note(['E4', 'E5'], 120, 1, 5, 103)
+                .note([64, 76], 120, 1, 5, 103)
+                .note(64, 120, 1, 5, 103)
             .end(),
         file, 'should allow chaining');
 
         assert.equal(file.tracks.length, 1, 'should create a track');
-        assert.equal(file.tracks[0].events.length, 8, 'should create events');
+        assert.equal(file.tracks[0].events.length, 18, 'should create events');
         assert.ok(file.tracks[0].events[0] instanceof events.ChannelEvent, 'should create channel events');
         assert.ok(file.tracks[0].events[1] instanceof events.MetaEvent, 'should create meta events');
         assert.ok(file.tracks[0].events[2] instanceof events.SysexEvent, 'should create sysex events');
@@ -126,7 +129,12 @@ test('File', function (sub) {
         assert.equal(file.tracks[0].events[4].channel, 1);
         assert.equal(file.tracks[0].events[3].data.velocity, 103);
         assert.equal(file.tracks[0].events[4].data.velocity, 103);
-        assert.equal(file.tracks[0].events[7].type, events.MetaEvent.TYPE.END_OF_TRACK, 'should append end event');
+        assert.equal(file.tracks[0].events[3].data.note, file.tracks[0].events[7].data.note, 'should allow several notations');
+        assert.equal(file.tracks[0].events[7].data.note, file.tracks[0].events[11].data.note);
+        assert.equal(file.tracks[0].events[4].data.note, file.tracks[0].events[8].data.note);
+        assert.equal(file.tracks[0].events[8].data.note, file.tracks[0].events[12].data.note);
+        assert.equal(file.tracks[0].events[7].data.note, file.tracks[0].events[15].data.note);
+        assert.equal(file.tracks[0].events[17].type, events.MetaEvent.TYPE.END_OF_TRACK, 'should append end event');
 
         assert.end();
     });

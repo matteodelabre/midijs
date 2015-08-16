@@ -1,8 +1,13 @@
 'use strict';
 
+/**
+ * @overview Test set for File, Track and Chunk
+ */
+
 var test = require('tape');
 var fs = require('fs');
 var path = require('path');
+
 var File = require('../').File;
 var events = require('../').events;
 

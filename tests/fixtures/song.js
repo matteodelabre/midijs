@@ -4,8 +4,8 @@ var File = require('../../').File;
 var fs = require('fs');
 var path = require('path');
 
-var tune = new File('sync tracks');
-var spacer = 120;
+var beat = 120;
+var tune = new File('sync tracks', [], beat);
 
 tune.track()
     .meta('time signature')
@@ -21,385 +21,80 @@ tune.track()
 
     .meta('marker', {
         text: 'Verse 1'
-    }, spacer)
-    .channel('note on', {
-        note: 'E'
-    }, 0)
-    .channel('note off', {
-        note: 'E'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'E'
-    }, 0)
-    .channel('note off', {
-        note: 'E'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'F'
-    }, 0)
-    .channel('note off', {
-        note: 'F'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'G'
-    }, 0)
-    .channel('note off', {
-        note: 'G'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'G'
-    }, 0)
-    .channel('note off', {
-        note: 'G'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'F'
-    }, 0)
-    .channel('note off', {
-        note: 'F'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'E'
-    }, 0)
-    .channel('note off', {
-        note: 'E'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'D'
-    }, 0)
-    .channel('note off', {
-        note: 'D'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'C'
-    }, 0)
-    .channel('note off', {
-        note: 'C'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'C'
-    }, 0)
-    .channel('note off', {
-        note: 'C'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'D'
-    }, 0)
-    .channel('note off', {
-        note: 'D'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'E'
-    }, 0)
-    .channel('note off', {
-        note: 'E'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'E'
-    }, 0)
-    .channel('note off', {
-        note: 'E'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'D'
-    }, 0, spacer / 2)
-    .channel('note off', {
-        note: 'D'
-    }, 0, spacer / 2)
-    .channel('note on', {
-        note: 'D'
-    }, 0)
-    .channel('note off', {
-        note: 'D'
-    }, 0, spacer)
+    }, beat)
+    .note('E', beat, 0)
+    .note('E', beat, 0)
+    .note('F', beat, 0)
+    .note('G', beat, 0)
+    .note('G', beat, 0)
+    .note('F', beat, 0)
+    .note('E', beat, 0)
+    .note('D', beat, 0)
+    .note('C', beat, 0)
+    .note('C', beat, 0)
+    .note('D', beat, 0)
+    .note('E', beat, 0)
+    .note('E', beat, 0)
+    .note('D', beat / 2, 0, beat / 2)
+    .note('D', beat, 0)
 
     .meta('marker', {
         text: 'Verse 2'
-    }, spacer)
-    .channel('note on', {
-        note: 'E'
-    }, 0)
-    .channel('note off', {
-        note: 'E'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'E'
-    }, 0)
-    .channel('note off', {
-        note: 'E'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'F'
-    }, 0)
-    .channel('note off', {
-        note: 'F'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'G'
-    }, 0)
-    .channel('note off', {
-        note: 'G'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'G'
-    }, 0)
-    .channel('note off', {
-        note: 'G'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'F'
-    }, 0)
-    .channel('note off', {
-        note: 'F'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'E'
-    }, 0)
-    .channel('note off', {
-        note: 'E'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'D'
-    }, 0)
-    .channel('note off', {
-        note: 'D'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'C'
-    }, 0)
-    .channel('note off', {
-        note: 'C'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'C'
-    }, 0)
-    .channel('note off', {
-        note: 'C'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'D'
-    }, 0)
-    .channel('note off', {
-        note: 'D'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'E'
-    }, 0)
-    .channel('note off', {
-        note: 'E'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'D'
-    }, 0)
-    .channel('note off', {
-        note: 'D'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'C'
-    }, 0, spacer / 2)
-    .channel('note off', {
-        note: 'C'
-    }, 0, spacer / 2)
-    .channel('note on', {
-        note: 'C'
-    }, 0)
-    .channel('note off', {
-        note: 'C'
-    }, 0, spacer)
+    }, beat)
+    .note('E', beat, 0)
+    .note('E', beat, 0)
+    .note('F', beat, 0)
+    .note('G', beat, 0)
+    .note('G', beat, 0)
+    .note('F', beat, 0)
+    .note('E', beat, 0)
+    .note('D', beat, 0)
+    .note('C', beat, 0)
+    .note('C', beat, 0)
+    .note('D', beat, 0)
+    .note('E', beat, 0)
+    .note('D', beat, 0)
+    .note('C', beat / 2, 0, beat / 2)
+    .note('C', beat, 0)
 
     .meta('marker', {
         text: 'Verse 3'
-    }, spacer)
-    .channel('note on', {
-        note: 'D'
-    }, 0)
-    .channel('note off', {
-        note: 'D'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'D'
-    }, 0)
-    .channel('note off', {
-        note: 'D'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'E'
-    }, 0)
-    .channel('note off', {
-        note: 'E'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'C'
-    }, 0)
-    .channel('note off', {
-        note: 'C'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'D'
-    }, 0)
-    .channel('note off', {
-        note: 'D'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'E'
-    }, 0)
-    .channel('note off', {
-        note: 'E'
-    }, 0, spacer / 2)
-    .channel('note on', {
-        note: 'F'
-    }, 0)
-    .channel('note off', {
-        note: 'F'
-    }, 0, spacer / 2)
-    .channel('note on', {
-        note: 'E'
-    }, 0)
-    .channel('note off', {
-        note: 'E'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'C'
-    }, 0)
-    .channel('note off', {
-        note: 'C'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'D'
-    }, 0)
-    .channel('note off', {
-        note: 'D'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'E'
-    }, 0)
-    .channel('note off', {
-        note: 'E'
-    }, 0, spacer / 2)
-    .channel('note on', {
-        note: 'F'
-    }, 0)
-    .channel('note off', {
-        note: 'F'
-    }, 0, spacer / 2)
-    .channel('note on', {
-        note: 'E'
-    }, 0)
-    .channel('note off', {
-        note: 'E'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'D'
-    }, 0)
-    .channel('note off', {
-        note: 'D'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'C'
-    }, 0)
-    .channel('note off', {
-        note: 'C'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'D'
-    }, 0)
-    .channel('note off', {
-        note: 'D'
-    }, 0, spacer)
+    }, beat)
+    .note('D', beat, 0)
+    .note('D', beat, 0)
+    .note('E', beat, 0)
+    .note('C', beat, 0)
+    .note('D', beat, 0)
+    .note('E', beat / 2, 0)
+    .note('F', beat / 2, 0)
+    .note('E', beat, 0)
+    .note('C', beat, 0)
+    .note('D', beat, 0)
+    .note('E', beat / 2, 0)
+    .note('F', beat / 2, 0)
+    .note('E', beat, 0)
+    .note('D', beat, 0)
+    .note('C', beat, 0)
+    .note('D', beat, 0)
 
     .meta('marker', {
         text: 'Verse 4'
-    }, spacer)
-    .channel('note on', {
-        note: 'E'
-    }, 0)
-    .channel('note off', {
-        note: 'E'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'E'
-    }, 0)
-    .channel('note off', {
-        note: 'E'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'F'
-    }, 0)
-    .channel('note off', {
-        note: 'F'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'G'
-    }, 0)
-    .channel('note off', {
-        note: 'G'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'G'
-    }, 0)
-    .channel('note off', {
-        note: 'G'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'F'
-    }, 0)
-    .channel('note off', {
-        note: 'F'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'E'
-    }, 0)
-    .channel('note off', {
-        note: 'E'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'D'
-    }, 0)
-    .channel('note off', {
-        note: 'D'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'C'
-    }, 0)
-    .channel('note off', {
-        note: 'C'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'C'
-    }, 0)
-    .channel('note off', {
-        note: 'C'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'D'
-    }, 0)
-    .channel('note off', {
-        note: 'D'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'E'
-    }, 0)
-    .channel('note off', {
-        note: 'E'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'D'
-    }, 0)
-    .channel('note off', {
-        note: 'D'
-    }, 0, spacer)
-    .channel('note on', {
-        note: 'C'
-    }, 0, spacer / 2)
-    .channel('note off', {
-        note: 'C'
-    }, 0, spacer / 2)
-    .channel('note on', {
-        note: 'C'
-    }, 0)
-    .channel('note off', {
-        note: 'C'
-    }, 0, spacer * 2)
+    }, beat)
+    .note('E', beat, 0)
+    .note('E', beat, 0)
+    .note('F', beat, 0)
+    .note('G', beat, 0)
+    .note('G', beat, 0)
+    .note('F', beat, 0)
+    .note('E', beat, 0)
+    .note('D', beat, 0)
+    .note('C', beat, 0)
+    .note('C', beat, 0)
+    .note('D', beat, 0)
+    .note('E', beat, 0)
+    .note('D', beat, 0)
+    .note('C', beat / 2, 0, beat / 2)
+    .note('C', beat * 2, 0)
 .end().track()
     .meta('sequence name', {
         text: 'Left hand'
@@ -414,205 +109,42 @@ tune.track()
 
     .meta('marker', {
         text: 'Verse 1'
-    }, spacer)
-    .channel('note on', {
-        note: 'C3'
-    }, 1)
-    .channel('note on', {
-        note: 'G3'
-    }, 1)
-    .channel('note off', {
-        note: 'C3'
-    }, 1, spacer * 4)
-    .channel('note off', {
-        note: 'G3'
-    }, 1)
-    .channel('note on', {
-        note: 'G3'
-    }, 1)
-    .channel('note off', {
-        note: 'G3'
-    }, 1, spacer * 4)
-    .channel('note on', {
-        note: 'C3'
-    }, 1)
-    .channel('note on', {
-        note: 'E3'
-    }, 1)
-    .channel('note off', {
-        note: 'C3'
-    }, 1, spacer * 4)
-    .channel('note off', {
-        note: 'E3'
-    }, 1)
-    .channel('note on', {
-        note: 'G3'
-    }, 1)
-    .channel('note off', {
-        note: 'G3'
-    }, 1, spacer * 4)
+    }, beat)
+    .note('C3+G3', beat * 4, 1)
+    .note('G3', beat * 4, 1)
+    .note('C3+E3', beat * 4, 1)
+    .note('G3', beat * 4, 1)
 
     .meta('marker', {
         text: 'Verse 2'
     })
-    .channel('note on', {
-        note: 'C3'
-    }, 1)
-    .channel('note on', {
-        note: 'G3'
-    }, 1)
-    .channel('note off', {
-        note: 'C3'
-    }, 1, spacer * 4)
-    .channel('note off', {
-        note: 'G3'
-    }, 1)
-    .channel('note on', {
-        note: 'G3'
-    }, 1)
-    .channel('note off', {
-        note: 'G3'
-    }, 1, spacer * 4)
-    .channel('note on', {
-        note: 'C3'
-    }, 1)
-    .channel('note on', {
-        note: 'E3'
-    }, 1)
-    .channel('note off', {
-        note: 'C3'
-    }, 1, spacer * 4)
-    .channel('note off', {
-        note: 'E3'
-    }, 1)
-    .channel('note on', {
-        note: 'G3'
-    }, 1)
-    .channel('note off', {
-        note: 'G3'
-    }, 1, spacer * 2)
-    .channel('note on', {
-        note: 'C3'
-    }, 1)
-    .channel('note on', {
-        note: 'E3'
-    }, 1)
-    .channel('note off', {
-        note: 'C3'
-    }, 1, spacer * 2)
-    .channel('note off', {
-        note: 'E3'
-    }, 1)
+    .note('C3+G3', beat * 4, 1)
+    .note('G3', beat * 4, 1)
+    .note('C3+E3', beat * 4, 1)
+    .note('G3', beat * 2, 1)
+    .note('C3+E3', beat * 2, 1)
 
     .meta('marker', {
         text: 'Verse 3'
     })
-    .channel('note on', {
-        note: 'G3'
-    }, 1)
-    .channel('note off', {
-        note: 'G3'
-    }, 1, spacer * 2)
-    .channel('note on', {
-        note: 'G3'
-    }, 1)
-    .channel('note off', {
-        note: 'G3'
-    }, 1, spacer * 2)
-    .channel('note on', {
-        note: 'G3'
-    }, 1)
-    .channel('note off', {
-        note: 'G3'
-    }, 1, spacer * 2)
-    .channel('note on', {
-        note: 'G3'
-    }, 1)
-    .channel('note off', {
-        note: 'G3'
-    }, 1, spacer * 2)
-    .channel('note on', {
-        note: 'G3'
-    }, 1)
-    .channel('note off', {
-        note: 'G3'
-    }, 1, spacer * 2)
-    .channel('note on', {
-        note: 'G3#'
-    }, 1)
-    .channel('note off', {
-        note: 'G3#'
-    }, 1, spacer * 2)
-    .channel('note on', {
-        note: 'A3'
-    }, 1)
-    .channel('note off', {
-        note: 'A3'
-    }, 1, spacer)
-    .channel('note on', {
-        note: 'G3B'
-    }, 1)
-    .channel('note off', {
-        note: 'G3B'
-    }, 1, spacer)
-    .channel('note on', {
-        note: 'G3'
-    }, 1)
-    .channel('note off', {
-        note: 'G3'
-    }, 1, spacer)
+    .note('G3', beat * 2, 1)
+    .note('G3', beat * 2, 1)
+    .note('G3', beat * 2, 1)
+    .note('G3', beat * 2, 1)
+    .note('G3', beat * 2, 1)
+    .note('G3#', beat * 2, 1)
+    .note('A3', beat, 1)
+    .note('G3B', beat, 1)
+    .note('G3', beat, 1)
 
     .meta('marker', {
         text: 'Verse 4'
     })
-    .channel('note on', {
-        note: 'C3'
-    }, 1)
-    .channel('note on', {
-        note: 'G3'
-    }, 1)
-    .channel('note off', {
-        note: 'C3'
-    }, 1, spacer * 4)
-    .channel('note off', {
-        note: 'G3'
-    }, 1)
-    .channel('note on', {
-        note: 'G3'
-    }, 1)
-    .channel('note off', {
-        note: 'G3'
-    }, 1, spacer * 4)
-    .channel('note on', {
-        note: 'C3'
-    }, 1)
-    .channel('note on', {
-        note: 'E3'
-    }, 1)
-    .channel('note off', {
-        note: 'C3'
-    }, 1, spacer * 4)
-    .channel('note off', {
-        note: 'E3'
-    }, 1)
-    .channel('note on', {
-        note: 'G3'
-    }, 1)
-    .channel('note off', {
-        note: 'G3'
-    }, 1, spacer * 2)
-    .channel('note on', {
-        note: 'C3'
-    }, 1)
-    .channel('note on', {
-        note: 'E3'
-    }, 1)
-    .channel('note off', {
-        note: 'C3'
-    }, 1, spacer * 2)
-    .channel('note off', {
-        note: 'E3'
-    }, 1)
+    .note('C3+G3', beat * 4, 1)
+    .note('G3', beat * 4, 1)
+    .note('C3+E3', beat * 4, 1)
+    .note('G3', beat * 2, 1)
+    .note('C3+E3', beat * 2, 1)
 .end();
 
 fs.writeFile(path.join(__dirname, 'song.mid'), tune.encode(), function (err) {

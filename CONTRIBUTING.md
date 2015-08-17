@@ -1,8 +1,9 @@
-# Contributing
+# Contribution guide
 
 All contributions are welcome! If you want a new feature
 to be added or a bug to be fixed, you can propose your changes
-using a pull request.
+using a [pull request](https://github.com/midijs/pulls), or
+propose your ideas in a new [issue](https://github.com/midijs/issues).
 
 Many thanks to those who contributed to this project:
 

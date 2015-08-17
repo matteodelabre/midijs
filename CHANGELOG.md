@@ -6,7 +6,7 @@ This package follows semantic versioning starting from v1.0.0. Changes in **bold
 
 ## [v1.0.0](https://github.com/MattouFP/midijs/tree/) ([compare](https://github.com/MattouFP/midijs/compare/v0.12.0...v1.0.0))
 
-See pull request #3 for more information.
+See pull request [#3](https://github.com/MattouFP/midijs/pull/3) for more information.
 
 * **connect: remove devices, drivers support. Use the WebMIDI API or `node-midi` for this purpose.**
 * **gm: remove General MIDI, integrate instruments into ChannelEvent.**
@@ -15,7 +15,7 @@ See pull request #3 for more information.
 * **ChannelEvent: rename CONTROLLER.controller to CONTROLLER.type.**
 * **ChannelEvent: rename PROGRAM_CHANGE.program to PROGRAM_CHANGE.instrument.**
 * **SysexEvent: add SysexEvent.TYPE.**
-* **MetaEvent: allow unknown events (thanks to @corentingurtner).**
+* **MetaEvent: allow unknown events (thanks to [@corentingurtner](https://github.com/corentingurtner)).**
 * **File: remove streams support, only expose File#encode and File.decode methods for encoding and decoding.**
 * **File: add API to easily create tunes in the code, without redundancy.**
 * **events: expose event classes publicly.**

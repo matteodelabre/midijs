@@ -5,7 +5,9 @@
  */
 
 var test = require('tape');
+
 var events = require('../').events;
+var MalformedError = require('../lib/util/errors').MalformedError;
 
 /**
  * Check whether two buffers contain the same data or not
@@ -66,6 +68,18 @@ function testType(assert, Ctor) {
 }
 
 test('events', function (sub) {
+    sub.test('event decoding', function (assert) {
+        assert.throws(function () {
+            events.Event.decode(new Buffer([0x51]), null, 5);
+        }, MalformedError, 'should throw with invalid events');
+
+        assert.throws(function () {
+            events.Event.decode(new Buffer([0x51]), {}, 5);
+        }, MalformedError, 'should throw with invalid running status');
+
+        assert.end();
+    });
+
     sub.test('channel events', function (assert) {
         testType(assert, events.ChannelEvent);
     });

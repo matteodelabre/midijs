@@ -84,10 +84,21 @@ test('File', function (sub) {
         });
     });
 
-    sub.test('should detect non-midi files', function (assert) {
+    sub.test('should detect erroneous files', function (assert) {
         assert.throws(function () {
             File.decode(new Buffer('not midi data'));
         }, /not a midi file/i, 'should throw with non-midi files');
+
+        assert.throws(function () {
+            File.decode(new Buffer([
+                // regular MIDI header
+                0x4d, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x06,
+                0x00, 0x01, 0x00, 0x03, 0x00, 0x78,
+                // invalid duplicate empty header
+                0x4d, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x00
+            ]));
+        }, /expected a track chunk/i, 'should throw with chunk-malformed files');
+
         assert.end();
     });
 

@@ -16,9 +16,15 @@ a easily-readable, high-level API for manipulating
 MIDI data, and even creating MIDI files
 _right from your code!_
 
+**NOTE:** this module does not provide access to the devices by itself,
+but enables you to handle the stream of events that are sent
+to or received from them. Use this module with the
+[WebMIDI API](http://www.w3.org/TR/webmidi/) in the browser,
+or [`node-midi`](http://npmjs.com/package/midi) with Node.JS for this purpose.
+
 ### Install
 
-This is a module for Node.JS, start using it with npm.
+This is a module for JavaScript. Start using it with npm.
 
 ```sh
 npm install --save midijs

@@ -7,7 +7,7 @@ propose your ideas in a new [issue](https://github.com/midijs/issues).
 
 Many thanks to those who contributed to this project:
 
-* [corentingurtner](https://github.com/corentingurtner)
+* [@corentingurtner](https://github.com/corentingurtner)
 
 There are a few rules to follow so that the repo
 stays consistent.

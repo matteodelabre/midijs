@@ -11,7 +11,7 @@ var path = require('path');
 var File = require('../').File;
 var events = require('../').events;
 
-var songpath = path.join(__dirname, 'fixtures/song.mid');
+var songpath = path.join(__dirname, 'fixtures/tune.mid');
 
 /**
  * Check whether two buffers contain the same data or not

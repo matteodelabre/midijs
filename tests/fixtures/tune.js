@@ -147,7 +147,7 @@ tune.track()
     .note('C3+E3', beat * 2, 1)
 .end();
 
-fs.writeFile(path.join(__dirname, 'song.mid'), tune.encode(), function (err) {
+fs.writeFile(path.join(__dirname, 'tune.mid'), tune.encode(), function (err) {
     if (err) {
         throw err;
     }

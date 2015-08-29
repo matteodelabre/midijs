@@ -69,6 +69,14 @@ test('File', function (sub) {
         }, /not a midi file/i, 'should throw with non-midi files');
 
         assert.throws(function () {
+            File.decode(new Buffer([0x4d, 0x54, 0x65, 0x64, 0x00, 0x00, 0x00, 0x00]));
+        }, /not a midi file/i, 'should throw with non-midi files even if they look right');
+
+        assert.throws(function () {
+            File.decode(new Buffer([0x4d, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x00]));
+        }, /invalid midi header/i, 'should throw with invalid headers');
+
+        assert.throws(function () {
             File.decode(new Buffer([
                 // regular MIDI header
                 0x4d, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x06,
@@ -77,6 +85,19 @@ test('File', function (sub) {
                 0x4d, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x00
             ]));
         }, /expected a track chunk/i, 'should throw with chunk-malformed files');
+
+        assert.end();
+    });
+
+    sub.test('should clamp type 0 to 1 track', function (assert) {
+        assert.throws(function () {
+            var file = new File('single track');
+            file.track().end().track().end();
+        }, /cannot contain more than one track/i, 'should throw with more tracks');
+
+        assert.throws(function () {
+            return new File('single track', [[], []]);
+        }, /cannot contain more than one track/i, 'should throw with more tracks');
 
         assert.end();
     });
@@ -95,13 +116,15 @@ test('File', function (sub) {
                 .sysex('type 1', new Buffer('void'))
                 .note('E4', 120, 1, 5, 103)
                 .note(['E4', 'E5'], 120, 1, 5, 103)
+                .note(32)
+                .note([33, 34])
             .end(),
             file,
             'should allow chaining'
         );
 
         assert.equal(file.tracks.length, 1, 'should create a track');
-        assert.equal(file.tracks[0].events.length, 10, 'should create events');
+        assert.equal(file.tracks[0].events.length, 16, 'should create events');
         assert.ok(file.tracks[0].events[0] instanceof events.ChannelEvent, 'should create channel events');
         assert.ok(file.tracks[0].events[1] instanceof events.MetaEvent, 'should create meta events');
         assert.ok(file.tracks[0].events[2] instanceof events.SysexEvent, 'should create sysex events');
@@ -141,7 +164,20 @@ test('File', function (sub) {
         assert.equal(file.tracks[0].events[7].data.velocity, 0, 'shortcut notation should work with chords');
         assert.equal(file.tracks[0].events[8].data.velocity, 0, 'shortcut notation should work with chords');
 
-        assert.equal(file.tracks[0].events[9].type, events.MetaEvent.TYPE.END_OF_TRACK, 'should append end event');
+        assert.equal(file.tracks[0].events[3].data.note, 64, 'should work with english-notation notes');
+        assert.equal(file.tracks[0].events[5].data.note, 64, 'chords should work with english-notation notes');
+        assert.equal(file.tracks[0].events[6].data.note, 76, 'chords should work with english-notation notes');
+
+        assert.equal(file.tracks[0].events[9].delay, 0, 'should set defaults');
+        assert.equal(file.tracks[0].events[9].channel, 0, 'should set defaults');
+        assert.equal(file.tracks[0].events[9].data.velocity, 127, 'should set defaults');
+        assert.equal(file.tracks[0].events[9].data.note, 32, 'should work with plain notes');
+        assert.equal(file.tracks[0].events[10].delay, 120, 'should set defaults');
+
+        assert.equal(file.tracks[0].events[11].data.note, 33, 'chords should work with plain notes');
+        assert.equal(file.tracks[0].events[12].data.note, 34, 'chords should work with plain notes');
+
+        assert.equal(file.tracks[0].events[15].type, events.MetaEvent.TYPE.END_OF_TRACK, 'should append end event');
 
         assert.end();
     });

@@ -38,11 +38,17 @@ Send an event to a device, without writing raw MIDI data!
 ```js
 var ChannelEvent = require('midijs').events.ChannelEvent;
 
-// using the WebMIDI API or `node-midi`
-output.send(new ChannelEvent('controller', { // or #sendMessage with node
+// using the WebMIDI API
+output.send(new ChannelEvent('controller', {
     type: 'all sound off',
     value: 127
-}).encode());
+}).encode(null, true).toArray());
+
+// using `node-midi`
+output.sendMessage(new ChannelEvent('controller', {
+    type: 'all sound off',
+    value: 127
+}).encode(null, true).toArray());
 ```
 
 Or receive them from the device and read them as easily.
@@ -52,15 +58,17 @@ var Event = require('midijs').events.Event;
 var rs = {}; // ensure we use the running status if requested
 
 // using the WebMIDI API
-input.onmidimessage = function (event) {
-    var decoded = Event.decode(new Buffer(event.data), rs, event.timestamp);
-    // `decoded` is a decoded representation of `event`
+input.onmidimessage = function (signal) {
+    var event = Event.decode(new Buffer(signal.data), rs, true);
+
+    // `event` represents the received event
+    // `signal.timestamp` is a timestamp for the sending time
 };
 
 // using `node-midi`
 input.on('event', function (timestamp, data) {
-    var decoded = Event.decode(new Buffer(data), rs, timestamp);
-    // `decoded` is a decoded representation of `event`
+    var decoded = Event.decode(new Buffer(data), rs, true);
+    // `event` represents the received event
 });
 ```
 

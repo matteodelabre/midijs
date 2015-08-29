@@ -5,63 +5,199 @@
  */
 
 var test = require('tape');
+var bufferEqual = require('./util/buffer-equal');
 
-var buffer = require('../lib/util/buffer');
+var MIDIBuffer = require('../lib/util/buffer');
 var convertNote = require('../lib/util/convert-note');
 var selectConst = require('../lib/util/select-const');
 
 test('buffer', function (sub) {
-    sub.test('should initialize buffer and dispose of properly', function (assert) {
-        var buf = new Buffer(1);
+    sub.test('should create and convert buffers', function (assert) {
+        var buf, subuf;
 
-        assert.equal(buffer.tell(buf), undefined, 'should not have cursor in the first place');
-        buffer.start(buf);
-        assert.equal(buffer.tell(buf), 0, 'should initialize to 0');
-        buffer.seek(buf, 1);
-        assert.equal(buffer.tell(buf), 1, 'should tell properly');
-        assert.ok(buffer.eof(buf), 'should tell if we are at the end of the buffer');
-        buffer.start(buf);
-        assert.equal(buffer.tell(buf), 1, 'should keep cursor across stacks');
-        buffer.end(buf);
-        assert.equal(buffer.tell(buf), 1, 'should keep cursor after stacking');
-        buffer.end(buf);
-        assert.equal(buffer.tell(buf), undefined, 'should erase cursor after removal');
+        assert.equal(new MIDIBuffer(4).getLength(), 4, 'should create from numbers');
+        assert.equal(new MIDIBuffer([1, 2, 3]).getLength(), 3, 'should create from arrays');
+        assert.equal(new MIDIBuffer(new Buffer([1, 5])).getLength(), 2, 'should create from buffers');
+        assert.equal(new MIDIBuffer(new MIDIBuffer(12)).getLength(), 12, 'should create from midi buffers');
+
+        buf = new MIDIBuffer(5);
+        buf.write('abcde');
+        buf.seek(0);
+
+        subuf = new MIDIBuffer(buf);
+        assert.equal(subuf.parent, buf, 'should keep track of parent');
+
+        subuf.seek(1);
+        assert.equal(buf.tell(), 1, 'should move parent\'s cursor');
+        assert.end();
+    });
+
+    sub.test('should concat midi buffers', function (assert) {
+        assert.ok(bufferEqual(
+            Buffer.concat([new Buffer([1, 2]), new Buffer([3, 4])]),
+            MIDIBuffer.concat([new Buffer([1, 2]), new Buffer([3, 4])])
+        ), 'should work with buffers');
+
+        assert.ok(bufferEqual(
+            new Buffer([1, 2, 3, 4]),
+            MIDIBuffer.concat([new MIDIBuffer([1, 2]), new MIDIBuffer([3, 4])])
+        ), 'should work with midi buffers');
+
+        assert.ok(bufferEqual(
+            new Buffer([1, 2, 3, 4]),
+            MIDIBuffer.concat([[1, 2], [3, 4]])
+        ), 'should work with arrays');
 
         assert.end();
     });
 
-    sub.test('should perform operations on the buffer', function (assert) {
-        var buf = new Buffer(28), buf2 = new Buffer(7), actions = [
+    sub.test('should have a cursor', function (assert) {
+        var buf = new MIDIBuffer(10);
+
+        assert.equal(buf.tell(), 0, 'initial position = 0');
+
+        buf.seek(5);
+        assert.equal(buf.tell(), 5, 'should move cursor');
+
+        assert.throws(function () {
+            buf.seek(11);
+        }, /beyond limits/, 'should not seek beyond limits');
+
+        buf.seek(10);
+        assert.ok(buf.eof(), 'should detect eof');
+
+        assert.equal(buf.getLength(), 10, 'should report length');
+        assert.end();
+    });
+
+    sub.test('should convert midi buffers', function (assert) {
+        var buf = new MIDIBuffer(10), norm = new Buffer(10), arr;
+
+        buf.write('abcdefghij');
+        norm.write('abcdefghij');
+        arr = [97, 98, 99, 100, 101, 102, 103, 104, 105, 106];
+
+        assert.ok(
+            bufferEqual(buf.toBuffer(), norm),
+            'should convert to buffer'
+        );
+
+        assert.deepEqual(
+            buf.toArray(), arr,
+            'should convert to array'
+        );
+
+        assert.equal(
+            buf.toUint8Array()[0], arr[0],
+            'should convert to uint8array'
+        );
+
+        assert.ok(
+            buf.toUint8Array() instanceof Uint8Array,
+            'should convert to uint8array'
+        );
+
+        assert.end();
+    });
+
+    sub.test('should read and write integers', function (assert) {
+        var buf = new MIDIBuffer(28), actions = [
             ['UIntBE', 'unsigned integers (big endian)', [200, 60000, 4000000000]],
             ['UIntLE', 'unsigned integers (little endian)', [200, 60000, 4000000000]],
             ['IntBE', 'signed integers (big endian)', [100, 30000, 2000000000]],
             ['IntLE', 'signed integers (little endian)', [100, 30000, 2000000000]]
-        ], bytes = [1, 2, 4], slice;
-
-        buffer.start(buf);
-        buffer.start(buf2);
+        ], bits = [8, 16, 32];
 
         actions.forEach(function (series) {
             series[2].forEach(function (number, i) {
-                buffer['write' + series[0]](buf, bytes[i], number);
-                buffer.seek(buf, buffer.tell(buf) - bytes[i]);
-                assert.equal(buffer['read' + series[0]](buf, bytes[i]), number, 'should write and read ' + series[1]);
+                buf['write' + series[0]](bits[i], number);
+                buf.seek(buf.tell() - bits[i] / 8);
+
+                assert.equal(
+                    buf['read' + series[0]](bits[i]), number,
+                    'should write and read ' + bits[i] + '-bits ' + series[1]
+                );
             });
         });
 
-        buffer.seek(buf, 0);
-        buffer.write(buf, 'testing strings usability !!', 'ascii');
-        buffer.seek(buf, 0);
-        assert.equal(buffer.toString(buf, 'ascii'), 'testing strings usability !!', 'should write and read strings');
+        assert.end();
+    });
 
-        buffer.copy(buf2, buf, 0, 7);
-        assert.equal(buf2.toString('ascii'), 'testing', 'should copy buffers');
+    sub.test('should read and write variable integers', function (assert) {
+        var buf = new MIDIBuffer(100);
 
-        buffer.seek(buf2, 0);
-        slice = buffer.slice(buf2, 4);
-        slice.write('work');
-        assert.equal(buf2.toString('ascii'), 'working', 'should slice buffers');
+        buf.writeVarInt(MIDIBuffer.MAX_VAR_INT);
+        buf.seek(0);
 
+        assert.ok(bufferEqual(buf.toBuffer().slice(0, 4), [0xFF, 0xFF, 0xFF, 0x7F]), 'should encode correct sequence');
+        assert.equal(buf.readVarInt(), MIDIBuffer.MAX_VAR_INT, 'should write & read var ints');
+
+        assert.throws(function () {
+            buf.seek(0);
+            buf.writeVarInt(MIDIBuffer.MAX_VAR_INT + 1);
+        }, /too large/, 'should throw with too large numbers');
+
+        buf = new MIDIBuffer([0xFF, 0xFF, 0xFF, 0xFF, 0xFF]);
+        assert.equal(buf.readVarInt(), MIDIBuffer.MAX_VAR_INT, 'should truncate malformed var ints');
+
+        assert.equal(
+            MIDIBuffer.getVarIntLength(MIDIBuffer.MAX_VAR_INT), 4,
+            'should predict var int length in bytes'
+        );
+
+        assert.equal(
+            MIDIBuffer.getVarIntLength(MIDIBuffer.MAX_VAR_INT + 1), false,
+            'getVarIntLength should return false with too large numbers'
+        );
+
+        assert.end();
+    });
+
+    sub.test('should read and write chunks', function (assert) {
+        var buf = new MIDIBuffer(12), data = new Buffer([1, 2, 3, 4]), result;
+
+        buf.writeChunk('test', data);
+        assert.ok(bufferEqual(
+            MIDIBuffer.concat([new Buffer('test'), new Buffer([0, 0, 0, 4, 1, 2, 3, 4])]), buf
+        ), 'should write chunks');
+
+        buf.seek(0);
+        result = buf.readChunk();
+
+        assert.equal(result.type, 'test');
+        assert.ok(bufferEqual(result.data, data), 'should read chunks');
+
+        assert.end();
+    });
+
+    sub.test('should read and write strings', function (assert) {
+        var buf = new MIDIBuffer(4);
+
+        buf.write('abcd');
+        assert.equal(buf.toBuffer()[0], 97, 'should have written the "a"');
+        assert.equal(buf.toBuffer()[1], 98, 'should have written the "b"');
+        assert.equal(buf.toBuffer()[2], 99, 'should have written the "c"');
+        assert.equal(buf.toBuffer()[3], 100, 'should have written the "d"');
+
+        buf.seek(0);
+        assert.equal(buf.toString(), 'abcd', 'should read strings');
+        assert.end();
+    });
+
+    sub.test('should copy and slice buffers', function (assert) {
+        var buf = new MIDIBuffer(4), copy = new MIDIBuffer(4);
+
+        buf.write('lkj.');
+        copy.write('.ljg');
+
+        copy.seek(0);
+        copy.copy(buf, 0, 2);
+
+        copy.seek(0);
+        assert.equal(copy.toString(), 'lkjg', 'should copy buffers');
+
+        copy.seek(2);
+        assert.ok(bufferEqual(copy.slice(2), new Buffer('jg')));
         assert.end();
     });
 });

@@ -5,6 +5,8 @@
  */
 
 var test = require('tape');
+var bufferEqual = require('./util/buffer-equal');
+
 var fs = require('fs');
 var path = require('path');
 
@@ -12,29 +14,6 @@ var File = require('../').File;
 var events = require('../').events;
 
 var songpath = path.join(__dirname, 'fixtures/tune.mid');
-
-/**
- * Check whether two buffers contain the same data or not
- *
- * @param {Buffer} a First buffer
- * @param {Buffer} b Second buffer
- * @return {bool} Whether the two buffers equal or not
- */
-function bufferEqual(a, b) {
-    var length = a.length, i;
-
-    if (length !== b.length) {
-        return false;
-    }
-
-    for (i = 0; i < length; i += 1) {
-        if (a[i] !== b[i]) {
-            return false;
-        }
-    }
-
-    return true;
-}
 
 test('File', function (sub) {
     sub.test('should create an empty file', function (assert) {
@@ -114,38 +93,55 @@ test('File', function (sub) {
                     text: 'testing'
                 })
                 .sysex('type 1', new Buffer('void'))
-                .note('E4+E5', 120, 1, 5, 103)
+                .note('E4', 120, 1, 5, 103)
                 .note(['E4', 'E5'], 120, 1, 5, 103)
-                .note([64, 76], 120, 1, 5, 103)
-                .note(64, 120, 1, 5, 103)
             .end(),
-        file, 'should allow chaining');
+            file,
+            'should allow chaining'
+        );
 
         assert.equal(file.tracks.length, 1, 'should create a track');
-        assert.equal(file.tracks[0].events.length, 18, 'should create events');
+        assert.equal(file.tracks[0].events.length, 10, 'should create events');
         assert.ok(file.tracks[0].events[0] instanceof events.ChannelEvent, 'should create channel events');
         assert.ok(file.tracks[0].events[1] instanceof events.MetaEvent, 'should create meta events');
         assert.ok(file.tracks[0].events[2] instanceof events.SysexEvent, 'should create sysex events');
-        assert.ok(file.tracks[0].events[3] instanceof events.ChannelEvent, 'should allow shortcut note notation');
-        assert.ok(file.tracks[0].events[4] instanceof events.ChannelEvent);
-        assert.ok(file.tracks[0].events[5] instanceof events.ChannelEvent);
-        assert.ok(file.tracks[0].events[6] instanceof events.ChannelEvent);
-        assert.equal(file.tracks[0].events[3].type, events.ChannelEvent.TYPE.NOTE_ON);
-        assert.equal(file.tracks[0].events[4].type, events.ChannelEvent.TYPE.NOTE_ON);
-        assert.equal(file.tracks[0].events[5].type, events.ChannelEvent.TYPE.NOTE_OFF);
-        assert.equal(file.tracks[0].events[6].type, events.ChannelEvent.TYPE.NOTE_OFF);
-        assert.equal(file.tracks[0].events[3].delay, 5);
-        assert.equal(file.tracks[0].events[5].delay, 120);
-        assert.equal(file.tracks[0].events[3].channel, 1);
-        assert.equal(file.tracks[0].events[4].channel, 1);
-        assert.equal(file.tracks[0].events[3].data.velocity, 103);
-        assert.equal(file.tracks[0].events[4].data.velocity, 103);
-        assert.equal(file.tracks[0].events[3].data.note, file.tracks[0].events[7].data.note, 'should allow several notations');
-        assert.equal(file.tracks[0].events[7].data.note, file.tracks[0].events[11].data.note);
-        assert.equal(file.tracks[0].events[4].data.note, file.tracks[0].events[8].data.note);
-        assert.equal(file.tracks[0].events[8].data.note, file.tracks[0].events[12].data.note);
-        assert.equal(file.tracks[0].events[7].data.note, file.tracks[0].events[15].data.note);
-        assert.equal(file.tracks[0].events[17].type, events.MetaEvent.TYPE.END_OF_TRACK, 'should append end event');
+
+        assert.ok(file.tracks[0].events[3] instanceof events.ChannelEvent, 'shortcut notation should yield ChannelEvents');
+        assert.ok(file.tracks[0].events[4] instanceof events.ChannelEvent, 'shortcut notation should yield ChannelEvents');
+        assert.ok(file.tracks[0].events[5] instanceof events.ChannelEvent, 'shortcut notation should yield ChannelEvents');
+        assert.ok(file.tracks[0].events[6] instanceof events.ChannelEvent, 'shortcut notation should yield ChannelEvents');
+        assert.ok(file.tracks[0].events[7] instanceof events.ChannelEvent, 'shortcut notation should yield ChannelEvents');
+        assert.ok(file.tracks[0].events[8] instanceof events.ChannelEvent, 'shortcut notation should yield ChannelEvents');
+
+        assert.equal(file.tracks[0].events[3].type, events.ChannelEvent.TYPE.NOTE_ON, 'shortcut notation should yield NOTE_ONs');
+        assert.equal(file.tracks[0].events[4].type, events.ChannelEvent.TYPE.NOTE_ON, 'shortcut notation should yield NOTE_ONs');
+        assert.equal(file.tracks[0].events[5].type, events.ChannelEvent.TYPE.NOTE_ON, 'shortcut notation should yield NOTE_ONs');
+        assert.equal(file.tracks[0].events[6].type, events.ChannelEvent.TYPE.NOTE_ON, 'shortcut notation should yield NOTE_ONs');
+        assert.equal(file.tracks[0].events[7].type, events.ChannelEvent.TYPE.NOTE_ON, 'shortcut notation should yield NOTE_ONs');
+        assert.equal(file.tracks[0].events[8].type, events.ChannelEvent.TYPE.NOTE_ON, 'shortcut notation should yield NOTE_ONs');
+
+        assert.equal(file.tracks[0].events[3].delay, 5, 'shortcut notation should delay sequenced events properly');
+        assert.equal(file.tracks[0].events[4].delay, 120, 'shortcut notation should delay sequenced events properly');
+        assert.equal(file.tracks[0].events[5].delay, 5, 'shortcut notation should delay sequenced events properly');
+        assert.equal(file.tracks[0].events[6].delay, 0, 'shortcut notation should delay sequenced events properly');
+        assert.equal(file.tracks[0].events[7].delay, 120, 'shortcut notation should delay sequenced events properly');
+        assert.equal(file.tracks[0].events[8].delay, 0, 'shortcut notation should delay sequenced events properly');
+
+        assert.equal(file.tracks[0].events[3].channel, 1, 'shortcut notation should associate correct channels');
+        assert.equal(file.tracks[0].events[4].channel, 1, 'shortcut notation should associate correct channels');
+        assert.equal(file.tracks[0].events[5].channel, 1, 'shortcut notation should associate correct channels');
+        assert.equal(file.tracks[0].events[6].channel, 1, 'shortcut notation should associate correct channels');
+        assert.equal(file.tracks[0].events[7].channel, 1, 'shortcut notation should associate correct channels');
+        assert.equal(file.tracks[0].events[8].channel, 1, 'shortcut notation should associate correct channels');
+
+        assert.equal(file.tracks[0].events[3].data.velocity, 103, 'shortcut notation should work with chords');
+        assert.equal(file.tracks[0].events[4].data.velocity, 0, 'shortcut notation should work with chords');
+        assert.equal(file.tracks[0].events[5].data.velocity, 103, 'shortcut notation should work with chords');
+        assert.equal(file.tracks[0].events[6].data.velocity, 103, 'shortcut notation should work with chords');
+        assert.equal(file.tracks[0].events[7].data.velocity, 0, 'shortcut notation should work with chords');
+        assert.equal(file.tracks[0].events[8].data.velocity, 0, 'shortcut notation should work with chords');
+
+        assert.equal(file.tracks[0].events[9].type, events.MetaEvent.TYPE.END_OF_TRACK, 'should append end event');
 
         assert.end();
     });

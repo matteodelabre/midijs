@@ -11,11 +11,17 @@ See pull request [#3](https://github.com/MattouFP/midijs/pull/3) for more inform
 * **connect: remove devices, drivers support. Use the WebMIDI API or `node-midi` for this purpose.**
 * **gm: remove General MIDI, integrate instruments into ChannelEvent.**
 * **Error: not publicly exposed anymore.**
+* **Event: type supports textual values.**
 * **ChannelEvent: support all controllers.**
 * **ChannelEvent: rename CONTROLLER.controller to CONTROLLER.type.**
 * **ChannelEvent: rename PROGRAM_CHANGE.program to PROGRAM_CHANGE.instrument.**
+* **ChannelEvent: NOTE_AFTERTOUCH.pressure defaults to 127 instead of 127.**
+* **ChannelEvent: NOTE_OFF, NOTE_ON and NOTE_AFTERTOUCH accept english-written notes such as "C" or "D2#".**
+* **ChannelEvent: PROGRAM_CHANGE accepts textual instrument names.**
+* **ChannelEvent: CONTROLLER accepts textual constroller names.**
 * **SysexEvent: add SysexEvent.TYPE.**
 * **MetaEvent: allow unknown events (thanks to [@corentingurtner](https://github.com/corentingurtner)).**
+* **MetaEvent: rename TIME_SIGNATURE.clockSignalsPerBeat to TIME_SIGNATURE.notated32ndsPerMIDIBeat.**
 * **File: remove streams support, only expose File#encode and File.decode methods for encoding and decoding.**
 * **File: add API to easily create tunes in the code, without redundancy.**
 * **events: expose event classes publicly.**

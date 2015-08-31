@@ -13,89 +13,89 @@ var MetaEvent = events.MetaEvent;
 var SysexEvent = events.SysexEvent;
 var ChannelEvent = events.ChannelEvent;
 
-var MalformedError = require('../lib/util/errors').MalformedError;
+// var MalformedError = require('../lib/util/errors').MalformedError;
 
 test('Encoding and decoding meta events', function (assert) {
     bufferEqual(assert,
         new Buffer([0x00, 0xFF, 0x00, 2, 0, 1]),
         new MetaEvent('sequence number', {
             number: 1
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode sequence number');
 
     bufferEqual(assert,
         new Buffer([0x00, 0xFF, 0x01, 4, 0x4d, 0x49, 0x44, 0x49]),
         new MetaEvent('text', {
             text: 'MIDI'
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode text');
 
     bufferEqual(assert,
         new Buffer([0x00, 0xFF, 0x02, 4, 0x4d, 0x49, 0x44, 0x49]),
         new MetaEvent('copyright notice', {
             text: 'MIDI'
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode copyright notice');
 
     bufferEqual(assert,
         new Buffer([0x00, 0xFF, 0x03, 4, 0x4d, 0x49, 0x44, 0x49]),
         new MetaEvent('sequence name', {
             text: 'MIDI'
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode sequence name');
 
     bufferEqual(assert,
         new Buffer([0x00, 0xFF, 0x04, 4, 0x4d, 0x49, 0x44, 0x49]),
         new MetaEvent('instrument name', {
             text: 'MIDI'
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode instrument name');
 
     bufferEqual(assert,
         new Buffer([0x00, 0xFF, 0x05, 4, 0x4d, 0x49, 0x44, 0x49]),
         new MetaEvent('lyrics', {
             text: 'MIDI'
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode lyrics');
 
     bufferEqual(assert,
         new Buffer([0x00, 0xFF, 0x06, 4, 0x4d, 0x49, 0x44, 0x49]),
         new MetaEvent('marker', {
             text: 'MIDI'
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode marker');
 
     bufferEqual(assert,
         new Buffer([0x00, 0xFF, 0x07, 4, 0x4d, 0x49, 0x44, 0x49]),
         new MetaEvent('cue point', {
             text: 'MIDI'
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode cue point');
 
     bufferEqual(assert,
         new Buffer([0x00, 0xFF, 0x08, 4, 0x4d, 0x49, 0x44, 0x49]),
         new MetaEvent('program name', {
             text: 'MIDI'
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode program name');
 
     bufferEqual(assert,
         new Buffer([0x00, 0xFF, 0x09, 4, 0x4d, 0x49, 0x44, 0x49]),
         new MetaEvent('device name', {
             text: 'MIDI'
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode device name');
 
     bufferEqual(assert,
         new Buffer([0x00, 0xFF, 0x2F, 0]),
-        new MetaEvent('end of track').encode().toBuffer(),
+        new MetaEvent('end of track').encode(),
         'should encode end of track');
 
     bufferEqual(assert,
         new Buffer([0x00, 0xFF, 0x51, 3, 0x07, 0xA1, 0x20]),
         new MetaEvent('set tempo', {
             tempo: 120
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode tempo');
 
     bufferEqual(assert,
@@ -107,7 +107,7 @@ test('Encoding and decoding meta events', function (assert) {
             seconds: 30,
             frames: 21,
             subframes: 56
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode smpte offset');
 
     bufferEqual(assert,
@@ -116,7 +116,7 @@ test('Encoding and decoding meta events', function (assert) {
             numerator: 2,
             denominator: 8,
             metronome: 21
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode time signature');
 
     bufferEqual(assert,
@@ -124,14 +124,14 @@ test('Encoding and decoding meta events', function (assert) {
         new MetaEvent('key signature', {
             note: -4,
             major: true
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode key signature');
 
     bufferEqual(assert,
         new Buffer([0x00, 0xFF, 0x74, 2, 13, 37]),
         new MetaEvent(0x74, {
             bytes: new Buffer([13, 37])
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode other kinds');
 
     assert.ok(
@@ -373,7 +373,7 @@ test('Encoding and decoding sysex events', function (assert) {
         new Buffer([0x00, 0xF0, 3, 0xa, 0xb, 0xc]),
         new SysexEvent(
             'type 1', new Buffer([0xa, 0xb, 0xc])
-        ).encode().toBuffer(),
+        ).encode(),
         'should encode sysex events');
 
     assert.equal(
@@ -396,14 +396,14 @@ test('Encoding and decoding channel events', function (assert) {
         new ChannelEvent('note off', {
             note: 0,
             velocity: 120
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode note off');
 
     bufferEqual(assert,
         new Buffer([0x00, 0x80, 60, 127]),
         new ChannelEvent('note off', {
             note: 'C'
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode note off with shortcuts');
 
     bufferEqual(assert,
@@ -411,14 +411,14 @@ test('Encoding and decoding channel events', function (assert) {
         new ChannelEvent('note on', {
             note: 0,
             velocity: 120
-        }, 1).encode().toBuffer(),
+        }, 1).encode(),
         'should encode note on');
 
     bufferEqual(assert,
         new Buffer([0x00, 0x91, 60, 127]),
         new ChannelEvent('note on', {
             note: 'C'
-        }, 1).encode().toBuffer(),
+        }, 1).encode(),
         'should encode note on with shortcuts');
 
     bufferEqual(assert,
@@ -426,14 +426,14 @@ test('Encoding and decoding channel events', function (assert) {
         new ChannelEvent('note aftertouch', {
             note: 0,
             pressure: 120
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode note aftertouch');
 
     bufferEqual(assert,
         new Buffer([0x00, 0xA0, 60, 127]),
         new ChannelEvent('note aftertouch', {
             note: 'C'
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode note aftertouch with shortcuts');
 
     bufferEqual(assert,
@@ -441,35 +441,35 @@ test('Encoding and decoding channel events', function (assert) {
         new ChannelEvent('controller', {
             type: 0,
             value: 63
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode controller');
 
     bufferEqual(assert,
         new Buffer([0x00, 0xB0, 64, 127]),
         new ChannelEvent('controller', {
             type: 'hold pedal'
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode controller with shortcuts');
 
     bufferEqual(assert,
         new Buffer([0x00, 0xC3, 2]),
         new ChannelEvent('program change', {
             instrument: 2
-        }, 3).encode().toBuffer(),
+        }, 3).encode(),
         'should encode program change');
 
     bufferEqual(assert,
         new Buffer([0x00, 0xC3, 19]),
         new ChannelEvent('program change', {
             instrument: 'church organ'
-        }, 3).encode().toBuffer(),
+        }, 3).encode(),
         'should encode program change with shortcuts');
 
     bufferEqual(assert,
         new Buffer([0x00, 0xD0, 24]),
         new ChannelEvent('channel aftertouch', {
             pressure: 24
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode channel aftertouch');
 
     bufferEqual(assert,
@@ -482,7 +482,7 @@ test('Encoding and decoding channel events', function (assert) {
         ]),
         new ChannelEvent('pitch bend', {
             value: -200
-        }).encode().toBuffer(),
+        }).encode(),
         'should encode pitch bend');
 
     assert.ok(

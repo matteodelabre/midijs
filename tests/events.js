@@ -134,19 +134,18 @@ test('Encoding and decoding meta events', function (assert) {
         }).encode(),
         'should encode other kinds');
 
-    assert.ok(
-        Event.decode(new Buffer([0x00, 0xFF, 0x00, 2, 0, 1])) instanceof
-        MetaEvent, 'should decode meta events'
-    );
-
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xFF, 0x00, 2, 0, 1])).type,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x00, 2, 0, 1
+        ])).type,
         MetaEvent.TYPE.SEQUENCE_NUMBER,
         'should decode sequence number'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([0x00, 0xFF, 0x00, 2, 0, 1])).data,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x00, 2, 0, 1
+        ])).data,
         {
             number: 1
         },
@@ -154,13 +153,17 @@ test('Encoding and decoding meta events', function (assert) {
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xFF, 0x01, 4, 0x4d, 0x49, 0x44, 0x49])).type,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x01, 4, 0x4d, 0x49, 0x44, 0x49
+        ])).type,
         MetaEvent.TYPE.TEXT,
         'should decode text'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([0x00, 0xFF, 0x01, 4, 0x4d, 0x49, 0x44, 0x49])).data,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x01, 4, 0x4d, 0x49, 0x44, 0x49
+        ])).data,
         {
             text: 'MIDI'
         },
@@ -168,13 +171,17 @@ test('Encoding and decoding meta events', function (assert) {
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xFF, 0x02, 4, 0x4d, 0x49, 0x44, 0x49])).type,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x02, 4, 0x4d, 0x49, 0x44, 0x49
+        ])).type,
         MetaEvent.TYPE.COPYRIGHT_NOTICE,
         'should decode copyright notice'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([0x00, 0xFF, 0x02, 4, 0x4d, 0x49, 0x44, 0x49])).data,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x02, 4, 0x4d, 0x49, 0x44, 0x49
+        ])).data,
         {
             text: 'MIDI'
         },
@@ -182,13 +189,17 @@ test('Encoding and decoding meta events', function (assert) {
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xFF, 0x03, 4, 0x4d, 0x49, 0x44, 0x49])).type,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x03, 4, 0x4d, 0x49, 0x44, 0x49
+        ])).type,
         MetaEvent.TYPE.SEQUENCE_NAME,
         'should decode sequence name'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([0x00, 0xFF, 0x03, 4, 0x4d, 0x49, 0x44, 0x49])).data,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x03, 4, 0x4d, 0x49, 0x44, 0x49
+        ])).data,
         {
             text: 'MIDI'
         },
@@ -196,13 +207,17 @@ test('Encoding and decoding meta events', function (assert) {
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xFF, 0x04, 4, 0x4d, 0x49, 0x44, 0x49])).type,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x04, 4, 0x4d, 0x49, 0x44, 0x49
+        ])).type,
         MetaEvent.TYPE.INSTRUMENT_NAME,
         'should decode instrument name'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([0x00, 0xFF, 0x04, 4, 0x4d, 0x49, 0x44, 0x49])).data,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x04, 4, 0x4d, 0x49, 0x44, 0x49
+        ])).data,
         {
             text: 'MIDI'
         },
@@ -210,13 +225,17 @@ test('Encoding and decoding meta events', function (assert) {
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xFF, 0x05, 4, 0x4d, 0x49, 0x44, 0x49])).type,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x05, 4, 0x4d, 0x49, 0x44, 0x49
+        ])).type,
         MetaEvent.TYPE.LYRICS,
         'should decode lyrics'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([0x00, 0xFF, 0x05, 4, 0x4d, 0x49, 0x44, 0x49])).data,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x05, 4, 0x4d, 0x49, 0x44, 0x49
+        ])).data,
         {
             text: 'MIDI'
         },
@@ -224,13 +243,17 @@ test('Encoding and decoding meta events', function (assert) {
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xFF, 0x06, 4, 0x4d, 0x49, 0x44, 0x49])).type,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x06, 4, 0x4d, 0x49, 0x44, 0x49
+        ])).type,
         MetaEvent.TYPE.MARKER,
         'should decode marker'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([0x00, 0xFF, 0x06, 4, 0x4d, 0x49, 0x44, 0x49])).data,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x06, 4, 0x4d, 0x49, 0x44, 0x49
+        ])).data,
         {
             text: 'MIDI'
         },
@@ -238,13 +261,17 @@ test('Encoding and decoding meta events', function (assert) {
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xFF, 0x07, 4, 0x4d, 0x49, 0x44, 0x49])).type,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x07, 4, 0x4d, 0x49, 0x44, 0x49
+        ])).type,
         MetaEvent.TYPE.CUE_POINT,
         'should decode cue point'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([0x00, 0xFF, 0x07, 4, 0x4d, 0x49, 0x44, 0x49])).data,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x07, 4, 0x4d, 0x49, 0x44, 0x49
+        ])).data,
         {
             text: 'MIDI'
         },
@@ -252,13 +279,17 @@ test('Encoding and decoding meta events', function (assert) {
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xFF, 0x08, 4, 0x4d, 0x49, 0x44, 0x49])).type,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x08, 4, 0x4d, 0x49, 0x44, 0x49
+        ])).type,
         MetaEvent.TYPE.PROGRAM_NAME,
         'should decode program name'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([0x00, 0xFF, 0x08, 4, 0x4d, 0x49, 0x44, 0x49])).data,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x08, 4, 0x4d, 0x49, 0x44, 0x49
+        ])).data,
         {
             text: 'MIDI'
         },
@@ -266,13 +297,17 @@ test('Encoding and decoding meta events', function (assert) {
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xFF, 0x09, 4, 0x4d, 0x49, 0x44, 0x49])).type,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x09, 4, 0x4d, 0x49, 0x44, 0x49
+        ])).type,
         MetaEvent.TYPE.DEVICE_NAME,
         'should decode device name'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([0x00, 0xFF, 0x09, 4, 0x4d, 0x49, 0x44, 0x49])).data,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x09, 4, 0x4d, 0x49, 0x44, 0x49
+        ])).data,
         {
             text: 'MIDI'
         },
@@ -280,19 +315,25 @@ test('Encoding and decoding meta events', function (assert) {
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xFF, 0x2F, 0])).type,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x2F, 0
+        ])).type,
         MetaEvent.TYPE.END_OF_TRACK,
         'should decode end of track'
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xFF, 0x51, 3, 0x07, 0xA1, 0x20])).type,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x51, 3, 0x07, 0xA1, 0x20
+        ])).type,
         MetaEvent.TYPE.SET_TEMPO,
         'should decode tempo'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([0x00, 0xFF, 0x51, 3, 0x07, 0xA1, 0x20])).data,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x51, 3, 0x07, 0xA1, 0x20
+        ])).data,
         {
             tempo: 120
         },
@@ -300,13 +341,17 @@ test('Encoding and decoding meta events', function (assert) {
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xFF, 0x54, 5, 12, 20, 30, 21, 56])).type,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x54, 5, 12, 20, 30, 21, 56
+        ])).type,
         MetaEvent.TYPE.SMPTE_OFFSET,
         'should decode smpte offset'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([0x00, 0xFF, 0x54, 5, 12, 20, 30, 21, 56])).data,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x54, 5, 12, 20, 30, 21, 56
+        ])).data,
         {
             rate: 24,
             hours: 12,
@@ -319,13 +364,17 @@ test('Encoding and decoding meta events', function (assert) {
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xFF, 0x58, 4, 2, 3, 21, 8])).type,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x58, 4, 2, 3, 21, 8
+        ])).type,
         MetaEvent.TYPE.TIME_SIGNATURE,
         'should decode time signature'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([0x00, 0xFF, 0x58, 4, 2, 3, 21, 8])).data,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x58, 4, 2, 3, 21, 8
+        ])).data,
         {
             numerator: 2,
             denominator: 8,
@@ -336,13 +385,17 @@ test('Encoding and decoding meta events', function (assert) {
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xFF, 0x59, 2, 0xfc, 0x00])).type,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x59, 2, 0xfc, 0x00
+        ])).type,
         MetaEvent.TYPE.KEY_SIGNATURE,
         'should decode key signature'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([0x00, 0xFF, 0x59, 2, 0xfc, 0x00])).data,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x59, 2, 0xfc, 0x00
+        ])).data,
         {
             note: -4,
             major: true
@@ -351,17 +404,24 @@ test('Encoding and decoding meta events', function (assert) {
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xFF, 0x74, 2, 13, 37])).type, 0x74,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x74, 2, 13, 37
+        ])).type,
+        0x74,
         'should decode other kinds'
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xFF, 0x74, 2, 13, 37])).unknown, true,
-        'should set unknown flags for other kinds'
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x74, 2, 13, 37
+        ])).unknown, true,
+        'should set unknown flag for other kinds'
     );
 
     bufferEqual(assert,
-        Event.decode(new Buffer([0x00, 0xFF, 0x74, 2, 13, 37])).data.bytes,
+        MetaEvent.decode(new Buffer([
+            0x00, 0xFF, 0x74, 2, 13, 37
+        ])).data.bytes,
         new Buffer([13, 37]),
         'should decode other kinds\' data');
 
@@ -377,13 +437,17 @@ test('Encoding and decoding sysex events', function (assert) {
         'should encode sysex events');
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xF7, 3, 0x1, 0x2, 0x3])).type,
+        SysexEvent.decode(new Buffer([
+            0x00, 0xF7, 3, 0x1, 0x2, 0x3
+        ])).type,
         SysexEvent.TYPE.TYPE_2,
         'should decode sysex events'
     );
 
     bufferEqual(assert,
-        Event.decode(new Buffer([0x00, 0xF7, 3, 0x1, 0x2, 0x3])).data,
+        SysexEvent.decode(new Buffer([
+            0x00, 0xF7, 3, 0x1, 0x2, 0x3
+        ])).data,
         new Buffer([0x1, 0x2, 0x3]),
         'should decode sysex events data');
 
@@ -485,24 +549,25 @@ test('Encoding and decoding channel events', function (assert) {
         }).encode(),
         'should encode pitch bend');
 
-    assert.ok(
-        Event.decode(new Buffer([0x00, 0xC0, 0])) instanceof ChannelEvent,
-        'should decode channel events'
-    );
-
     assert.equal(
-        Event.decode(new Buffer([0x00, 0x85, 0, 120])).channel, 5,
+        ChannelEvent.decode(new Buffer([
+            0x00, 0x85, 0, 120
+        ])).channel, 5,
         'should decode channel number'
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0x80, 0, 120])).type,
+        ChannelEvent.decode(new Buffer([
+            0x00, 0x80, 0, 120
+        ])).type,
         ChannelEvent.TYPE.NOTE_OFF,
         'should decode note off'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([0x00, 0x80, 0, 120])).data,
+        ChannelEvent.decode(new Buffer([
+            0x00, 0x80, 0, 120
+        ])).data,
         {
             note: 0,
             velocity: 120
@@ -511,13 +576,17 @@ test('Encoding and decoding channel events', function (assert) {
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0x90, 0, 127])).type,
+        ChannelEvent.decode(new Buffer([
+            0x00, 0x90, 0, 127
+        ])).type,
         ChannelEvent.TYPE.NOTE_ON,
         'should decode note on'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([0x00, 0x90, 0, 127])).data,
+        ChannelEvent.decode(new Buffer([
+            0x00, 0x90, 0, 127
+        ])).data,
         {
             note: 0,
             velocity: 127
@@ -526,13 +595,17 @@ test('Encoding and decoding channel events', function (assert) {
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xA0, 0, 120])).type,
+        ChannelEvent.decode(new Buffer([
+            0x00, 0xA0, 0, 120
+        ])).type,
         ChannelEvent.TYPE.NOTE_AFTERTOUCH,
         'should decode note aftertouch'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([0x00, 0xA0, 0, 120])).data,
+        ChannelEvent.decode(new Buffer([
+            0x00, 0xA0, 0, 120
+        ])).data,
         {
             note: 0,
             pressure: 120
@@ -541,13 +614,17 @@ test('Encoding and decoding channel events', function (assert) {
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xB0, 0, 63])).type,
+        ChannelEvent.decode(new Buffer([
+            0x00, 0xB0, 0, 63
+        ])).type,
         ChannelEvent.TYPE.CONTROLLER,
         'should decode controller'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([0x00, 0xB0, 0, 63])).data,
+        ChannelEvent.decode(new Buffer([
+            0x00, 0xB0, 0, 63
+        ])).data,
         {
             type: 0,
             value: 63
@@ -556,13 +633,17 @@ test('Encoding and decoding channel events', function (assert) {
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xC0, 2])).type,
+        ChannelEvent.decode(new Buffer([
+            0x00, 0xC0, 2
+        ])).type,
         ChannelEvent.TYPE.PROGRAM_CHANGE,
         'should decode program change'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([0x00, 0xC0, 2])).data,
+        ChannelEvent.decode(new Buffer([
+            0x00, 0xC0, 2
+        ])).data,
         {
             instrument: 2
         },
@@ -570,13 +651,17 @@ test('Encoding and decoding channel events', function (assert) {
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xD0, 24])).type,
+        ChannelEvent.decode(new Buffer([
+            0x00, 0xD0, 24
+        ])).type,
         ChannelEvent.TYPE.CHANNEL_AFTERTOUCH,
         'should decode channel aftertouch'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([0x00, 0xD0, 24])).data,
+        ChannelEvent.decode(new Buffer([
+            0x00, 0xD0, 24
+        ])).data,
         {
             pressure: 24
         },
@@ -584,13 +669,15 @@ test('Encoding and decoding channel events', function (assert) {
     );
 
     assert.equal(
-        Event.decode(new Buffer([0x00, 0xE0, 56, 62])).type,
+        ChannelEvent.decode(new Buffer([
+            0x00, 0xE0, 56, 62
+        ])).type,
         ChannelEvent.TYPE.PITCH_BEND,
         'should decode pitch bend'
     );
 
     assert.deepEqual(
-        Event.decode(new Buffer([
+        ChannelEvent.decode(new Buffer([
             0x00, 0xE0,
             parseInt('0111000', 2), parseInt('111110', 2)
             // => 1111100111000

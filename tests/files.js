@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * @overview Test set for File, Track and Chunk
+ * @overview Test suite for file reading and writing
  */
 
 var test = require('tape');

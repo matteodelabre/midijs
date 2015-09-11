@@ -21,7 +21,7 @@ function formatByte(byte) {
  */
 module.exports = function bufferEqual(test, input1, input2, msg, extra) {
     var buffer1, buffer2, equals = true,
-        length, i, actual, expected;
+        length, i, expected, actual;
 
     // convert inputs to buffers
     buffer1 = (input1 instanceof Buffer) ? input1 : new Buffer(input1);
@@ -40,18 +40,18 @@ module.exports = function bufferEqual(test, input1, input2, msg, extra) {
         buffer1 = [].slice.call(buffer1);
         buffer2 = [].slice.call(buffer2);
 
-        actual = '<Buffer (' + buffer1.length + ') ' +
+        expected = '<Buffer (' + buffer1.length + ') ' +
             buffer1.map(formatByte).join(' ') + '>';
 
-        expected = '<Buffer (' + buffer2.length + ') ' +
+        actual = '<Buffer (' + buffer2.length + ') ' +
             buffer2.map(formatByte).join(' ') + '>';
     }
 
     test._assert(equals, {
         message: (msg === undefined) ? 'should be equal' : msg,
         operator: 'equal',
-        actual: actual,
         expected: expected,
+        actual: actual,
         extra: extra
     });
 };

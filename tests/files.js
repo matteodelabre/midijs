@@ -31,12 +31,14 @@ test('Keeping valid values', function (assert) {
     file.type = 'this is not valid';
     assert.equal(file.type, File.TYPE.SYNC_TRACKS, 'should not allow strings');
     file.type = -1;
-    assert.equal(file.type, File.TYPE.SYNC_TRACKS, 'should not allow out of bounds values');
+    assert.equal(file.type, File.TYPE.SYNC_TRACKS,
+        'should not allow out of bounds values');
 
     file.ticksPerBeat = 'this is not valid';
     assert.equal(file.ticksPerBeat, 120, 'should not allow strings');
     file.ticksPerBeat = -1;
-    assert.equal(file.ticksPerBeat, 120, 'should not allow out of bounds values');
+    assert.equal(file.ticksPerBeat, 120,
+        'should not allow out of bounds values');
 
     assert.end();
 });
@@ -45,14 +47,13 @@ test('Selecting constants as strings', function (assert) {
     var file = new File();
 
     file.type = 'async tracks';
-    assert.equal(file.type, File.TYPE.ASYNC_TRACKS, 'should convert strings to constants');
+    assert.equal(file.type, File.TYPE.ASYNC_TRACKS,
+        'should convert strings to constants');
 
     assert.end();
 });
 
-test('INVALID TEST: should decode a file and encode it back to the exact same bytes', function (assert) {
-    // TODO: rewrite this test
-
+test('Decoding and re-encoding a file', function (assert) {
     fs.readFile(songpath, function (err, buffer) {
         var file;
 

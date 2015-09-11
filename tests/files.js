@@ -59,7 +59,7 @@ test('INVALID TEST: should decode a file and encode it back to the exact same by
         assert.error(err, 'should read file successfully');
         file = File.decode(buffer);
 
-        bufferEqual(assert, buffer, file.encode().toBuffer(),
+        bufferEqual(assert, buffer, file.encode(),
             'should result in the same data');
 
         assert.end();

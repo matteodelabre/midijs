@@ -81,8 +81,9 @@ test('Context device mode', function (assert) {
     assert.equal(ctx.options.runningStatus.out, false,
         'should not produce running statuses in device mode');
 
-    bufferEqual(assert, data, ctx.encode(event),
-        'should not encode delay');
+    assert.ok(Array.isArray(ctx.encode(event)), 'should encode to array');
+    assert.deepEqual(ctx.encode(event), [0x95, 61, 63],
+        'should not encode delays');
 
     assert.equal(
         ctx.decode(data)[0].channel,
@@ -111,10 +112,13 @@ test('Context running status', function (assert) {
         rs = Buffer.concat([rs1, rs2]);
 
     assert.ok(ctx.decode(rs).length === 2, 'should decode several events');
-    assert.ok(Buffer.isBuffer(ctx.encode([
+    ctx.reset();
+
+    assert.deepEqual(ctx.encode([
         new ChannelEvent('note on'),
         new ChannelEvent('note off')
-    ])), 'should encode several events');
+    ]), [0x90, 60, 127, 0x80, 60, 127], 'should encode several events');
+    ctx.reset();
 
     bufferEqual(assert, rs, ctx.encode([
         new ChannelEvent('note on'),
@@ -122,7 +126,6 @@ test('Context running status', function (assert) {
             velocity: 0
         })
     ]), 'should take advantage of running status');
-
     ctx.reset();
 
     bufferEqual(assert, ctx.encode(

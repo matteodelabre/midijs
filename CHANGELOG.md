@@ -11,6 +11,7 @@ See pull request [#3](https://github.com/MattouFP/midijs/pull/3) for more inform
 * **connect: remove devices, drivers support. Use the WebMIDI API or `node-midi` for this purpose.**
 * **gm: remove General MIDI, integrate instruments into ChannelEvent.**
 * **Error: not publicly exposed anymore.**
+* **Event: remove Event class, partially replacing it with Context.**
 * **Event: type supports textual values.**
 * **ChannelEvent: support all controllers.**
 * **ChannelEvent: rename CONTROLLER.controller to CONTROLLER.type.**

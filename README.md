@@ -18,7 +18,7 @@ _right from your code!_
 
 **NOTE:** this module does not provide access to the devices by itself,
 but enables you to handle the stream of events that are sent
-to or received from them. Use this module with the
+to or received from them. Use this module in conjunction with the
 [WebMIDI API](http://www.w3.org/TR/webmidi/) in the browser,
 or [`node-midi`](http://npmjs.com/package/midi) with Node.JS for this purpose.
 
@@ -33,50 +33,60 @@ npm install --save midijs
 ### Examples
 
 Here are a few common things that you can do with the help of this module.  
-Send an event to a device, without writing raw MIDI data!
+Send an event to a MIDI device (e.g. your piano keyboard), without
+writing raw MIDI data!
 
 ```js
-var ChannelEvent = require('midijs').events.ChannelEvent;
+var midijs = require('midijs');
+var ChannelEvent = midijs.events.ChannelEvent;
+var ctx = new midijs.events.Context({
+    device: true // this informs the parser that we are working with a device
+});
 
 // using the WebMIDI API
-output.send(new ChannelEvent('controller', {
+output.send(ctx.encode(new ChannelEvent('controller', {
     type: 'all sound off',
     value: 127
-}).encode(null, true).toArray());
+})));
 
 // using `node-midi`
-output.sendMessage(new ChannelEvent('controller', {
+output.sendMessage(ctx.encode(new ChannelEvent('controller', {
     type: 'all sound off',
     value: 127
-}).encode(null, true).toArray());
+})));
 ```
 
-Or receive them from the device and read them as easily.
+And receive events from the same device as easily.
 
 ```js
-var Event = require('midijs').events.Event;
-var rs = {}; // ensure we use the running status if requested
+var midijs = require('midijs');
+var ctx = new midijs.events.Context({
+    device: true
+});
 
 // using the WebMIDI API
 input.onmidimessage = function (signal) {
-    var event = Event.decode(new Buffer(signal.data), rs, true);
+    var event = ctx.decode(signal.data);
 
     // `event` represents the received event
-    // `signal.timestamp` is a timestamp for the sending time
+    // `signal.timestamp` is a timestamp for sending time
 };
 
 // using `node-midi`
 input.on('event', function (timestamp, data) {
-    var decoded = Event.decode(new Buffer(data), rs, true);
+    var event = ctx.decode(data);
+
     // `event` represents the received event
+    // `timestamp` is for sending time
 });
 ```
 
-Read a Standard MIDI File's tracks and events.
+You can also read MIDI files as a list of tracks containing events.
+This parser supports meta events that provide information about the
+file itself. Here's how you would read a file named `Ode to Joy.mid`.
 
 ```js
-var File = require('midijs').File;
-var ChannelEvent = require('midijs').events.ChannelEvent;
+var midijs = require('midijs');
 var fs = require('fs');
 
 fs.readFile('Ode to Joy.mid', function (err, data) {
@@ -86,23 +96,24 @@ fs.readFile('Ode to Joy.mid', function (err, data) {
         throw err;
     }
 
-    tune = File.decode(data);
+    tune = midijs.File.decode(data);
     tune.tracks.forEach(function (track) {
         track.events.forEach(function (event) {
-            if (event instanceof ChannelEvent) {
-                // this is a channel event, use it
-            }
+            // you can now manipulate the event
+            // (store a list of notes, make stats,
+            //  show it on a score, ...)
         });
     });
 });
 ```
 
-Or create a whole tune right from your code!
+And you can even create a whole tune right in your code!
 
 ```js
-var File = require('midijs').File;
+var midijs = require('midijs');
 var fs = require('fs');
-var tune = new File('sync tracks');
+
+var tune = new midijs.File('sync tracks');
 var spacer = 24;
 
 tune.track()

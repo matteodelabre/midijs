@@ -4,10 +4,17 @@
  * Format a byte to hexadecimal
  *
  * @param {number} byte Value of the byte
+ * @param {boolean} [differ=false] Whether to highlight this byte in red or not
  * @return {string} Hex value of that byte
  */
-function formatByte(byte) {
-    return '0x' + byte.toString(16);
+function formatByte(byte, differ) {
+    var str = '0x' + byte.toString(16);
+
+    if (differ) {
+        str = '[!' + str + '!]';
+    }
+
+    return str;
 }
 
 /**
@@ -41,10 +48,14 @@ module.exports = function bufferEqual(test, input1, input2, msg, extra) {
         buffer2 = [].slice.call(buffer2);
 
         expected = '<Buffer (' + buffer1.length + ') ' +
-            buffer1.map(formatByte).join(' ') + '>';
+            buffer1.map(function (byte, x) {
+                return formatByte(byte, buffer1[x] !== buffer2[x]);
+            }).join(' ') + '>';
 
         actual = '<Buffer (' + buffer2.length + ') ' +
-            buffer2.map(formatByte).join(' ') + '>';
+            buffer2.map(function (byte, x) {
+                return formatByte(byte, buffer1[x] !== buffer2[x]);
+            }).join(' ') + '>';
     }
 
     test._assert(equals, {

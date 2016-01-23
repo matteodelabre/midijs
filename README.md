@@ -33,8 +33,8 @@ npm install --save midijs
 ### Examples
 
 Here are a few common things that you can do with the help of this module.  
-Send an event to a MIDI device (e.g. your piano keyboard), without
-writing raw MIDI data!
+You can send an event to any MIDI device (e.g. your piano keyboard), without
+writing raw MIDI data,
 
 ```js
 var midijs = require('midijs');
@@ -56,7 +56,7 @@ output.sendMessage(ctx.encode(new ChannelEvent('controller', {
 })));
 ```
 
-And receive events from the same device as easily.
+and receive events from the same device as easily.
 
 ```js
 var midijs = require('midijs');
@@ -138,7 +138,7 @@ fs.writeFile('Ode to Joy.mid', tune.encode(), function (err) {
         throw err;
     }
 
-    console.log('Beethoven saved.');
+    console.log('Saved!');
 });
 ```
 
@@ -147,10 +147,9 @@ fs.writeFile('Ode to Joy.mid', tune.encode(), function (err) {
 ### API docs
 
 If you need more information about how to
-use this module, head over to the
-[API docs](http://matteodelabre.me/midijs),
-a precise reference of all available
-public functions and classes.
+use this module, go check out the
+[wiki](https://github.com/matteodelabre/midijs/wiki),
+a reference of all available functions and objects.
 
 ### License
 
@@ -163,7 +162,7 @@ to distribute and edit this module's source code.
 Help us make this module better by contributing
 to its source! If you need a particular feature
 or a bug to be fixed, the best way is to
-propose changes. Find more in the
+propose changes. Find out more in the
 [contribution guide](CONTRIBUTING.md).
 
 ### Changelog
@@ -171,4 +170,4 @@ propose changes. Find more in the
 The [changelog](CHANGELOG.md) lists all changes
 that have been made to the public API, version per
 version, so that you can easily upgrade and get
-more features!
+more features.

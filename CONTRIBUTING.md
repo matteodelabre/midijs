@@ -1,63 +1,54 @@
-# Contribution guide
+# Contributing
 
-All contributions are welcome! If you want a new feature
-to be added or a bug to be fixed, you can propose your changes
-using a [pull request](https://github.com/midijs/pulls), or
-propose your ideas in a new [issue](https://github.com/midijs/issues).
+Thank you for your interest in contributing to this repo!  
+All contributions (even small ones) are welcome.
+In order to keep this repo consistent, please
+try to follow these rules.
 
 Many thanks to those who contributed to this project:
 
 * [@corentingurtner](https://github.com/corentingurtner)
 
-There are a few rules to follow so that the repo
-stays consistent.
-
 ## 1. Commit tags
 
-All commits should be tagged with emojis to make
-the commit list more readable. (If you forget it, that's
-not a problem, though.)
+All commits should be tagged with emojis whenever possible
+to make the commit list more readable.
 
 | Emoji      | Commit content        |
 |:----------:|:--------------------- |
 | :book:     | Documentation updates |
 | :bug:      | Bug fixes             |
-| :ledger:   | Rename/move files     |
-| :bulb:     | Features              |
-| :lipstick: | Fix coding style      |
+| :ledger:   | Moving files          |
+| :bulb:     | New features          |
+| :lipstick: | Fixing coding style   |
 
 ## 2. Branches
 
 Please use a branch name that differs from `master`
-when making pull requests, so that the network history is more
-readable.
+when making pull requests, so that the network
+history is more readable.
 
-For example, if you wanted to improve the documentation
-you could have chosen something like: `improve-docs`.
+For example, if you wanted to fix the issue
+"improve documentation", you could have
+chosen the following branch name: `improve-docs`.
 
 ## 3. Coding style
 
-JavaScript can be authored following
+Javascript can be authored by following
 [a](https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml)
 [lot](https://github.com/airbnb/javascript)
 [of](https://github.com/felixge/node-style-guide)
 [different](https://contribute.jquery.org/style-guide/js/)
-[coding styles](https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Coding_Style),
-and here's some style rules that should be followed whenever possible.
+[style guides](https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Coding_Style)
+but we decided to be a bit soft on that.
 
-All of these rules are also stored in `.eslintrc`, so that
-you can use [ESLint](http://eslint.org/) to ensure that your code
-complies with them.
+As a rule of thumb, use [ESLint](http://eslint.org/) to check if your code complies
+with our style conventions. Here are some of the rules:
 
-* Use the radix parameter in `parseInt()` calls.
-* Declare all your variables at the top of the functions.
-* Use the *one true brace style*.
-* Use strict mode.
-* Avoid yoda conditions.
-* Put semicolons to avoid ASI.
-* Put one space after commas, and no space before.
-* Use consistent spacing.
-* Put your comma at the end of the lines.
-* Use single quotes.
-* Use camel-case.
-* Use 4 spaces for indentation.
+* use the radix parameter in `parseInt()` calls;
+* use the *one true brace style;*
+* put one space after commas, and no space before;
+* put your comma at the end of the lines;
+* use simple quotes;
+* use camelcase;
+* use 4 spaces for indentation.

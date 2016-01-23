@@ -1,17 +1,17 @@
 {
   "name": "midijs",
-  "version": "0.12.0",
   "description": "Parser and encoder for MIDI events and Standard MIDI files",
+  "version": "0.12.0",
   "license": "MIT",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/matteodelabre/midijs.git"
+  },
   "scripts": {
     "test": "tape tests/*.js | tap-spec",
     "coverage": "istanbul cover tape -- tests/*.js",
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls"
-  },
-  "repository": {
-    "type": "git",
-    "url": "http://github.com/MattouFP/midijs.git"
   },
   "engines": {
     "node": ">=0.10.0"
@@ -23,9 +23,9 @@
     "music"
   ],
   "author": {
-    "name": "Mattéo DELABRE",
-    "email": "matteo.delabre@outlook.fr",
-    "url": "https://github.com/MattouFP"
+    "name": "Mattéo Delabre ✏️",
+    "email": "contact@matteodelabre.me",
+    "url": "https://github.com/matteodelabre"
   },
   "dependencies": {
     "object-assign": "^3.0.0"

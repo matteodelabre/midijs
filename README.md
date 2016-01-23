@@ -165,9 +165,9 @@ or a bug to be fixed, the best way is to
 propose changes. Find out more in the
 [contribution guide](CONTRIBUTING.md).
 
-### Changelog
+### Change log
 
-The [changelog](CHANGELOG.md) lists all changes
+The [change log](CHANGELOG.md) lists all changes
 that have been made to the public API, version per
 version, so that you can easily upgrade and get
 more features.

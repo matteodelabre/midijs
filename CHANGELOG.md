@@ -1,176 +1,268 @@
-# Changelog
+# Change log
 
-This is a log of all API changes that are applied to the library, version per version. All changes in a version are cumulative with those in the previous ones.
+This is a log of all API changes to the library, version per version. It follows advices from [keepachangelog.com](http://keepachangelog.com/).
+All releases following v1.0.0 follow semantic versioning ‒ for previous releases, read the change log for more information.
 
-This package follows semantic versioning starting from v1.0.0. Changes in **bold font** are breaking compatibility with previous versions.
+## [v1.0.0](https://github.com/matteodelabre/midijs/releases/tag/v1.0.0) ― 2016-01-24
 
-## [v1.0.0](https://github.com/MattouFP/midijs/tree/) ([compare](https://github.com/MattouFP/midijs/compare/v0.12.0...v1.0.0))
+*See pull request [#3](https://github.com/matteodelabre/midijs/pull/3) for* more information.
 
-See pull request [#3](https://github.com/MattouFP/midijs/pull/3) for more information.
+### Added
 
-* **connect: remove devices, drivers support. Use the WebMIDI API or `node-midi` for this purpose.**
-* **gm: remove General MIDI, integrate instruments into ChannelEvent.**
-* **Error: not publicly exposed anymore.**
-* **Event: remove Event class, partially replacing it with Context.**
-* **Event: type supports textual values.**
-* **ChannelEvent: support all controllers.**
-* **ChannelEvent: rename CONTROLLER.controller to CONTROLLER.type.**
-* **ChannelEvent: rename PROGRAM_CHANGE.program to PROGRAM_CHANGE.instrument.**
-* **ChannelEvent: NOTE_AFTERTOUCH.pressure defaults to 127 instead of 127.**
-* **ChannelEvent: NOTE_OFF, NOTE_ON and NOTE_AFTERTOUCH accept english-written notes such as "C" or "D2#".**
-* **ChannelEvent: PROGRAM_CHANGE accepts textual instrument names.**
-* **ChannelEvent: CONTROLLER accepts textual constroller names.**
-* **SysexEvent: add SysexEvent.TYPE.**
-* **MetaEvent: allow unknown events (thanks to [@corentingurtner](https://github.com/corentingurtner)).**
-* **MetaEvent: rename TIME_SIGNATURE.clockSignalsPerBeat to TIME_SIGNATURE.notated32ndsPerMIDIBeat.**
-* **File: remove streams support, only expose File#encode and File.decode methods for encoding and decoding.**
-* **File: add API to easily create tunes in the code, without redundancy.**
-* **events: expose event classes publicly.**
-* Make parsing more efficient.
-* Remove editor-specific configuration.
-* Add automatic coverage check.
-* Add CHANGELOG.
-* Move CONTRIBUTING guide apart.
-* Improve README, LICENSE, CONTRIBUTING and style guide.
-* Rewrite tests with tape instead of mocha.
-* Use a better fixture song! ([check it out](tests/fixtures/tune.mid))
-* Improve code coverage.
+* `Event` accepts strings in some arguments (`Event` type can be given with a string, `PROGRAM_CHANGE` accepts a string for specifying the instrument, `CONTROLLER` accepts a string for specifying the controller).
+* `CONTROLLER` now supports all kinds of controllers.
+* `NOTE_OFF`, `NOTE_ON` and `NOTE_AFTERTOUCH` accept English-written notes such as "C" or "D2#".
+* New `TYPE` property on `SysexEvent`s for consistency.
+* `encode` and `decode` methods on `File`, replacing previous ones.
+* New API on `File` for creating tunes from the code.
+* `Event` subclasses are now publicly exposed.
 
-## [v0.12.0](https://github.com/MattouFP/midijs/tree/67f9bd1) ([compare](https://github.com/MattouFP/midijs/compare/v0.11.2...v0.12.0))
+### Changed
 
-* **CHANNEL_PREFIX meta becomes MIDI_CHANNEL.**
-* **Add support for MIDI_PORT meta.**
+* `gm` module. Instruments literals have been integrated into `ChannelEvent`.
+* `CONTROLLER#controller` has been renamed to `CONTROLLER#type`.
+* `PROGRAM_CHANGE#program` has been renamed to `PROGRAM_CHANGE#instrument`.
+* `TIME_SIGNATURE#clockSignalsPerBeat` has been renamed to `TIME_SIGNATURE#notated32ndsPerMIDIBeat`.
+* `NOTE_AFTERTOUCH#pressure` defaults to 127 instead of 0.
+* Unknown events doesn't generate exceptions but sets an `unknown` flag to true. (Thanks to [@corentingurtner](https://github.com/corentingurtner)).
 
-## [v0.11.2](https://github.com/MattouFP/midijs/tree/ad3842d) ([compare](https://github.com/MattouFP/midijs/compare/v0.11.1...v0.11.2))
+### Removed
 
-* Add editor-specific configuration.
+* `connect` module. Use the WebMIDI API or `node-midi` for this purpose.
+* `Error` subclasses.
+* `Event` class.
+* All previous methods of `File`, including support for streams.
+
+---
+
+## [v0.12.0](https://github.com/matteodelabre/midijs/releases/tag/v0.12.0) ― 2015-05-08
+
+### Added
+
+* Support `MIDI_PORT` meta event.
+
+### Changed
+
+* Rename `CHANNEL_PREFIX` meta event to `MIDI_CHANNEL`.
+
+---
+
+## [v0.11.2](https://github.com/matteodelabre/midijs/releases/tag/v0.11.2) ― 2015-05-01
+
+### Changed
+
 * Improve error messages.
-* Refactoring.
 
-## [v0.11.1](https://github.com/MattouFP/midijs/tree/171dce2) ([compare](https://github.com/MattouFP/midijs/compare/v0.11.0...v0.11.1))
+---
 
-* **instruments: rename to GM (this is breaking!).**
-* Improve docs.
-* Improve style guide.
-* Reuse event parsers for outputs and inputs.
+## [v0.11.1](https://github.com/matteodelabre/midijs/releases/tag/v0.11.1) ― 2015-04-30
 
-## [v0.11.0](https://github.com/MattouFP/midijs/tree/b153c9a) ([compare](https://github.com/MattouFP/midijs/compare/v0.10.2...v0.11.0))
+### Changed
 
-* **File: improve streams support.**
-* **Error: use custom errors.**
-* **Event: add default values.**
-* Rewrite chunk and events parsers.
-* Add coverage.
-* Improve docs and README.
-* Improve coding style guide.
+* Rename the `instruments` module to `GM` (despite the release number, this is a breaking change).
 
-## [v0.10.2](https://github.com/MattouFP/midijs/tree/c4d76aa) ([compare](https://github.com/MattouFP/midijs/compare/v0.10.1...v0.10.2))
+---
 
-* Improve docs and package.json.
+## [v0.11.0](https://github.com/matteodelabre/midijs/releases/tag/v0.11.0) ― 2015-02-18
 
-## [v0.10.1](https://github.com/MattouFP/midijs/tree/0f19445) ([compare](https://github.com/MattouFP/midijs/compare/v0.10.0...v0.10.1))
+### Added
 
-* Bundle dev dependencies.
+* Default values in `Event`.
+* Custom error classes.
 
-## [v0.10.0](https://github.com/MattouFP/midijs/tree/d761073) ([compare](https://github.com/MattouFP/midijs/compare/v0.9.0...v0.10.0))
+### Changed
 
-* **Reader, Writer -> File: apply merge in index.**
-* Add CI.
-* Improve README.
-* Improve docs.
+* Improved streams support in `File`.
 
-## [v0.9.0](https://github.com/MattouFP/midijs/tree/c38815b) ([compare](https://github.com/MattouFP/midijs/compare/v0.8.0...v0.9.0))
+---
 
-* **Event: use constants instead of strings for types.**
-* **Deprecate portions of internal code.**
-* Improve docs.
+## [v0.10.2](https://github.com/matteodelabre/midijs/releases/tag/v0.10.2) ― 2015-02-14
 
-## [v0.8.0](https://github.com/MattouFP/midijs/tree/529411a) ([compare](https://github.com/MattouFP/midijs/compare/v0.7.5...v0.8.0))
+*No visible changes.*
 
-* **Reader, Writer: merge back in one single class, File.**
-* Use custom fixtures instead of fixtures from Wikipedia.
-* Rewrite test suite.
-* Add coding style guide.
-* Internal reorganization.
-* Docs improvement.
+---
 
-## [v0.7.5](https://github.com/MattouFP/midijs/tree/8cb8b07) ([compare](https://github.com/MattouFP/midijs/compare/v0.7.4...v0.7.5))
+## [v0.10.1](https://github.com/matteodelabre/midijs/releases/tag/v0.10.1) ― 2015-02-14
 
-* Fix Output code.
+*No visible changes.*
 
-## [v0.7.4](https://github.com/MattouFP/midijs/tree/f834a6a) ([compare](https://github.com/MattouFP/midijs/compare/v0.7.3...v0.7.4))
+---
 
-* Fix code error.
+## [v0.10.0](https://github.com/matteodelabre/midijs/releases/tag/v0.10.0) ― 2015-02-14
 
-## [v0.7.3](https://github.com/MattouFP/midijs/tree/eaa0657) ([compare](https://github.com/MattouFP/midijs/compare/v0.7.2...v0.7.3))
+### Added
 
-* Improve package.json.
-* Fix typo while copy-pasting...
+* New `File` class merging `Reader` and `Writer`.
 
-## [v0.7.2](https://github.com/MattouFP/midijs/tree/b37bac2) ([compare](https://github.com/MattouFP/midijs/compare/v0.7.1...v0.7.2))
+### Removed
 
-* Fix reference error.
+* `Reader` and `Writer` classes, merged in `File`.
 
-## [v0.7.1](https://github.com/MattouFP/midijs/tree/60aab03) ([compare](https://github.com/MattouFP/midijs/compare/v0.7.0...v0.7.1))
+---
 
-* Support exotic values for Input and Outputs.
+## [v0.9.0](https://github.com/matteodelabre/midijs/releases/tag/v0.9.0) ― 2015-02-14
 
-## [v0.7.0](https://github.com/MattouFP/midijs/tree/cdfbddb) ([compare](https://github.com/MattouFP/midijs/compare/v0.6.0...v0.7.0))
+### Changed
 
-* **Input/Output: provide port metadata.**
-* Improve docs.
+* Use constants instead of strings for `Event` types.
 
-## [v0.6.0](https://github.com/MattouFP/midijs/tree/e3cb636) ([compare](https://github.com/MattouFP/midijs/compare/v0.5.0...v0.6.0))
+### Deprecated
 
-* **connect: also support inputs.**
-* Improve docs.
+* Portions of internal, non-documented code.
 
-## [v0.5.0](https://github.com/MattouFP/midijs/tree/7168dfe) ([compare](https://github.com/MattouFP/midijs/compare/v0.4.2...v0.5.0))
+---
 
-* **connect: only supported in the browser.**
+## [v0.8.0](https://github.com/matteodelabre/midijs/releases/tag/v0.8.0) ― 2015-02-13
 
-## [v0.4.2](https://github.com/MattouFP/midijs/tree/8fa86f1) ([compare](https://github.com/MattouFP/midijs/compare/v0.4.1...v0.4.2))
+### Changed
 
-* Support SMPTEOffset as a meta event.
+* Documentation improvements.
+* Rewrite the test suite.
 
-## [v0.4.1](https://github.com/MattouFP/midijs/tree/0204cb5) ([compare](https://github.com/MattouFP/midijs/compare/v0.4.0...v0.4.1))
+---
 
-* **Remove keyOffset (this is breaking!).**
-* Fix paths.
+## [v0.7.5](https://github.com/matteodelabre/midijs/releases/tag/v0.7.5) ― 2015-02-01
 
-## [v0.4.0](https://github.com/MattouFP/midijs/tree/753ed9a) ([compare](https://github.com/MattouFP/midijs/compare/v0.3.1...v0.4.0))
+### Fixed
 
-* **FileReader, FileWriter: rename to Reader and Write.**
-* **Reader, Writer: allow using streams for parsing/encoding.**
-* Add streams examples.
+* Fix `Output#send` producing wrong MIDI data.
 
-## [v0.3.1](https://github.com/MattouFP/midijs/tree/434c159) ([compare](https://github.com/MattouFP/midijs/compare/v0.3.0...v0.3.1))
+---
 
-* Fix paths and organize files.
-* Improve documentation.
+## [v0.7.4](https://github.com/matteodelabre/midijs/releases/tag/v0.7.4) ― 2015-02-01
 
-## [v0.3.0](https://github.com/MattouFP/midijs/tree/eeeaad1) ([compare](https://github.com/MattouFP/midijs/compare/v0.2.0...v0.3.0))
+### Fixed
 
-* **File: separate into two subclasses, FileReader & FileWriter.**
-* **Event: running status is stored locally, remove parameter.**
-* Remove previous test fixtures and replace them with first ones.
-* Write test suite for FileReader.
-* Internal code improvement.
-* Write a suitable README and improve docs.
+* Fix wrong subtype checks.
 
-## [v0.2.0](https://github.com/MattouFP/midijs/tree/18208a3) ([compare](https://github.com/MattouFP/midijs/compare/v0.1.0...v0.2.0))
+---
 
-* **File: remove specific methods, parse data during object construction.**
-* **File: not responsible for loading files anymore. Use fs.readFile or XHR.**
-* **programs: do not provide translated instrument names anymore.**
-* Add LICENSE and README.
-* Implement first tests, change test fixtures.
-* Use BufferCursor instead of custom-implemented Stream.
-* Separate parsing in subfiles to improve readability.
-* Translate french error messages.
-* Clean up older unused files.
-* Migrate from JSHint to JSLint.
+## [v0.7.3](https://github.com/matteodelabre/midijs/releases/tag/v0.7.3) ― 2015-02-01
 
-## [v0.1.0](https://github.com/MattouFP/midijs/tree/81d006c)
+### Changed
 
-* Initial release.
+* Added `repository` field in package.json.
+
+### Fixed
+
+* Fixed `Driver#send` method.
+
+---
+
+## [v0.7.2](https://github.com/matteodelabre/midijs/releases/tag/v0.7.2) ― 2015-02-01
+
+### Fixed
+
+* Tried to fix `Driver#send` method (and failed; use 0.7.3 instead).
+
+---
+
+## [v0.7.1](https://github.com/matteodelabre/midijs/releases/tag/v0.7.1) ― 2015-02-01
+
+### Fixed
+
+* Do not crash with falsy `Input`/`Output` values.
+
+---
+
+## [v0.7.0](https://github.com/matteodelabre/midijs/releases/tag/v0.7.1) ― 2015-02-01
+
+### Added
+
+* Add port metadata in `Input`/`Output`.
+
+---
+
+## [v0.6.0](https://github.com/matteodelabre/midijs/releases/tag/v0.6.0) ― 2015-02-01
+
+### Added
+
+* Support inputs in `connect` module.
+
+---
+
+## [v0.5.0](https://github.com/matteodelabre/midijs/releases/tag/v0.5.0) ― 2015-02-01
+
+### Changed
+
+* `connect` is only supported in the browser.
+
+---
+
+## [v0.4.2](https://github.com/matteodelabre/midijs/releases/tag/v0.4.2) ― 2015-01-31
+
+### Added
+
+* Support for the `SMTPEOffset` meta event.
+
+---
+
+## [v0.4.1](https://github.com/matteodelabre/midijs/releases/tag/v0.4.1) ― 2015-01-31
+
+### Removed
+
+* Remove keyOffset in `programs` (despite the release number, this is a breaking change).
+
+### Fixed
+
+* Typos in paths.
+
+---
+
+## [v0.4.0](https://github.com/matteodelabre/midijs/releases/tag/v0.4.0) ― 2015-01-31
+
+### Added
+
+* Support streams with `Reader` and `Writer`.
+
+### Changed
+
+* `FileReader` and `FileWriter` have been renamed to `Reader` and `Writer`.
+
+---
+
+## [v0.3.1](https://github.com/matteodelabre/midijs/releases/tag/v0.3.1) ― 2015-01-25
+
+*No visible changes.*
+
+---
+
+## [v0.3.0](https://github.com/matteodelabre/midijs/releases/tag/v0.3.0) ― 2015-01-25
+
+### Added
+
+* `FileReader`, `FileWriter` instead of `File`.
+* Test suite for `FileReader`.
+
+### Changed
+
+* Wrote a real README file.
+
+### Removed
+
+* `Event` constructor's running status parameter. Stored internally instead.
+
+---
+
+## [v0.2.0](https://github.com/matteodelabre/midijs/releases/tag/v0.2.0) ― 2015-01-25
+
+### Added
+
+* Added LICENSE and README.
+
+### Changed
+
+* `File` doesn't load files by itself. Use `fs.readFile` or a XHR object instead.
+* Error messages are now in English.
+* Use JSLint instead of JSHint for code-style checking.
+
+### Removed
+
+* `programs` doesn't provide localized instrument names anymore.
+* Remove undocumented internal method in `File` (`File#_parseMetaEvent`, `File#_parseEvent`, `File#_parseSystemEvent`, `File#_parseChannelEvent`).
+
+---
+
+## [v0.1.0](https://github.com/matteodelabre/midijs/releases/tag/v0.1.0) ― 2014-12-30
+
+*Initial release.*

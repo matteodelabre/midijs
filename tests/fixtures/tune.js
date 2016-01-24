@@ -5,7 +5,10 @@ var fs = require('fs');
 var path = require('path');
 
 var beat = 120;
-var tune = new File('sync tracks', [], beat);
+var tune = File({
+    type: 'sync',
+    ticksPerBeat: beat
+});
 
 tune.track()
     .meta('time signature')
@@ -151,5 +154,6 @@ fs.writeFile(path.join(__dirname, 'tune.mid'), tune.encode(), function (err) {
     if (err) {
         throw err;
     }
-    console.log('Beethoven saved.');
+
+    console.log('Saved!');
 });

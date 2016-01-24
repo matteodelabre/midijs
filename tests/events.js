@@ -14,8 +14,6 @@ var MetaEvent = events.MetaEvent;
 var SysexEvent = events.SysexEvent;
 var ChannelEvent = events.ChannelEvent;
 
-// var MalformedError = require('../lib/util/errors').MalformedError;
-
 test('Creating event context', function (assert) {
     var ctx = new Context();
 

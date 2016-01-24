@@ -16,39 +16,33 @@ var events = require('../').events;
 var songpath = path.join(__dirname, 'fixtures/tune.mid');
 
 test('Creating an empty file', function (assert) {
-    var file = new File();
+    var file = File();
 
-    assert.equal(file.type, File.TYPE.SYNC_TRACKS, 'should be sync by default');
+    assert.equal(file.type, 'sync', 'should be sync by default');
     assert.equal(file.tracks.length, 0, 'should have no tracks');
     assert.equal(file.ticksPerBeat, 120, 'should be 120 tpb');
 
     assert.end();
 });
 
-test('Keeping valid values', function (assert) {
-    var file = new File();
+test('Keeping valid values', assert => {
+    const file = File();
 
-    file.type = 'this is not valid';
-    assert.equal(file.type, File.TYPE.SYNC_TRACKS, 'should not allow strings');
-    file.type = -1;
-    assert.equal(file.type, File.TYPE.SYNC_TRACKS,
-        'should not allow out of bounds values');
+    assert.throws(() => {
+        file.type = 'this is not valid';
+    }, /invalid file type/i, 'type cannot be invalid');
 
-    file.ticksPerBeat = 'this is not valid';
-    assert.equal(file.ticksPerBeat, 120, 'should not allow strings');
-    file.ticksPerBeat = -1;
-    assert.equal(file.ticksPerBeat, 120,
-        'should not allow out of bounds values');
+    assert.throws(() => {
+        file.ticksPerBeat = 'this is not valid';
+    }, /invalid ticks per beat value/i, 'tpb should not allow strings');
 
-    assert.end();
-});
+    assert.throws(() => {
+        file.ticksPerBeat = -1;
+    }, /invalid ticks per beat value/i, 'tpb should not allow out of bounds values');
 
-test('Selecting constants as strings', function (assert) {
-    var file = new File();
-
-    file.type = 'async tracks';
-    assert.equal(file.type, File.TYPE.ASYNC_TRACKS,
-        'should convert strings to constants');
+    assert.throws(() => {
+        file.ticksPerBeat = 65536;
+    }, /invalid ticks per beat value/i, 'tpb should not allow out of bounds values');
 
     assert.end();
 });
@@ -70,15 +64,15 @@ test('Decoding and re-encoding a file', function (assert) {
 test('Detecting errors while parsing', function (assert) {
     assert.throws(function () {
         File.decode(new Buffer('not midi data'));
-    }, /not a midi file/i, 'should throw with non-midi files');
+    }, /not a valid midi file.+could not read file header/i, 'should throw with non-midi files');
 
     assert.throws(function () {
         File.decode(new Buffer([0x4d, 0x54, 0x65, 0x64, 0x00, 0x00, 0x00, 0x00]));
-    }, /not a midi file/i, 'should throw with non-midi files even if they look right');
+    }, /not a valid midi file.+unexpected MTed chunk.+expected a header/i, 'should throw with non-midi files even if they look right');
 
     assert.throws(function () {
         File.decode(new Buffer([0x4d, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x00]));
-    }, /invalid midi header/i, 'should throw with invalid headers');
+    }, /not a valid midi file.+could not read header fields/i, 'should throw with invalid headers');
 
     assert.throws(function () {
         File.decode(new Buffer([
@@ -88,26 +82,26 @@ test('Detecting errors while parsing', function (assert) {
             // invalid duplicate empty header
             0x4d, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x00
         ]));
-    }, /expected a track chunk/i, 'should throw with chunk-malformed files');
+    }, /not a valid midi file.+unexpected MThd chunk.+expected a track/i, 'should throw with chunk-malformed files');
 
     assert.end();
 });
 
-test('SINGLE_TRACK files should keep one track', function (assert) {
+test('Single track files should keep one track', function (assert) {
     assert.throws(function () {
-        var file = new File('single track');
-        file.track().end().track().end();
-    }, /cannot contain more than one track/i, 'should throw with more tracks');
+        var file = File({type: 'single'});
+        file.track().end().track().end().encode();
+    }, /contains more than one track/i, 'should throw with more tracks');
 
     assert.throws(function () {
-        return new File('single track', [[], []]);
-    }, /cannot contain more than one track/i, 'should throw with more tracks');
+        File({type: 'single', tracks: [[], []]}).encode();
+    }, /contains more than one track/i, 'should throw with more tracks');
 
     assert.end();
 });
 
 test('File creation', function (assert) {
-    var file = new File();
+    var file = File();
 
     assert.equal(
         file.track()

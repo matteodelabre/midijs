@@ -28,7 +28,8 @@
     "url": "https://github.com/matteodelabre"
   },
   "dependencies": {
-    "object-assign": "^3.0.0"
+    "object-assign": "^3.0.0",
+    "stampit": "^2.1.1"
   },
   "devDependencies": {
     "buffer-equal": "0.0.1",

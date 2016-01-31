@@ -29,7 +29,8 @@
   },
   "dependencies": {
     "object-assign": "^3.0.0",
-    "stampit": "^2.1.1"
+    "stampit": "^2.1.1",
+    "text-encoding": "^0.5.2"
   },
   "devDependencies": {
     "buffer-equal": "0.0.1",

@@ -7,7 +7,7 @@
 const test = require('tape');
 const convertNote = require('../lib/util/convertnote');
 
-test('Converting of English-notated notes with convertNote', assert => {
+test('Converting English-notated notes with convertNote', assert => {
     assert.equal(convertNote('C4'), convertNote('C'), 'should default octave to 4');
     assert.equal(convertNote('C4#'), convertNote('C4') + 1, 'should parse sharps');
     assert.equal(convertNote('C4B'), convertNote('C4') - 1, 'should parse flats');
